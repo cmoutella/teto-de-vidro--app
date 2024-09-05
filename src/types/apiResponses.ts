@@ -1,5 +1,7 @@
+import { InterfaceUser } from "./app";
+
 export interface UserAuth {
   token: string;
   expireAt: string;
-  userId: string;
+  user: Omit<InterfaceUser, "password">;
 }

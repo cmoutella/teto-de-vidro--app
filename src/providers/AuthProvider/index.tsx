@@ -1,5 +1,6 @@
 "use client";
 import { createContext, useContext, useEffect, useMemo, useState } from "react";
+import { hash } from "bcryptjs";
 
 import { useRouter } from "next/navigation";
 import storage from "@/services/storage";
@@ -17,7 +18,7 @@ interface SessionContext {
 }
 
 const DEFAULT_VALUES = {
-  user: (storage.getToken() && { id: storage.getToken().userId }) ?? undefined,
+  user: getUserFn(),
   isLogged: storage.hasToken(),
   login: (u: string, p: string) => {},
   logout: () => {},
@@ -44,21 +45,10 @@ export const SessionProvider = ({
   const [user, setUser] = useState<SessionUser>(DEFAULT_VALUES.user);
   const router = useRouter();
 
-  const handleSessionInit = async () => {
-    const user = await getUserFn();
+  const login = async (email: string, password: string) => {
+    const hashedPassword = await hash(password, 8);
+    const auth = await authLogin(email, hashedPassword);
 
-    setUser(user);
-  };
-
-  useEffect(() => {
-    handleSessionInit();
-  }, []);
-
-  const login = async (username: string, password: string) => {
-    console.log("AuthProvider login");
-    const auth = await authLogin(username, password);
-
-    console.log("AuthProvider auth", auth);
     if (!auth) return;
 
     await handleUserResponse(auth).then((res) => {

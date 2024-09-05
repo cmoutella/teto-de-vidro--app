@@ -2,25 +2,23 @@
 
 import { clearToken, getToken, setToken } from "@/services/storage";
 import { isTokenValid } from "@/utils/auth";
-import { InterfaceUser } from "@/types/app";
+import { SessionUser } from "@/types/app";
 import { UserAuth } from "@/types/apiResponses";
-import { getUserRequest } from "@/features/user/getUserRequest";
 
 export interface UserResponse {
   appToken: string;
 }
 
-export async function getUserFn(): Promise<InterfaceUser | undefined> {
+export function getUserFn(): SessionUser {
   const currAuth: UserAuth = getToken();
-  if (!currAuth || !currAuth.userId) return undefined;
+  if (!currAuth || !currAuth.user) return undefined;
 
   const authIsValid = isTokenValid(currAuth.expireAt);
 
-  if (!authIsValid) return undefined;
+  if (authIsValid) return currAuth.user;
 
-  const teacher = await getUserRequest(currAuth.userId, currAuth.token);
-
-  return teacher;
+  clearToken();
+  return undefined;
 }
 
 export async function handleUserResponse(loginAuth?: UserAuth) {
@@ -41,7 +39,5 @@ export async function handleUserResponse(loginAuth?: UserAuth) {
 
   setToken(auth);
 
-  const user = (await getUserFn()) as InterfaceUser;
-
-  return user;
+  return auth.user;
 }

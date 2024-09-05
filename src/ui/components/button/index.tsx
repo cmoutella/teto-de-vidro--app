@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Button as ButtonHeadless,
   ButtonProps as ButtonHeadlessProps,

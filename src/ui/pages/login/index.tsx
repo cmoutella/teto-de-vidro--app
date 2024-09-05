@@ -16,9 +16,6 @@ const LoginView = () => {
 
     if (!email || !password) return;
 
-    console.log("email", email);
-    console.log("password", password);
-
     await login(email, password);
   };
 

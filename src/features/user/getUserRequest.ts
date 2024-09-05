@@ -9,7 +9,7 @@ export const getUserRequest: (
 
   if (!baseUrl) return undefined;
 
-  const loginUrl = `${baseUrl}/users/id/${id}`;
+  const loginUrl = `${baseUrl}/users/${id}`;
 
   try {
     const user = await fetch(loginUrl, {

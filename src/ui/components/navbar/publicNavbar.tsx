@@ -1,7 +1,4 @@
 "use client";
-import { redirect } from "next/navigation";
-import Button from "../button";
-import PATHS from "@/routes/paths";
 import SessionButton from "../sessionButton";
 
 const PublicNavbar = () => {
