@@ -9,6 +9,8 @@ export interface InterfaceUser {
   email: string;
 }
 
+export type SessionUser = Omit<InterfaceUser, "password"> | undefined;
+
 export type SUN_LIGHT = "morning" | "afternoon" | "none";
 
 export interface InterfaceProperty {
