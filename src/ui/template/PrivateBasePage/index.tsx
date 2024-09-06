@@ -5,7 +5,7 @@ const PrivateBasePage = ({ children }: { children: ReactNode }) => {
   return (
     <div className="w-full min-h-full">
       <PrivateNavbar />
-      {children}
+      <div className="w-full">{children}</div>
     </div>
   );
 };

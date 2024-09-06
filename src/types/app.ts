@@ -1,10 +1,12 @@
+export type Gender = "male" | "female" | "neutral";
+
 export interface InterfaceUser {
   id?: string;
   nickName: string;
   name: string;
   password: string;
   profession?: string;
-  gender: "male" | "female" | "neutral";
+  gender: Gender;
   birthDate: string;
   email: string;
 }
