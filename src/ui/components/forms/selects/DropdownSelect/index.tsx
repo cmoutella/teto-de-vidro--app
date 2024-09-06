@@ -1,26 +1,17 @@
 "use client";
 
-import {
-  Description,
-  Field,
-  Label,
-  Select as SelectHeadless,
-  SelectProps as SelectHeadlessProps,
-} from "@headlessui/react";
-import cx from "classnames";
-import InputWrapper from "../../inputWrapper";
+import { SelectProps as SelectHeadlessProps } from "@headlessui/react";
 import { ChangeEvent, useState } from "react";
-
-interface Option {
-  label: string;
-  value: string;
-  onClick?: () => void;
-}
-
+import { FormSizes, FormTheme } from "../../shared/style";
+import SelectRaw from "../../raw/select";
+import { Option } from "../../raw/select";
+import FieldWrapper from "../../raw/wrappers/field";
 export interface DropdownSelectProps extends SelectHeadlessProps {
   label?: string;
   description?: string;
   options: Option[];
+  theme?: FormTheme;
+  themeSize?: FormSizes;
 }
 
 const DropdownSelect = ({
@@ -28,6 +19,8 @@ const DropdownSelect = ({
   description,
   options,
   defaultValue,
+  theme = "light",
+  themeSize = "md",
   ...otherProps
 }: DropdownSelectProps) => {
   const [selectedValue, setSelectedValue] = useState<string | undefined>(
@@ -42,37 +35,21 @@ const DropdownSelect = ({
   };
 
   return (
-    <Field>
-      {label && (
-        <Label className="text-sm/6 font-medium text-white">{label}</Label>
-      )}
-      {description && (
-        <Description className="text-sm/6 text-white/50">
-          {description}
-        </Description>
-      )}
-      <InputWrapper>
-        <SelectHeadless
-          value={selectedValue}
-          onChange={handleChange}
-          className={cx(
-            "mt-3 block w-full appearance-none rounded-lg border-none bg-white/5 py-1.5 px-3 text-sm/6 text-white",
-            "focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-white/25",
-            // Make the text of each option black on Windows
-            "*:text-black"
-          )}
-          {...otherProps}
-        >
-          {options.map((opt) => {
-            return (
-              <option value={opt.value} key={opt.value}>
-                {opt.label}
-              </option>
-            );
-          })}
-        </SelectHeadless>
-      </InputWrapper>
-    </Field>
+    <FieldWrapper
+      label={label}
+      description={description}
+      theme={theme}
+      themeSize={themeSize}
+    >
+      <SelectRaw
+        value={selectedValue}
+        onChange={handleChange}
+        options={options}
+        theme={theme}
+        themeSize={themeSize}
+        {...otherProps}
+      />
+    </FieldWrapper>
   );
 };
 
