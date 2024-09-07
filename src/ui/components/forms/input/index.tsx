@@ -1,6 +1,6 @@
 import type { InputProps as InputHeadlessProps } from "@headlessui/react";
 import { ReactNode } from "react";
-import { FormSizes, FormTheme } from "../shared/style";
+import { FormSizes, formTheme, FormTheme } from "../shared/style";
 import InputRaw from "../raw/input";
 import FieldWrapper from "../raw/wrappers/field";
 
@@ -10,6 +10,7 @@ interface InputProps extends InputHeadlessProps {
   theme?: FormTheme;
   themeSize?: FormSizes;
   iconButton?: ReactNode;
+  fieldSymbol?: string | ReactNode;
 }
 
 const Input = ({
@@ -18,6 +19,7 @@ const Input = ({
   theme = "light",
   themeSize = "md",
   iconButton,
+  fieldSymbol,
   ...otherProps
 }: InputProps) => {
   return (
@@ -27,8 +29,11 @@ const Input = ({
       theme={theme}
       themeSize={themeSize}
     >
+      {fieldSymbol && (
+        <span className={formTheme[theme].input}>{fieldSymbol}</span>
+      )}
       <InputRaw theme={theme} themeSize={themeSize} {...otherProps} />
-      {iconButton && <span className="">{iconButton}</span>}
+      {iconButton && <span>{iconButton}</span>}
     </FieldWrapper>
   );
 };
