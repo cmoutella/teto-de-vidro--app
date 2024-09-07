@@ -24,7 +24,7 @@ const InputRaw = ({
       className={cx(
         formTheme[theme].input,
         baseInputStyle,
-        "focus:outline-none focus:bg-transparent active:bg-transparent w-full"
+        "focus:outline-none focus:bg-transparent active:bg-transparent w-full placeholder:text-brand-gray-400"
       )}
       {...otherProps}
     />
