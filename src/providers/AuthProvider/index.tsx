@@ -1,13 +1,13 @@
 "use client";
-import { createContext, useContext, useEffect, useMemo, useState } from "react";
+import { createContext, useContext, useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
 import { hash } from "bcryptjs";
 
-import { useRouter } from "next/navigation";
+import { SessionUser } from "@/types/app";
+import { UserAuth } from "@/types/apiResponses";
 import storage from "@/services/storage";
 import { getUserFn, handleUserResponse } from "@/services/auth";
 import { authLogin } from "@/features/auth/login";
-import { UserAuth } from "@/types/apiResponses";
-import { SessionUser } from "@/types/app";
 
 interface SessionContext {
   user?: SessionUser;
@@ -46,8 +46,8 @@ export const SessionProvider = ({
   const router = useRouter();
 
   const login = async (email: string, password: string) => {
-    const hashedPassword = await hash(password, 8);
-    const auth = await authLogin(email, hashedPassword);
+    // const hashedPassword = await hash(password, 8);
+    const auth = await authLogin(email, password);
 
     if (!auth) return;
 

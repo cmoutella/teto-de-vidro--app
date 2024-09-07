@@ -1,10 +1,12 @@
+export type Gender = "male" | "female" | "neutral";
+
 export interface InterfaceUser {
-  id?: string;
+  id: string;
   nickName: string;
   name: string;
   password: string;
   profession?: string;
-  gender: "male" | "female" | "neutral";
+  gender: Gender;
   birthDate: string;
   email: string;
 }
@@ -14,7 +16,7 @@ export type SessionUser = Omit<InterfaceUser, "password"> | undefined;
 export type SUN_LIGHT = "morning" | "afternoon" | "none";
 
 export interface InterfaceProperty {
-  id?: string;
+  id: string;
   mainAddressId: string;
   block?: string;
   propertyNumber: string;
@@ -31,7 +33,7 @@ export interface InterfaceProperty {
 type PropertyDataProps = Omit<InterfaceProperty, "id">;
 
 export interface InterfaceLot {
-  id?: string;
+  id: string;
   name?: string;
   street: string;
   lotNumber: string;
@@ -50,7 +52,7 @@ export interface InterfaceAddress extends PropertyDataProps, LotDataProps {}
 export type CONTRACT_TYPE = "buy" | "rent" | "either";
 
 export interface InterfaceHunt {
-  id?: string;
+  id: string;
   creatorId: string;
   invitedUsers?: string[];
   title?: string;
