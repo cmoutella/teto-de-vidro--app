@@ -26,7 +26,7 @@ const UserHuntsView = () => {
     <div className="w-full flex justify-center flex-col items-center px-14 py-10 gap-3">
       <div className="container px-20 mb-10">Minhas buscas por um lar</div>
 
-      <div>
+      <div className="flex flex-col gap-y-3">
         {hunts.map((hunt) => {
           return (
             <div

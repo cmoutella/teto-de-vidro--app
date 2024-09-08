@@ -74,12 +74,12 @@ const CreateHuntView = () => {
 
   return (
     <div className="w-full flex justify-center flex-col items-center px-14 py-10 gap-3">
-      <div className="container px-20 mb-10">
+      <div className="page-container px-20 mb-10">
         <h1 className="text-3xl text-brand-primary-800 font-semibold">
           Nova mudança
         </h1>
       </div>
-      <div className="container px-20">
+      <div className="page-container px-20">
         <form
           onSubmit={handleSubmit}
           className="w-full grid md:grid-cols-12 gap-x-4 gap-y-5"
