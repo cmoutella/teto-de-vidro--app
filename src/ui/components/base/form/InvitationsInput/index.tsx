@@ -1,4 +1,4 @@
-import Button from "../../base/Button";
+import Button from "../../Button";
 
 const InvitationsInput = () => {
   return (

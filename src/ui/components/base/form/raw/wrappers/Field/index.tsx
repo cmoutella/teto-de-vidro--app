@@ -7,7 +7,7 @@ import type { InputProps as InputHeadlessProps } from "@headlessui/react";
 import cx from "classnames";
 import { ReactNode } from "react";
 import { FormSizes, formTheme, FormTheme, iSizes } from "../../../shared/style";
-import InputWrapper from "../input";
+import InputWrapper from "../Input";
 
 interface InputProps extends InputHeadlessProps {
   label?: string;

@@ -1,8 +1,8 @@
 import { ChangeEvent, useEffect, useState } from "react";
 import { FormSizes, FormTheme } from "../shared/style";
-import FieldWrapper from "../raw/wrappers/field";
-import SelectRaw from "../raw/select";
-import { Option } from "../raw/select";
+import FieldWrapper from "../raw/wrappers/Field";
+import SelectRaw from "../raw/Select";
+import { Option } from "../raw/Select";
 
 interface InputPartialDateProps {
   label?: string;

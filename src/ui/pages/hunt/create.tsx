@@ -3,10 +3,10 @@ import { createHunt, CreateHuntRequestProps } from "@/features/hunt/create";
 import { useSessionContext } from "@/providers/AuthProvider";
 import { CONTRACT_TYPE } from "@/types/app";
 import Button from "@/ui/components/base/Button";
-import Input from "@/ui/components/forms/input";
-import InputPartialDate from "@/ui/components/forms/inputPartialDate";
-import DropdownSelect from "@/ui/components/forms/selects/DropdownSelect";
-import { FormSizes, FormTheme } from "@/ui/components/forms/shared/style";
+import Input from "@/ui/components/base/form/Input";
+import InputPartialDate from "@/ui/components/base/form/InputPartialDate";
+import DropdownSelect from "@/ui/components/base/form/selects/DropdownSelect";
+import { FormSizes, FormTheme } from "@/ui/components/base/form/shared/style";
 import { useRouter } from "next/navigation";
 
 import { ChangeEvent, FormEvent, useState } from "react";

@@ -6,7 +6,7 @@ import {
   SelectProps as SelectHeadlessProps,
 } from "@headlessui/react";
 import cx from "classnames";
-import InputWrapper from "../wrappers/input";
+import InputWrapper from "../wrappers/Input";
 import { ChangeEvent, useState } from "react";
 import {
   baseInputStyle,
