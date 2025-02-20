@@ -3,6 +3,7 @@ import { useSessionContext } from "@/providers/AuthProvider";
 import Button from "@/ui/components/base/Button";
 import Input from "@/ui/components/base/form/Input";
 import { ChangeEvent, FormEvent, useState } from "react";
+import cx from "classnames";
 
 const LoginView = () => {
   const [email, setEmail] = useState<string | undefined>(undefined);
@@ -44,7 +45,7 @@ const LoginView = () => {
   };
 
   return (
-    <div className="w-full h-full px-6 py-10">
+    <div className="w-full h-full px-6 py-10 flex justify-center items-center">
       <div className="container">
         <div className="flex justify-center">
           <div className="px-6 py-8 pb-6 w-6/12 max-w-xl shadow-md shadow-white">
@@ -70,10 +71,16 @@ const LoginView = () => {
               />
               <Button
                 type="submit"
-                className="self-end"
+                className={cx(
+                  "self-end",
+                  "border border-1",
+                  "border-brand-primary-400 bg-brand-primary-400 hover:border-brand-primary-300 hover:bg-brand-primary-500",
+                  "text-white",
+                  "disabled:text-brand-primary-400 disabled:bg-transparent disabled:border-brand-primary-300",
+                  "font-medium"
+                )}
                 disabled={!password && !email}
                 label="Entrar"
-                theme="primary"
               />
             </form>
           </div>

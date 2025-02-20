@@ -8,10 +8,8 @@ import cx from "classnames";
 import {
   btnBorderRadius,
   btnSize,
-  btnType,
   ButtonRadius,
   ButtonSize,
-  ButtonTheme,
   ButtonType,
   roundedBtnSize,
 } from "./shared/style";
@@ -19,7 +17,6 @@ import { ReactNode } from "react";
 
 export interface ButtonProps extends ButtonHeadlessProps {
   uiType?: ButtonType;
-  theme?: ButtonTheme;
   size?: ButtonSize;
   label: string | ReactNode;
   fullWidth?: boolean;
@@ -30,7 +27,6 @@ export interface ButtonProps extends ButtonHeadlessProps {
 
 const Button = ({
   uiType = "default",
-  theme = "primary",
   size = "medium",
   borderRadius = "md",
   flat = false,
@@ -43,14 +39,11 @@ const Button = ({
 }: ButtonProps) => {
   const bSize = rounded ? roundedBtnSize[size] : btnSize[size];
 
-  const bTheme = disabled ? btnType[uiType].disabled : btnType[uiType][theme];
-
   return (
     <ButtonHeadless
       className={cx(
-        "cursor-pointer",
+        { "cursor-pointer": !disabled },
         bSize,
-        bTheme,
         {
           "w-full": fullWidth,
         },
