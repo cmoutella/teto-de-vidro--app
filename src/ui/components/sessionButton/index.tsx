@@ -3,12 +3,12 @@
 import cx from "classnames";
 import { useSessionContext } from "@/providers/AuthProvider";
 import Link from "next/link";
-import Button, { ButtonProps } from "../button";
+import Button, { ButtonProps } from "../base/Button";
 import {
   btnBorderRadius,
   btnSize,
   btnThemeOutline,
-} from "../button/shared/style";
+} from "../base/Button/shared/style";
 
 const SessionButton = ({
   size = "medium",

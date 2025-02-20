@@ -2,7 +2,7 @@
 import { createHunt, CreateHuntRequestProps } from "@/features/hunt/create";
 import { useSessionContext } from "@/providers/AuthProvider";
 import { CONTRACT_TYPE } from "@/types/app";
-import Button from "@/ui/components/button";
+import Button from "@/ui/components/base/Button";
 import Input from "@/ui/components/forms/input";
 import InputPartialDate from "@/ui/components/forms/inputPartialDate";
 import DropdownSelect from "@/ui/components/forms/selects/DropdownSelect";

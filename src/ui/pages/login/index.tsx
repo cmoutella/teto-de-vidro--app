@@ -1,6 +1,6 @@
 "use client";
 import { useSessionContext } from "@/providers/AuthProvider";
-import Button from "@/ui/components/button";
+import Button from "@/ui/components/base/Button";
 import Input from "@/ui/components/forms/input";
 import { ChangeEvent, FormEvent, useState } from "react";
 

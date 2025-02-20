@@ -1,4 +1,4 @@
-import Button from "@/ui/components/button";
+import Button from "@/ui/components/base/Button";
 import DashboardCard from "@/ui/components/dashboardCard";
 import { useRouter } from "next/navigation";
 
