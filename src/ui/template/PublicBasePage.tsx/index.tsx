@@ -1,4 +1,4 @@
-import PublicNavbar from "@/ui/components/navbar/publicNavbar";
+import PublicNavbar from "@/ui/components/Nav/publicNavbar";
 import { ReactNode } from "react";
 
 const PublicBasePage = ({ children }: { children: ReactNode }) => {

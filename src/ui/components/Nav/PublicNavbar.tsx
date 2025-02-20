@@ -1,5 +1,5 @@
 "use client";
-import SessionButton from "../sessionButton";
+import SessionButton from "../SessionButton";
 
 const PublicNavbar = () => {
   return (
