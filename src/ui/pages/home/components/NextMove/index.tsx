@@ -1,5 +1,5 @@
 import Button from "@/ui/components/base/Button";
-import DashboardCard from "@/ui/components/dashboardCard";
+import DashboardCard from "@/ui/components/DashboardCard";
 import { useRouter } from "next/navigation";
 
 const NextMoveDashboard = () => {
