@@ -1,31 +1,27 @@
 import { SuccessResponse } from "@/types/apiPatterns";
 import { InterfaceHunt } from "@/types/app";
 
-export interface GetHuntRequestProps {
-  huntId: string;
-}
-
-export const createHunt: (
-  huntId: GetHuntRequestProps
+export const getHuntById: (
+  huntId: string
 ) => Promise<InterfaceHunt | undefined> = async (huntId) => {
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
 
   if (!baseUrl) return undefined;
 
   try {
-    const auth = await fetch(`${baseUrl}/hunt/${huntId}`, {
-      method: "POST",
+    const res = await fetch(`${baseUrl}/hunt/${huntId}`, {
+      method: "GET",
       mode: "cors",
       headers: {
         "Content-Type": "application/json",
       },
     }).then((res) => res.json());
 
-    if (auth.error) {
-      throw Error("Não foi possível ");
+    if (res.error) {
+      throw Error("Não foi possível encontrar a informação solicitada");
     }
 
-    const { data } = auth as SuccessResponse<InterfaceHunt>;
+    const { data } = res as SuccessResponse<InterfaceHunt>;
 
     return data;
   } catch (err) {
