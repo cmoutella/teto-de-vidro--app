@@ -11,6 +11,7 @@ interface TargetPropertyInterface {
   visitDate: string;
   realtor: string;
   realtorContact: string;
+
   lotId: string;
   lotNumber: string;
   postalCode: string;
@@ -18,6 +19,8 @@ interface TargetPropertyInterface {
   uf: string;
   city: string;
   country: string;
+  street: string;
+
   propertyId: string;
   block: string;
   number: string;
