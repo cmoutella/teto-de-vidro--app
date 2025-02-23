@@ -24,10 +24,10 @@ const SessionButton = ({
           {
             "w-full": fullWidth,
           },
-          "border border-1",
-          "bg-transparent border-brand-primary-600 hover:bg-brand-primary-600",
-          "text-brand-primary-800 hover:text-white",
-          "text-center flex justify-center items-center"
+          "border border-2",
+          "bg-transparent border-white hover:bg-brand-primary-600 hover:border-brand-primary-600",
+          "text-white hover:text-white",
+          "text-center tracking-wide flex justify-center items-center"
         )}
       >
         Entrar
