@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 
-import { clearToken, getToken, setToken } from "@/services/storage";
+import storage from "@/services/storage";
 import { isTokenValid } from "@/utils/auth";
 import { SessionUser } from "@/types/app";
 import { UserAuth } from "@/types/apiResponses";
@@ -10,34 +10,39 @@ export interface UserResponse {
 }
 
 export function getUserFn(): SessionUser {
-  const currAuth: UserAuth = getToken();
+  const currAuth: UserAuth = storage().getToken();
   if (!currAuth || !currAuth.user) return undefined;
 
   const authIsValid = isTokenValid(currAuth.expireAt);
 
   if (authIsValid) return currAuth.user;
 
-  clearToken();
+  storage().clearToken();
   return undefined;
 }
 
 export async function handleUserResponse(loginAuth?: UserAuth) {
-  const currAuth: UserAuth = getToken();
+  const store = storage();
+  const currAuth: UserAuth = store.getToken();
 
   const auth: UserAuth = loginAuth ?? currAuth;
 
   if (!auth) {
-    clearToken();
+    store.clearToken();
     throw new Error("Não foi possivel confirmar suas credenciais");
   }
   const authIsValid = isTokenValid(auth.expireAt);
 
   if (!authIsValid) {
-    clearToken();
+    store.clearToken();
     throw new Error("Não foi possivel confirmar suas credenciais");
   }
 
-  setToken(auth);
+  console.log("chegou aqui né?");
+
+  await store.setToken(auth);
+
+  console.log("mas e aqui, chegou?");
 
   return auth.user;
 }

@@ -19,7 +19,7 @@ interface SessionContext {
 
 const DEFAULT_VALUES = {
   user: getUserFn(),
-  isLogged: storage.hasToken(),
+  isLogged: storage().hasToken(),
   login: (u: string, p: string) => {},
   logout: () => {},
   authenticate: () => {},
@@ -45,6 +45,8 @@ export const SessionProvider = ({
   const [user, setUser] = useState<SessionUser>(DEFAULT_VALUES.user);
   const router = useRouter();
 
+  const bStorage = storage();
+
   const login = async (email: string, password: string) => {
     // const hashedPassword = await hash(password, 8);
     const auth = await authLogin(email, password);
@@ -59,7 +61,7 @@ export const SessionProvider = ({
 
   const logout = () => {
     setUser(undefined);
-    storage.clearToken();
+    bStorage.clearToken();
   };
 
   const authenticate = () => {
@@ -82,7 +84,7 @@ export const SessionProvider = ({
 
   // TODO: esse nao ta rolando, pq?
   const isLogged = useMemo(
-    () => user !== undefined && storage.hasToken(),
+    () => user !== undefined && bStorage.hasToken(),
     [user]
   );
 

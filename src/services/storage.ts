@@ -1,39 +1,47 @@
-import { authCookie, authCookieOptions } from "@/config/auth";
+import { authCookie } from "@/config/auth";
 import { UserAuth } from "@/types/apiResponses";
-import { setCookie, getCookie, deleteCookie } from "cookies-next";
+import { cookie } from "./cookies";
 
-export const getToken: () => UserAuth = () => {
-  const app = getCookie(authCookie.api);
+function storage() {
+  const cookies = cookie();
 
-  if (app) {
-    return JSON.parse(app);
-  }
+  const getToken: () => UserAuth = () => {
+    const app = cookies.get(authCookie.api);
 
-  return undefined;
-};
+    if (app) {
+      return JSON.parse(app);
+    }
 
-export const setToken = (payload: UserAuth) => {
-  setCookie(authCookie.api, JSON.stringify(payload), authCookieOptions);
-};
+    return undefined;
+  };
 
-export const clearToken = () => {
-  deleteCookie(authCookie.api);
-};
+  const setToken = (payload: UserAuth) => {
+    cookies.set(
+      authCookie.api,
+      JSON.stringify(payload),
+      new Date(payload.expireAt)
+    );
+  };
 
-export const hasToken = () => {
-  const authCookie = getToken();
-  if (!authCookie) return false;
+  const clearToken = () => {
+    cookies.remove(authCookie.api);
+  };
 
-  const app = authCookie.token;
+  const hasToken = () => {
+    const authCookie = getToken();
+    if (!authCookie) return false;
 
-  return !!app;
-};
+    const app = authCookie.token;
 
-const storage = {
-  getToken,
-  setToken,
-  clearToken,
-  hasToken,
-};
+    return !!app;
+  };
+
+  return {
+    getToken,
+    setToken,
+    clearToken,
+    hasToken,
+  };
+}
 
 export default storage;
