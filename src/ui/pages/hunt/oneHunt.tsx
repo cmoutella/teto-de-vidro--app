@@ -18,10 +18,10 @@ const OneHuntView = ({ hunt }: HuntViewProps) => {
   const [properties, setProperties] = useState<TargetPropertyInterface[]>([]);
 
   useEffect(() => {
-    fechPropertiesData();
+    fetchPropertiesData();
   }, []);
 
-  const fechPropertiesData = async () => {
+  const fetchPropertiesData = async () => {
     const data = await getAllTargetPropertiesfromHunt(hunt.id, page, perPage);
 
     if (!data || data.length <= 0) {
