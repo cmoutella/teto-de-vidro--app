@@ -1,5 +1,5 @@
 "use client";
-import { createHunt, CreateHuntRequestProps } from "@/features/hunt/create";
+import { createHunt, CreateHuntRequestProps } from "@/api/hunt/create";
 import { useSessionContext } from "@/providers/AuthProvider";
 import { CONTRACT_TYPE } from "@/types/app";
 import Button from "@/ui/components/base/Button";

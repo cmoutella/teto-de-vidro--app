@@ -1,6 +1,6 @@
 "use client";
 
-import { getAllTargetPropertiesfromHunt } from "@/features/hunt/getAllTargetProperties";
+import { getAllTargetPropertiesfromHunt } from "@/api/hunt/getAllTargetProperties";
 import { InterfaceHunt } from "@/types/app";
 import Button from "@/ui/components/base/Button";
 import TargetPropertyList from "@/ui/components/base/TargetPropertyList";
