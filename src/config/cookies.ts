@@ -1,7 +1,7 @@
 import type { OptionsType } from "cookies-next/lib/types";
 
-export const authCookie = {
-  api: "@tetoDeVidro:token",
+export const appCokies = {
+  auth: "@tetoDeVidro:token",
 };
 
 export const authCookieOptions: OptionsType = {

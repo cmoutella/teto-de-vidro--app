@@ -1,11 +1,12 @@
 "use client";
 
-import { getAllTargetPropertiesfromHunt } from "@/features/hunt/getAllTargetProperties";
+import { getAllTargetPropertiesfromHunt } from "@/api/hunt/getAllTargetProperties";
 import { InterfaceHunt } from "@/types/app";
 import Button from "@/ui/components/base/Button";
 import TargetPropertyList from "@/ui/components/base/TargetPropertyList";
 import PrivateBasePage from "@/ui/template/PrivateBasePage";
 import { useEffect, useState } from "react";
+import { DEFAULT_HUNT_LIST_PER_PAGE } from "./consts/perPage";
 
 interface HuntViewProps {
   hunt: InterfaceHunt;
@@ -14,14 +15,14 @@ interface HuntViewProps {
 const OneHuntView = ({ hunt }: HuntViewProps) => {
   const [page, setPage] = useState<number>(1);
   const [totalPages, setTotalPages] = useState<number>(0);
-  const [perPage, setPerPage] = useState<number>(8);
+  const [perPage, setPerPage] = useState<number>(DEFAULT_HUNT_LIST_PER_PAGE);
   const [properties, setProperties] = useState<TargetPropertyInterface[]>([]);
 
   useEffect(() => {
-    fechPropertiesData();
+    fetchPropertiesData();
   }, []);
 
-  const fechPropertiesData = async () => {
+  const fetchPropertiesData = async () => {
     const data = await getAllTargetPropertiesfromHunt(hunt.id, page, perPage);
 
     if (!data || data.length <= 0) {

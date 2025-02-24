@@ -1,4 +1,4 @@
-import { getHuntById } from "@/features/hunt/getById";
+import { getHuntById } from "@/api/hunt/getById";
 import HuntView from "@/ui/pages/hunt/oneHunt";
 import { redirect } from "next/navigation";
 
