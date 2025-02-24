@@ -1,1 +1,1 @@
-yarn lint-staged -r
+pnpm lint-staged -r

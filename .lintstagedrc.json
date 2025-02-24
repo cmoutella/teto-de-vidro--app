@@ -1,5 +1,5 @@
 {
-  "**/*.{js,jsx,ts,tsx}": ["yarn lint:check", "yarn lint:syntax --fix"],
-  "*.{json, md}": ["yarn lint:check"],
-  "*.{style.tsx, css, scss}": ["yarn lint:style", "yarn lint:check"]
+  "**/*.{js,jsx,ts,tsx}": ["pnpm lint:check", "pnpm lint:syntax --fix"],
+  "*.{json, md}": ["pnpm lint:check"],
+  "*.{style.tsx, css, scss}": ["pnpm lint:style", "pnpm lint:check"]
 }
