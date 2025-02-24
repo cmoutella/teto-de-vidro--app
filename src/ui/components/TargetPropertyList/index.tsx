@@ -1,18 +1,18 @@
 interface TargetPropertyListProps {
-  list: TargetPropertyInterface[];
-  page: number;
-  totalPages: number;
-  perPage: number;
+  list: TargetPropertyInterface[]
+  page: number
+  totalPages: number
+  perPage: number
 }
 
 function TargetPropertyList({
   list,
-  page,
-  totalPages,
-  perPage,
+  page: _page,
+  totalPages: _totalPages,
+  perPage: _perPage
 }: TargetPropertyListProps) {
   if (list.length <= 0) {
-    return <>Ainda não tem nenhum imóvel</>;
+    return <>Ainda não tem nenhum imóvel</>
   }
 
   return (
@@ -22,10 +22,10 @@ function TargetPropertyList({
           <>
             {tp.id}: {tp.nickname}
           </>
-        );
+        )
       })}
     </div>
-  );
+  )
 }
 
-export default TargetPropertyList;
+export default TargetPropertyList

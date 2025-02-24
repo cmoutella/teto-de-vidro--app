@@ -1,11 +1,11 @@
-import type { OptionsType } from "cookies-next/lib/types";
+import type { OptionsType } from 'cookies-next/lib/types'
 
 export const appCokies = {
-  auth: "@tetoDeVidro:token",
-};
+  auth: '@tetoDeVidro:token'
+}
 
 export const authCookieOptions: OptionsType = {
   maxAge: 15 * 24 * 60 * 60 * 1000,
-  sameSite: "strict",
-  httpOnly: false,
-};
+  sameSite: 'strict',
+  httpOnly: false
+}

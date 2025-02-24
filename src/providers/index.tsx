@@ -1,22 +1,23 @@
-"use client";
-import { createContext, useContext } from "react";
+/* eslint-disable @typescript-eslint/no-empty-object-type */
+'use client'
+import { createContext, useContext } from 'react'
 
-import { UIProvider } from "./UIProvider";
-import { SessionProvider } from "./AuthProvider";
+import { SessionProvider } from './AuthProvider'
+import { UIProvider } from './UIProvider'
 
 interface AllContext {}
 
-const AllContext = createContext<AllContext>({});
+const AllContext = createContext<AllContext>({})
 
 export const useAllContext = () => {
-  const context = useContext(AllContext);
+  const context = useContext(AllContext)
 
   if (context === undefined) {
-    throw new Error("Missing AllContext on React three");
+    throw new Error('Missing AllContext on React three')
   }
 
-  return context;
-};
+  return context
+}
 
 export const AllProviders = ({ children }: { children: React.ReactNode }) => {
   return (
@@ -25,5 +26,5 @@ export const AllProviders = ({ children }: { children: React.ReactNode }) => {
         <SessionProvider>{children}</SessionProvider>
       </UIProvider>
     </AllContext.Provider>
-  );
-};
+  )
+}

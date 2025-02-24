@@ -1,53 +1,53 @@
-import { SuccessResponse } from "@/types/apiPatterns";
-import { InterfaceLot } from "@/types/app";
+import type { SuccessResponse } from '@/types/apiPatterns'
+import type { InterfaceLot } from '@/types/app'
 
 export type GetLotsByAddressProps = {
-  street: string;
-  city: string;
-  neighborhood?: string;
-  province: string;
-  country: string;
-  lotName?: string;
-  lotNumber?: string;
-  postalCode?: string;
-};
+  street: string
+  city: string
+  neighborhood?: string
+  province: string
+  country: string
+  lotName?: string
+  lotNumber?: string
+  postalCode?: string
+}
 
-export const getAllLotsByAddress: (
-  requestBody: GetLotsByAddressProps
-) => Promise<InterfaceLot[]> = async (requestBody) => {
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
+type GetAllLotsByAddressRequest = (_requestBody: GetLotsByAddressProps) => Promise<InterfaceLot[]>
 
-  if (!baseUrl) return [];
+export const getAllLotsByAddress: GetAllLotsByAddressRequest = async (requestBody) => {
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL
 
-  const fetchUrl = `${baseUrl}/address/lots`;
+  if (!baseUrl) return []
+
+  const fetchUrl = `${baseUrl}/address/lots`
 
   const mockRequestData = {
-    street: "Rua Guaxupé",
-    city: "Rio de Janeiro",
-    province: "RJ",
-    country: "Brazil",
-  };
+    street: 'Rua Guaxupé',
+    city: 'Rio de Janeiro',
+    province: 'RJ',
+    country: 'Brazil'
+  }
 
-  const requestData = requestBody ?? mockRequestData;
+  const requestData = requestBody ?? mockRequestData
 
   try {
     const res = await fetch(fetchUrl, {
-      method: "POST",
-      mode: "cors",
+      method: 'POST',
+      mode: 'cors',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json'
       },
-      body: JSON.stringify(requestData),
-    }).then((res) => res.json());
+      body: JSON.stringify(requestData)
+    }).then((res) => res.json())
 
     if (res.error) {
-      throw Error("Não foi possivel buscar agora");
+      throw Error('Não foi possivel buscar agora')
     }
 
-    const { data } = res as SuccessResponse<InterfaceLot[]>;
+    const { data } = res as SuccessResponse<InterfaceLot[]>
 
-    return data;
-  } catch (err) {
-    return [];
+    return data
+  } catch (_err) {
+    return []
   }
-};
+}

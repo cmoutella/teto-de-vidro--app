@@ -1,31 +1,31 @@
-import { Features } from "@/types/features";
+import type { Features } from '@/types/features'
 
 export interface MenuItem {
-  title: string;
-  path: string;
+  title: string
+  path: string
 }
 
 const PATHS: Record<Features, MenuItem> = {
   LOGIN: {
-    title: "Login",
-    path: "/login",
+    title: 'Login',
+    path: '/login'
   },
   LOGOUT: {
-    title: "Logout",
-    path: "/logout",
+    title: 'Logout',
+    path: '/logout'
   },
   PUBLIC_HOME: {
-    title: "Início",
-    path: "/",
+    title: 'Início',
+    path: '/'
   },
   PRIVATE_HOME: {
-    title: "Meu painel",
-    path: "/",
+    title: 'Meu painel',
+    path: '/'
   },
   HUNTS: {
-    title: "Minhas buscas por imóvel",
-    path: "/hunts",
-  },
-};
+    title: 'Minhas buscas por imóvel',
+    path: '/hunts'
+  }
+}
 
-export default PATHS;
+export default PATHS

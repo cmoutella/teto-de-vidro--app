@@ -1,17 +1,18 @@
-"use client";
+'use client'
 
-import { InterfaceHunt } from "@/types/app";
-import Button from "@/ui/components/base/Button";
-import PrivateBasePage from "@/ui/template/PrivateBasePage";
-import { useRouter } from "next/navigation";
-import cx from "classnames";
+import PrivateBasePage from '@template/PrivateBasePage'
+import Button from '@ui/base/Button'
+import cx from 'classnames'
+import { useRouter } from 'next/navigation'
+
+import type { InterfaceHunt } from '@/types/app'
 
 interface ListHuntViewInterface {
-  hunts: InterfaceHunt[];
+  hunts: InterfaceHunt[]
 }
 
 const ListHuntView = ({ hunts }: ListHuntViewInterface) => {
-  const router = useRouter();
+  const router = useRouter()
 
   return (
     <PrivateBasePage>
@@ -27,14 +28,14 @@ const ListHuntView = ({ hunts }: ListHuntViewInterface) => {
               <Button
                 label="Acessar"
                 onClick={() => router.push(`/hunt/${hunt.id}`)}
-                className={cx("bg-brand-primary-600 text-white")}
+                className={cx('bg-brand-primary-600 text-white')}
               />
             </div>
           ))}
         </div>
       </div>
     </PrivateBasePage>
-  );
-};
+  )
+}
 
-export default ListHuntView;
+export default ListHuntView

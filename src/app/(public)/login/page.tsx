@@ -1,7 +1,7 @@
-import LoginView from "@/ui/pages/login";
+import LoginView from '@pages/login'
 
 const LoginPage = () => {
-  return <LoginView />;
-};
+  return <LoginView />
+}
 
-export default LoginView;
+export default LoginPage

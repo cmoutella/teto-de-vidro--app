@@ -1,44 +1,45 @@
-"use client";
-import { createHunt, CreateHuntRequestProps } from "@/api/hunt/create";
-import { useSessionContext } from "@/providers/AuthProvider";
-import { CONTRACT_TYPE } from "@/types/app";
-import Button from "@/ui/components/base/Button";
-import Input from "@/ui/components/base/form/Input";
-import InputPartialDate from "@/ui/components/base/form/InputPartialDate";
-import DropdownSelect from "@/ui/components/base/form/selects/DropdownSelect";
-import { FormSizes, FormTheme } from "@/ui/components/base/form/shared/style";
-import SubmitButton from "@/ui/components/base/form/SubmitButton";
-import cx from "classnames";
+'use client'
+import type { ChangeEvent, FormEvent } from 'react'
+import { useMemo, useState } from 'react'
 
-import { ChangeEvent, FormEvent, useMemo, useState } from "react";
+import type { CreateHuntRequestProps } from '@api/hunt/create'
+import { createHunt } from '@api/hunt/create'
+import { useSessionContext } from '@providers/AuthProvider'
+import SubmitButton from '@ui/base/form/buttons/SubmitButton'
+import Input from '@ui/base/form/inputs/Input'
+import InputPartialDate from '@ui/base/form/inputs/InputPartialDate'
+import DropdownSelect from '@ui/base/form/selects/DropdownSelect'
+import type { FormSizes, FormTheme } from '@ui/base/shared/formTheme'
+
+import type { CONTRACT_TYPE } from '@/types/app'
 
 interface CreateHuntFormProps {
-  onSuccess: (id: string) => void;
-  onFail: () => void;
+  onSuccess: (_id: string) => void
+  onFail: () => void
 }
 
-const formThemeSize: FormSizes = "lg";
-const themePallete: FormTheme = "light";
+const formThemeSize: FormSizes = 'lg'
+const themePallete: FormTheme = 'light'
 
 const CreateHuntForm = ({ onSuccess, onFail }: CreateHuntFormProps) => {
-  const [title, setTitle] = useState<string>("");
-  const [type, setType] = useState<CONTRACT_TYPE>("either");
-  const [movingDate, setMovingDate] = useState<Date | undefined>();
-  const [livingPeople, setLivingPeople] = useState<number>(1);
-  const [livingPets, setLivingPets] = useState<number>(0);
-  const [lowerBudget, setLowerBudget] = useState<number>(0);
-  const [higherBudget, setHigherBudget] = useState<number>(0);
+  const [title, setTitle] = useState<string>('')
+  const [type, setType] = useState<CONTRACT_TYPE>('either')
+  const [movingDate, setMovingDate] = useState<Date | undefined>()
+  const [livingPeople, setLivingPeople] = useState<number>(1)
+  const [livingPets, setLivingPets] = useState<number>(0)
+  const [lowerBudget, setLowerBudget] = useState<number>(0)
+  const [higherBudget, setHigherBudget] = useState<number>(0)
 
   const submitButtonDisabled = useMemo(() => {
-    return !title;
-  }, [title]);
+    return !title
+  }, [title])
 
-  const { user } = useSessionContext();
+  const { user } = useSessionContext()
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+    e.preventDefault()
 
-    if (!title || !user) return;
+    if (!title || !user) return
 
     const data: CreateHuntRequestProps = {
       creatorId: user.id,
@@ -46,49 +47,46 @@ const CreateHuntForm = ({ onSuccess, onFail }: CreateHuntFormProps) => {
       type: type,
       movingExpected: movingDate?.toISOString(),
       livingPeople: livingPeople,
-      livingPets: livingPets,
-    };
-
-    const res = await createHunt(data);
-
-    if (!res) {
-      onFail();
-      return;
+      livingPets: livingPets
     }
 
-    onSuccess(res?.id);
-  };
+    const res = await createHunt(data)
+
+    if (!res) {
+      onFail()
+      return
+    }
+
+    onSuccess(res?.id)
+  }
 
   const handleTitle = (e: ChangeEvent<HTMLInputElement>) => {
-    setTitle(e.target.value);
-  };
+    setTitle(e.target.value)
+  }
 
   const handleType = (e: ChangeEvent<HTMLSelectElement>) => {
-    setType(e.target.value as CONTRACT_TYPE);
-  };
+    setType(e.target.value as CONTRACT_TYPE)
+  }
 
   const handlePeople = (e: ChangeEvent<HTMLInputElement>) => {
-    setLivingPeople(Number(e.target.value));
-  };
+    setLivingPeople(Number(e.target.value))
+  }
 
   const handlePets = (e: ChangeEvent<HTMLInputElement>) => {
-    setLivingPets(Number(e.target.value));
-  };
+    setLivingPets(Number(e.target.value))
+  }
 
   const handleLowerBudget = (e: ChangeEvent<HTMLInputElement>) => {
-    setLowerBudget(Number(e.target.value));
-  };
+    setLowerBudget(Number(e.target.value))
+  }
 
   const handleHigherBudget = (e: ChangeEvent<HTMLInputElement>) => {
-    setHigherBudget(Number(e.target.value));
-  };
+    setHigherBudget(Number(e.target.value))
+  }
 
   return (
     <div className="w-full flex justify-center flex-col items-center px-14 py-10 gap-3">
-      <form
-        onSubmit={handleSubmit}
-        className="w-full grid md:grid-cols-12 gap-x-4 gap-y-5"
-      >
+      <form onSubmit={handleSubmit} className="w-full grid md:grid-cols-12 gap-x-4 gap-y-5">
         <span className="col-span-8">
           <Input
             label="Dê um título para esta mudança"
@@ -107,9 +105,9 @@ const CreateHuntForm = ({ onSuccess, onFail }: CreateHuntFormProps) => {
             description="Apenas para aluguel? Compra?"
             name="housingType"
             options={[
-              { value: "buy", label: "Compra" },
-              { value: "rent", label: "Aluguel" },
-              { value: "either", label: "?" },
+              { value: 'buy', label: 'Compra' },
+              { value: 'rent', label: 'Aluguel' },
+              { value: 'either', label: '?' }
             ]}
             themeSize={formThemeSize}
             theme={themePallete}
@@ -176,14 +174,12 @@ const CreateHuntForm = ({ onSuccess, onFail }: CreateHuntFormProps) => {
         </div>
 
         <div className="flex flex-col gap-2 col-span-12 justify-center items-center pt-5">
-          <span className="text-brand-gray-700 text-xs pb-2">
-            Você pode alterar depois
-          </span>
+          <span className="text-brand-gray-700 text-xs pb-2">Você pode alterar depois</span>
           <SubmitButton isDisabled={submitButtonDisabled} />
         </div>
       </form>
     </div>
-  );
-};
+  )
+}
 
-export default CreateHuntForm;
+export default CreateHuntForm

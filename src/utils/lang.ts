@@ -1,7 +1,7 @@
-import { Gender } from "@/types/app";
+import type { Gender } from '@/types/app'
 
-export const genderVowel: { [key in Gender]: string } = {
-  female: "a",
-  male: "o",
-  neutral: "e",
-};
+export const genderVowel: { [_key in Gender]: string } = {
+  female: 'a',
+  male: 'o',
+  neutral: 'e'
+}

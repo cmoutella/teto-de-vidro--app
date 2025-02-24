@@ -1,35 +1,34 @@
-import { SuccessResponse } from "@/types/apiPatterns";
-import { InterfaceHunt } from "@/types/app";
+import type { SuccessResponse } from '@/types/apiPatterns'
+import type { InterfaceHunt } from '@/types/app'
 
-export interface CreateHuntRequestProps
-  extends Omit<InterfaceHunt, "id" | "targets" | "isActive"> {}
+export type CreateHuntRequestProps = Omit<InterfaceHunt, 'id' | 'targets' | 'isActive'>
 
-export const createHunt: (
-  bodyData: CreateHuntRequestProps
-) => Promise<InterfaceHunt | undefined> = async (bodyData) => {
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
+type CreateHuntRequest = (_bodyData: CreateHuntRequestProps) => Promise<InterfaceHunt | undefined>
 
-  if (!baseUrl) return undefined;
+export const createHunt: CreateHuntRequest = async (bodyData) => {
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL
+
+  if (!baseUrl) return undefined
 
   try {
     const res = await fetch(`${baseUrl}/hunt`, {
-      method: "POST",
-      mode: "cors",
+      method: 'POST',
+      mode: 'cors',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json'
       },
-      body: JSON.stringify(bodyData),
-    }).then((res) => res.json());
+      body: JSON.stringify(bodyData)
+    }).then((res) => res.json())
 
     if (res.error) {
-      throw Error("Não foi possível criar agora, tente novamente mais tarde");
+      throw Error('Não foi possível criar agora, tente novamente mais tarde')
     }
 
-    const { data } = res as SuccessResponse<InterfaceHunt>;
+    const { data } = res as SuccessResponse<InterfaceHunt>
 
-    return data;
-  } catch (err) {
+    return data
+  } catch (_err) {
     // TODO: toast
-    return undefined;
+    return undefined
   }
-};
+}

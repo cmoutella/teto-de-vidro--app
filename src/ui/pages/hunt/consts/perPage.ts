@@ -1,1 +1,1 @@
-export const DEFAULT_HUNT_LIST_PER_PAGE = 8;
+export const DEFAULT_HUNT_LIST_PER_PAGE = 8

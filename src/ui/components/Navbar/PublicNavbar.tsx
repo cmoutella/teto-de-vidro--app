@@ -1,5 +1,5 @@
-"use client";
-import SessionButton from "../SessionButton";
+'use client'
+import SessionButton from '../SessionButton'
 
 const PublicNavbar = () => {
   return (
@@ -9,7 +9,7 @@ const PublicNavbar = () => {
         <SessionButton />
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default PublicNavbar;
+export default PublicNavbar

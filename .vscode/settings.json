@@ -1,0 +1,12 @@
+{
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit",
+    "source.organizeImports": "explicit"
+  },
+  "editor.tabCompletion": "on",
+  "editor.wordWrap": "on",
+  "editor.quickSuggestions": {
+    "strings": true
+  }
+}

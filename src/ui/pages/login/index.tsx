@@ -1,38 +1,41 @@
-"use client";
-import { useSessionContext } from "@/providers/AuthProvider";
-import Button from "@/ui/components/base/Button";
-import Input from "@/ui/components/base/form/Input";
-import { ChangeEvent, FormEvent, useState } from "react";
-import cx from "classnames";
+'use client'
+import type { ChangeEvent, FormEvent } from 'react'
+import { useState } from 'react'
+
+import { useSessionContext } from '@providers/AuthProvider'
+import cx from 'classnames'
+
+import Button from '@/ui/components/base/Button'
+import Input from '@/ui/components/base/form/inputs/Input'
 
 const LoginView = () => {
-  const [email, setEmail] = useState<string | undefined>(undefined);
-  const [password, setPassword] = useState<string | undefined>(undefined);
-  const [passwordVisible, setPasswordVisible] = useState<boolean>(true);
+  const [email, setEmail] = useState<string | undefined>(undefined)
+  const [password, setPassword] = useState<string | undefined>(undefined)
+  const [passwordVisible, setPasswordVisible] = useState<boolean>(true)
 
-  const { login } = useSessionContext();
+  const { login } = useSessionContext()
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+    e.preventDefault()
 
-    if (!email || !password) return;
+    if (!email || !password) return
 
-    await login(email, password);
-  };
+    await login(email, password)
+  }
 
   const changeUsernameValue = (e: ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
+    const value = e.target.value
 
-    setEmail(value);
-  };
+    setEmail(value)
+  }
   const changePasswordValue = (e: ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
+    const value = e.target.value
 
-    setPassword(value);
-  };
+    setPassword(value)
+  }
 
   const EyeButton = () => {
-    const eye = passwordVisible ? "XX" : "OO";
+    const eye = passwordVisible ? 'XX' : 'OO'
 
     return (
       <span
@@ -41,22 +44,19 @@ const LoginView = () => {
       >
         {eye}
       </span>
-    );
-  };
+    )
+  }
 
   return (
     <div className="w-full h-full px-6 py-10 flex justify-center items-center">
       <div className="container">
         <div className="flex justify-center">
           <div className="px-6 py-8 pb-6 w-6/12 max-w-xl shadow-md shadow-white">
-            <form
-              onSubmit={handleSubmit}
-              className="flex flex-col items-center gap-4 w-full"
-            >
+            <form onSubmit={handleSubmit} className="flex flex-col items-center gap-4 w-full">
               <Input
                 label="E-mail"
                 name="username"
-                value={email ?? ""}
+                value={email ?? ''}
                 onChange={changeUsernameValue}
                 placeholder="Digite seu e-mail"
               />
@@ -64,20 +64,20 @@ const LoginView = () => {
                 name="password"
                 label="Senha"
                 onChange={changePasswordValue}
-                value={password ?? ""}
-                type={passwordVisible ? "text" : "password"}
+                value={password ?? ''}
+                type={passwordVisible ? 'text' : 'password'}
                 placeholder="Digite sua senha"
                 iconButton={<EyeButton />}
               />
               <Button
                 type="submit"
                 className={cx(
-                  "self-end",
-                  "border border-1",
-                  "border-brand-primary-400 bg-brand-primary-400 hover:border-brand-primary-300 hover:bg-brand-primary-500",
-                  "text-white",
-                  "disabled:text-brand-primary-400 disabled:bg-transparent disabled:border-brand-primary-300",
-                  "font-medium"
+                  'self-end',
+                  'border border-1',
+                  'border-brand-primary-400 bg-brand-primary-400 hover:border-brand-primary-300 hover:bg-brand-primary-500',
+                  'text-white',
+                  'disabled:text-brand-primary-400 disabled:bg-transparent disabled:border-brand-primary-300',
+                  'font-medium'
                 )}
                 disabled={!password && !email}
                 label="Entrar"
@@ -87,7 +87,7 @@ const LoginView = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default LoginView;
+export default LoginView

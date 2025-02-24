@@ -1,15 +1,15 @@
-import { getHuntById } from "@/api/hunt/getById";
-import HuntView from "@/ui/pages/hunt/oneHunt";
-import { redirect } from "next/navigation";
+import { getHuntById } from '@api/hunt/getById'
+import HuntView from '@pages/hunt/oneHunt'
+import { redirect } from 'next/navigation'
 
 const HuntPage = async ({ params }: { params: { id: string } }) => {
-  const hunt = await getHuntById(params.id);
+  const hunt = await getHuntById(params.id)
 
   if (!hunt) {
-    redirect("/");
+    redirect('/')
   }
 
-  return <HuntView hunt={hunt} />;
-};
+  return <HuntView hunt={hunt} />
+}
 
-export default HuntPage;
+export default HuntPage

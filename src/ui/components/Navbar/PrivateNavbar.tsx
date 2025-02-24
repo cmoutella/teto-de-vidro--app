@@ -1,5 +1,5 @@
-"use client";
-import SessionButton from "../SessionButton";
+'use client'
+import SessionButton from '../SessionButton'
 
 const Private = () => {
   return (
@@ -9,7 +9,7 @@ const Private = () => {
         <SessionButton />
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Private;
+export default Private

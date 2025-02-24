@@ -1,40 +1,43 @@
-"use client";
+'use client'
 
-import { useSessionContext } from "@/providers/AuthProvider";
-import { genderVowel } from "@/utils/lang";
+import { useEffect, useState } from 'react'
 
-import PrivateBasePage from "@/ui/template/PrivateBasePage";
-import NextMoveDashboard from "../components/NextMove";
-import { getAllHuntsByUser } from "@/api/hunt/getAllHuntsByUser";
-import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
-import { InterfaceHunt } from "@/types/app";
+import { getAllHuntsByUser } from '@api/hunt/getAllHuntsByUser'
+import { useSessionContext } from '@providers/AuthProvider'
+import PrivateBasePage from '@template/PrivateBasePage'
+import { useRouter } from 'next/navigation'
+
+import type { InterfaceHunt } from '@/types/app'
+import { genderVowel } from '@/utils/lang'
+
+import NextMoveDashboard from '../components/NextMove'
 
 const PrivateHomeView = () => {
-  const { user } = useSessionContext();
+  const { user } = useSessionContext()
 
-  const [hunts, setHunts] = useState<InterfaceHunt[]>([]);
-  const firstName = user?.name.split(" ")[0];
+  const [hunts, setHunts] = useState<InterfaceHunt[]>([])
+  const firstName = user?.name.split(' ')[0]
 
-  const router = useRouter();
+  const router = useRouter()
 
   async function getUserHunts() {
-    if (!user) return;
-    const data = await getAllHuntsByUser(user.id, 1, 1);
+    if (!user) return
+    const data = await getAllHuntsByUser(user.id, 1, 1)
 
-    console.log("my hunts", data);
+    console.log('my hunts', data)
 
     if (!data) {
-      router.push("");
-      return;
+      router.push('')
+      return
     }
 
-    setHunts(data);
+    setHunts(data)
   }
 
   useEffect(() => {
-    getUserHunts();
-  }, []);
+    getUserHunts()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   return (
     <PrivateBasePage>
@@ -42,8 +45,7 @@ const PrivateHomeView = () => {
         {user && (
           <div className="container py-2">
             <h2 className="text-2xl text-brand-primary-900">
-              Bem vind{genderVowel[user.gender]}{" "}
-              <span className="capitalize">{firstName},</span>
+              Bem vind{genderVowel[user.gender]} <span className="capitalize">{firstName},</span>
             </h2>
           </div>
         )}
@@ -52,7 +54,7 @@ const PrivateHomeView = () => {
         </div>
       </div>
     </PrivateBasePage>
-  );
-};
+  )
+}
 
-export default PrivateHomeView;
+export default PrivateHomeView
