@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 
 import storage from "@/services/storage";
-import { isTokenValid } from "@/utils/auth";
+import { isTokenValid } from "@/utils/auth/token";
 import { SessionUser } from "@/types/app";
 import { UserAuth } from "@/types/apiResponses";
 
