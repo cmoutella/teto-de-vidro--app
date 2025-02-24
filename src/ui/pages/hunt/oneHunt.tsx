@@ -1,10 +1,10 @@
 "use client";
 
-import { getAllTargetPropertiesfromHunt } from "@/api/hunt/getAllTargetProperties";
+import { getAllTargetPropertiesfromHunt } from "@api/hunt/getAllTargetProperties";
 import { InterfaceHunt } from "@/types/app";
-import Button from "@/ui/components/base/Button";
-import TargetPropertyList from "@/ui/components/base/TargetPropertyList";
-import PrivateBasePage from "@/ui/template/PrivateBasePage";
+import Button from "@ui/base/Button";
+import TargetPropertyList from "@ui/TargetPropertyList";
+import PrivateBasePage from "@template/PrivateBasePage";
 import { useEffect, useState } from "react";
 import { DEFAULT_HUNT_LIST_PER_PAGE } from "./consts/perPage";
 

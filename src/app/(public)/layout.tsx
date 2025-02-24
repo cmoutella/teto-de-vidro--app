@@ -1,6 +1,6 @@
 import { ReactNode } from "react";
 
-import PublicBasePage from "@/ui/template/PublicBasePage.tsx";
+import PublicBasePage from "@template/PublicBasePage.tsx";
 
 const PublicLayout = ({ children }: { children: ReactNode }) => {
   return <PublicBasePage>{children}</PublicBasePage>;

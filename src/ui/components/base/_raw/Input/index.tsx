@@ -7,7 +7,7 @@ import {
   FormSizes,
   FormTheme,
   formTheme,
-} from "../../shared/style";
+} from "@ui/base/shared/formTheme";
 
 interface InputProps extends InputHeadlessProps {
   theme?: FormTheme;

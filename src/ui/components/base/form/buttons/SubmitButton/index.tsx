@@ -1,5 +1,5 @@
 import cx from "classnames";
-import Button from "../../Button";
+import Button from "@ui/base/Button";
 
 interface SubmitButtonProps {
   isDisabled: boolean;

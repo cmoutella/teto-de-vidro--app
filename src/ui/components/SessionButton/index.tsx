@@ -1,10 +1,10 @@
 "use client";
 
 import cx from "classnames";
-import { useSessionContext } from "@/providers/AuthProvider";
+import { useSessionContext } from "@providers/AuthProvider";
 import Link from "next/link";
 import Button, { ButtonProps } from "../base/Button";
-import { btnBorderRadius, btnSize } from "../base/Button/shared/style";
+import { btnBorderRadius, btnSize } from "../base/shared/buttonTheme";
 
 const SessionButton = ({
   size = "medium",

@@ -12,7 +12,7 @@ import {
   ButtonSize,
   ButtonType,
   roundedBtnSize,
-} from "./shared/style";
+} from "../shared/buttonTheme";
 import { ReactNode } from "react";
 
 export interface ButtonProps extends ButtonHeadlessProps {

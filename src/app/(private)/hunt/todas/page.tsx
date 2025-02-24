@@ -1,8 +1,8 @@
-import ListHuntView from "@/ui/pages/hunt/list";
+import ListHuntView from "@pages/hunt/list";
 import { redirect } from "next/navigation";
 import { isUserAuthenticated } from "@/utils/auth/userAuthentication";
-import { getAllHuntsByUser } from "@/api/hunt/getAllHuntsByUser";
-import { DEFAULT_HUNT_LIST_PER_PAGE } from "@/ui/pages/hunt/consts/perPage";
+import { getAllHuntsByUser } from "@api/hunt/getAllHuntsByUser";
+import { DEFAULT_HUNT_LIST_PER_PAGE } from "@pages/hunt/consts/perPage";
 
 async function ListHuntsPage() {
   const userLoggedIn = await isUserAuthenticated();

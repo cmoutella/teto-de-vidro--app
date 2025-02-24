@@ -1,8 +1,8 @@
 "use client";
 
 import { InterfaceHunt } from "@/types/app";
-import Button from "@/ui/components/base/Button";
-import PrivateBasePage from "@/ui/template/PrivateBasePage";
+import Button from "@ui/base/Button";
+import PrivateBasePage from "@template/PrivateBasePage";
 import { useRouter } from "next/navigation";
 import cx from "classnames";
 

@@ -1,6 +1,6 @@
 "use client";
 
-import PublicBasePage from "@/ui/template/PublicBasePage.tsx";
+import PublicBasePage from "@template/PublicBasePage.tsx";
 
 const PublicHomeView = () => {
   return (

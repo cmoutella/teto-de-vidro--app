@@ -1,4 +1,4 @@
-import CreateHuntView from "@/ui/pages/hunt/create";
+import CreateHuntView from "@pages/hunt/create";
 
 const CreateHuntPage = () => {
   return <CreateHuntView />;

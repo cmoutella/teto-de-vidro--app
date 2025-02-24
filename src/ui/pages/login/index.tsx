@@ -1,9 +1,9 @@
 "use client";
-import { useSessionContext } from "@/providers/AuthProvider";
+import { useSessionContext } from "@providers/AuthProvider";
 import Button from "@/ui/components/base/Button";
-import Input from "@/ui/components/base/form/Input";
 import { ChangeEvent, FormEvent, useState } from "react";
 import cx from "classnames";
+import Input from "@/ui/components/base/form/inputs/Input";
 
 const LoginView = () => {
   const [email, setEmail] = useState<string | undefined>(undefined);

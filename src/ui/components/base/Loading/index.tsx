@@ -2,7 +2,7 @@ import React from "react";
 
 import cx from "classnames";
 
-import { useUIContext } from "@/providers/UIProvider";
+import { useUIContext } from "@providers/UIProvider";
 
 export const Loading = () => {
   const { loading } = useUIContext();

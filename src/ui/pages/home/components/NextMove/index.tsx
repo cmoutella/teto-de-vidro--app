@@ -1,9 +1,9 @@
-import Button from "@/ui/components/base/Button";
-import DashboardCard from "@/ui/components/DashboardCard";
+import Button from "@ui/base/Button";
+import DashboardCard from "@ui/DashboardCard";
 import { useRouter } from "next/navigation";
 import cx from "classnames";
 import { useEffect, useState } from "react";
-import { getAllTargetPropertiesfromHunt } from "@/api/hunt/getAllTargetProperties";
+import { getAllTargetPropertiesfromHunt } from "@api/hunt/getAllTargetProperties";
 import { InterfaceHunt } from "@/types/app";
 
 interface NextMoveDashboardProps {

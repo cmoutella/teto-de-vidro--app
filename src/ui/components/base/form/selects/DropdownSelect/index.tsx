@@ -2,10 +2,10 @@
 
 import { SelectProps as SelectHeadlessProps } from "@headlessui/react";
 import { ChangeEvent, useState } from "react";
-import { FormSizes, FormTheme } from "../../shared/style";
-import SelectRaw from "../../raw/Select";
-import { Option } from "../../raw/Select";
-import FieldWrapper from "../../raw/wrappers/Field";
+import { FormSizes, FormTheme } from "@ui/base/shared/formTheme";
+import { Option } from "@raw/Select";
+import SelectRaw from "@raw/Select";
+import FieldWrapper from "@raw/wrappers/Field";
 export interface DropdownSelectProps extends SelectHeadlessProps {
   label?: string;
   description?: string;

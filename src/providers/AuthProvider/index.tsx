@@ -7,7 +7,7 @@ import { SessionUser } from "@/types/app";
 import { UserAuth } from "@/types/apiResponses";
 import storage from "@/services/storage";
 import { getUserFn, handleUserResponse } from "@/services/auth";
-import { authLogin } from "@/api/auth/login";
+import { authLogin } from "@api/auth/login";
 
 interface SessionContext {
   user?: SessionUser;

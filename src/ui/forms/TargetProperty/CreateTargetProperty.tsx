@@ -1,6 +1,6 @@
 "use client";
-import { createHunt, CreateHuntRequestProps } from "@/api/hunt/create";
-import { useSessionContext } from "@/providers/AuthProvider";
+import { createHunt, CreateHuntRequestProps } from "@api/hunt/create";
+import { useSessionContext } from "@providers/AuthProvider";
 import Input from "@/ui/components/base/form/Input";
 import { FormSizes, FormTheme } from "@/ui/components/base/form/shared/style";
 import SubmitButton from "@/ui/components/base/form/SubmitButton";

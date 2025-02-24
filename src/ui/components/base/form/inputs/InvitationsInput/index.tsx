@@ -1,4 +1,4 @@
-import Button from "../../Button";
+import Button from "@ui/base/Button";
 
 const InvitationsInput = () => {
   return (
@@ -7,7 +7,7 @@ const InvitationsInput = () => {
         <p className="text-lg font-medium text-brand-primary-600 w-">
           Convite alguém para colaborar nessa busca
         </p>
-        <Button rounded={true} label="+" uiType="outline" theme="primary" />
+        <Button rounded={true} label="+" uiType="outline" />
       </div>
 
       <div className="h-0.5 bg-brand-primary-500 my-1 w-full"></div>

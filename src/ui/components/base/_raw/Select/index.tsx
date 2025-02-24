@@ -1,19 +1,14 @@
 import {
-  Description as DescriptionHeadless,
-  Field as FieldHeadless,
-  Label as LabelHeadless,
   Select as SelectHeadless,
   SelectProps as SelectHeadlessProps,
 } from "@headlessui/react";
 import cx from "classnames";
-import InputWrapper from "../wrappers/Input";
-import { ChangeEvent, useState } from "react";
 import {
   baseInputStyle,
   FormSizes,
-  FormTheme,
   formTheme,
-} from "../../shared/style";
+  FormTheme,
+} from "../../shared/formTheme";
 
 export interface Option {
   label: string;

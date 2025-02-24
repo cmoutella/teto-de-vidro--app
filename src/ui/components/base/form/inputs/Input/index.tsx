@@ -1,8 +1,8 @@
 import type { InputProps as InputHeadlessProps } from "@headlessui/react";
 import { ReactNode } from "react";
-import { FormSizes, formTheme, FormTheme } from "../shared/style";
-import InputRaw from "../raw/Input";
-import FieldWrapper from "../raw/wrappers/Field";
+import { FormSizes, formTheme, FormTheme } from "@ui/base/shared/formTheme";
+import InputRaw from "@raw/Input";
+import FieldWrapper from "@raw/wrappers/Field";
 
 interface InputProps extends InputHeadlessProps {
   label?: string;

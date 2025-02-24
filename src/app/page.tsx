@@ -1,10 +1,11 @@
 import { appCokies } from "@/config/cookies";
 import { cookie } from "@/services/cookies";
 import { UserAuth } from "@/types/apiResponses";
-import PrivateHomeView from "@/ui/pages/home/privateHome";
-import PublicHomeView from "@/ui/pages/home/publicHome";
 import { isTokenValid } from "@/utils/auth/token";
 import { cookies } from "next/headers";
+
+import PrivateHomeView from "@pages/home/privateHome";
+import PublicHomeView from "@pages/home/publicHome";
 
 export default async function Home() {
   const reqCookies = await cookies();

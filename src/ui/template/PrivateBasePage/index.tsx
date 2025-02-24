@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import PrivateNavbar from "@/ui/components/Navbar/PrivateNavbar";
+import PrivateNavbar from "@ui/Navbar/PrivateNavbar";
 
 const PrivateBasePage = ({ children }: { children: ReactNode }) => {
   return (

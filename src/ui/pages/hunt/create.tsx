@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 
-import PrivateBasePage from "@/ui/template/PrivateBasePage";
+import PrivateBasePage from "@template/PrivateBasePage";
 import CreateHuntForm from "@/ui/forms/Hunt/CreateHunt";
 
 const CreateHuntView = () => {

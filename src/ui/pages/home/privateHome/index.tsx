@@ -1,11 +1,11 @@
 "use client";
 
-import { useSessionContext } from "@/providers/AuthProvider";
+import { useSessionContext } from "@providers/AuthProvider";
 import { genderVowel } from "@/utils/lang";
 
-import PrivateBasePage from "@/ui/template/PrivateBasePage";
+import PrivateBasePage from "@template/PrivateBasePage";
 import NextMoveDashboard from "../components/NextMove";
-import { getAllHuntsByUser } from "@/api/hunt/getAllHuntsByUser";
+import { getAllHuntsByUser } from "@api/hunt/getAllHuntsByUser";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { InterfaceHunt } from "@/types/app";
