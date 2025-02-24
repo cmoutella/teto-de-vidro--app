@@ -1,4 +1,12 @@
+import { RequestCookie } from "next/dist/compiled/@edge-runtime/cookies";
+import { ReadonlyRequestCookies } from "next/dist/server/web/spec-extension/adapters/request-cookies";
+
 export function cookie() {
+  /**
+   * ######################
+   * # Client side cookies
+   * ######################
+   */
   const accessCookie = () => {
     if (typeof window === "undefined" || typeof document === "undefined") {
       return false;
@@ -59,6 +67,21 @@ export function cookie() {
     return true;
   }
 
+  function getCookieServerSide(
+    cookieName: string,
+    allCookies: ReadonlyRequestCookies
+  ): RequestCookie | undefined {
+    if (!allCookies) return;
+
+    const cookie = allCookies.get(cookieName);
+
+    return cookie;
+  }
+
+  function setCookieServerSide() {
+    console.log("setCookieServerSide | not implemented");
+  }
+
   async function parseCookie(cookie: string) {
     const decodedString: string = decodeURIComponent(cookie);
 
@@ -67,11 +90,17 @@ export function cookie() {
   }
 
   return {
-    access: accessCookie,
-    get: getCookie,
-    set: setCookie,
-    remove: deleteCookie,
-    has: hasCookie,
+    client: {
+      access: accessCookie,
+      get: getCookie,
+      set: setCookie,
+      remove: deleteCookie,
+      has: hasCookie,
+    },
+    server: {
+      get: getCookieServerSide,
+      set: setCookieServerSide,
+    },
     parse: parseCookie,
   };
 }

@@ -1,12 +1,12 @@
-import { authCookie } from "@/config/auth";
+import { appCokies } from "@/config/cookies";
 import { UserAuth } from "@/types/apiResponses";
 import { cookie } from "./cookies";
 
-function storage() {
+function authStorage() {
   const cookies = cookie();
 
   const getToken: () => UserAuth = () => {
-    const app = cookies.get(authCookie.api);
+    const app = cookies.client.get(appCokies.auth);
 
     if (app) {
       return JSON.parse(app);
@@ -16,22 +16,22 @@ function storage() {
   };
 
   const setToken = (payload: UserAuth) => {
-    cookies.set(
-      authCookie.api,
+    cookies.client.set(
+      appCokies.auth,
       JSON.stringify(payload),
       new Date(payload.expireAt)
     );
   };
 
   const clearToken = () => {
-    cookies.remove(authCookie.api);
+    cookies.client.remove(appCokies.auth);
   };
 
   const hasToken = () => {
-    const authCookie = getToken();
-    if (!authCookie) return false;
+    const appCokies = getToken();
+    if (!appCokies) return false;
 
-    const app = authCookie.token;
+    const app = appCokies.token;
 
     return !!app;
   };
@@ -44,4 +44,4 @@ function storage() {
   };
 }
 
-export default storage;
+export default authStorage;

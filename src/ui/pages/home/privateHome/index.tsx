@@ -10,7 +10,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { InterfaceHunt } from "@/types/app";
 
-const PrivateHomeView = async () => {
+const PrivateHomeView = () => {
   const { user } = useSessionContext();
 
   const [hunts, setHunts] = useState<InterfaceHunt[]>([]);
