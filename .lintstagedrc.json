@@ -1,5 +1,5 @@
 {
-  "**/*.{js,jsx,ts,tsx}": ["yarn lint:format", "yarn lint:syntax --fix"],
-  "*.{json, md}": ["yarn lint:format"],
-  "*.{style.tsx, css, scss}": ["yarn lint:style", "yarn lint:format"]
+  "**/*.{js,jsx,ts,tsx}": ["yarn lint:check", "yarn lint:syntax --fix"],
+  "*.{json, md}": ["yarn lint:check"],
+  "*.{style.tsx, css, scss}": ["yarn lint:style", "yarn lint:check"]
 }
