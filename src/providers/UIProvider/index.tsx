@@ -1,57 +1,56 @@
-"use client";
-import { createContext, useContext, useState } from "react";
-import "react-toastify/dist/ReactToastify.min.css";
-import { ToastContainer } from "react-toastify";
-import { Loading } from "@/ui/components/base/Loading";
+'use client'
+import { createContext, useContext, useState } from 'react'
+import 'react-toastify/dist/ReactToastify.min.css'
+import { ToastContainer } from 'react-toastify'
 
-type InterfaceAction = () => void;
+import { Loading } from '@/ui/components/base/Loading'
+
+type InterfaceAction = () => void
 
 interface UIContext {
   loading: {
-    on: InterfaceAction;
-    off: InterfaceAction;
-    state: boolean;
-  };
+    on: InterfaceAction
+    off: InterfaceAction
+    state: boolean
+  }
 }
 
 const DEFAULT_VALUES = {
   loading: {
     on: () => {},
     off: () => {},
-    state: false,
-  },
-};
+    state: false
+  }
+}
 
-const UIContext = createContext<UIContext>(DEFAULT_VALUES);
+const UIContext = createContext<UIContext>(DEFAULT_VALUES)
 
 export const useUIContext = () => {
-  const context = useContext(UIContext);
+  const context = useContext(UIContext)
 
   if (context === undefined) {
-    throw new Error("Missing UIContext on React three");
+    throw new Error('Missing UIContext on React three')
   }
 
-  return context;
-};
+  return context
+}
 
 export const UIProvider = ({ children }: { children: React.ReactNode }) => {
-  const [loadingScreen, setLoadingScreen] = useState<boolean>(
-    DEFAULT_VALUES.loading.state
-  );
+  const [loadingScreen, setLoadingScreen] = useState<boolean>(DEFAULT_VALUES.loading.state)
   const showLoadingScreen = () => {
-    setLoadingScreen(true);
-  };
+    setLoadingScreen(true)
+  }
   const hideLoadingScreen = () => {
-    setLoadingScreen(false);
-  };
+    setLoadingScreen(false)
+  }
 
   const value = {
     loading: {
       on: showLoadingScreen,
       off: hideLoadingScreen,
-      state: loadingScreen,
-    },
-  };
+      state: loadingScreen
+    }
+  }
 
   return (
     <UIContext.Provider value={value}>
@@ -64,5 +63,5 @@ export const UIProvider = ({ children }: { children: React.ReactNode }) => {
       <Loading />
       {children}
     </UIContext.Provider>
-  );
-};
+  )
+}

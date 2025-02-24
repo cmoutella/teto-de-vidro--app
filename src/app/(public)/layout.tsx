@@ -1,9 +1,9 @@
-import { ReactNode } from "react";
+import type { ReactNode } from 'react'
 
-import PublicBasePage from "@template/PublicBasePage.tsx";
+import PublicBasePage from '@template/PublicBasePage.tsx'
 
 const PublicLayout = ({ children }: { children: ReactNode }) => {
-  return <PublicBasePage>{children}</PublicBasePage>;
-};
+  return <PublicBasePage>{children}</PublicBasePage>
+}
 
-export default PublicLayout;
+export default PublicLayout

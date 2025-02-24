@@ -1,4 +1,4 @@
-import Button from "@ui/base/Button";
+import Button from '@ui/base/Button'
 
 const InvitationsInput = () => {
   return (
@@ -14,7 +14,7 @@ const InvitationsInput = () => {
 
       <div className="w-full">{/* campos de input (nome + email) * n  */}</div>
     </div>
-  );
-};
+  )
+}
 
-export default InvitationsInput;
+export default InvitationsInput

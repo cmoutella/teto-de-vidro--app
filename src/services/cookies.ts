@@ -1,5 +1,5 @@
-import { RequestCookie } from "next/dist/compiled/@edge-runtime/cookies";
-import { ReadonlyRequestCookies } from "next/dist/server/web/spec-extension/adapters/request-cookies";
+import type { RequestCookie } from 'next/dist/compiled/@edge-runtime/cookies'
+import type { ReadonlyRequestCookies } from 'next/dist/server/web/spec-extension/adapters/request-cookies'
 
 export function cookie() {
   /**
@@ -8,85 +8,82 @@ export function cookie() {
    * ######################
    */
   const accessCookie = () => {
-    if (typeof window === "undefined" || typeof document === "undefined") {
-      return false;
+    if (typeof window === 'undefined' || typeof document === 'undefined') {
+      return false
     }
 
-    return true;
-  };
+    return true
+  }
 
   function getCookie(cookieName: string): string | null {
-    const cookiesAvailable = accessCookie();
+    const cookiesAvailable = accessCookie()
 
-    if (!cookiesAvailable) return null;
+    if (!cookiesAvailable) return null
 
-    const cookies = document.cookie.split("; ");
+    const cookies = document.cookie.split('; ')
 
     for (let i = 0; i < cookies.length; i++) {
-      const [name, value] = cookies[i].split("=");
+      const [name, value] = cookies[i].split('=')
       if (name === cookieName) {
-        return value;
+        return value
       }
     }
 
-    return null;
+    return null
   }
 
   function setCookie(
     cookieName: string,
-    cookieValue: any,
+    cookieStringValue: string,
     expirationDate: Date | undefined
   ) {
-    let expires: string;
+    let expires: string
 
     if (expirationDate) {
-      expires = "expires=" + expirationDate.toUTCString();
+      expires = 'expires=' + expirationDate.toUTCString()
     } else {
-      const date = new Date();
-      const defaultDaysBeforeExpires = 3;
-      date.setTime(
-        date.getTime() + defaultDaysBeforeExpires * 24 * 60 * 60 * 1000
-      );
+      const date = new Date()
+      const defaultDaysBeforeExpires = 3
+      date.setTime(date.getTime() + defaultDaysBeforeExpires * 24 * 60 * 60 * 1000)
 
-      expires = "expires=" + date.toUTCString();
+      expires = 'expires=' + date.toUTCString()
     }
 
-    document.cookie =
-      cookieName + "=" + cookieValue + ";" + expires + ";path=/";
+    document.cookie = cookieName + '=' + cookieStringValue + ';' + expires + ';path=/'
   }
 
   function deleteCookie(cookieName: string) {
-    document.cookie = `${cookieName}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
+    document.cookie = `${cookieName}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`
   }
 
   function hasCookie(cookieName: string): boolean {
-    const cookieData = getCookie(cookieName);
+    const cookieData = getCookie(cookieName)
 
-    if (!cookieData) return false;
+    if (!cookieData) return false
 
-    return true;
+    return true
   }
 
   function getCookieServerSide(
     cookieName: string,
     allCookies: ReadonlyRequestCookies
   ): RequestCookie | undefined {
-    if (!allCookies) return;
+    if (!allCookies) return
 
-    const cookie = allCookies.get(cookieName);
+    const cookie = allCookies.get(cookieName)
 
-    return cookie;
+    return cookie
   }
 
   function setCookieServerSide() {
-    console.log("setCookieServerSide | not implemented");
+    console.log('setCookieServerSide | not implemented')
   }
 
   async function parseCookie(cookie: string) {
-    const decodedString: string = decodeURIComponent(cookie);
+    const decodedString: string = decodeURIComponent(cookie)
 
-    const parsed = await JSON.parse(decodedString);
-    return parsed ?? undefined;
+    const parsed = await JSON.parse(decodedString)
+    return parsed ?? undefined
   }
 
   return {
@@ -95,12 +92,12 @@ export function cookie() {
       get: getCookie,
       set: setCookie,
       remove: deleteCookie,
-      has: hasCookie,
+      has: hasCookie
     },
     server: {
       get: getCookieServerSide,
-      set: setCookieServerSide,
+      set: setCookieServerSide
     },
-    parse: parseCookie,
-  };
+    parse: parseCookie
+  }
 }

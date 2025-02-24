@@ -1,27 +1,26 @@
-import Button from "@ui/base/Button";
-import DashboardCard from "@ui/DashboardCard";
-import { useRouter } from "next/navigation";
-import cx from "classnames";
-import { useEffect, useState } from "react";
-import { getAllTargetPropertiesfromHunt } from "@api/hunt/getAllTargetProperties";
-import { InterfaceHunt } from "@/types/app";
+import { useEffect, useState } from 'react'
+
+import { getAllTargetPropertiesfromHunt } from '@api/hunt/getAllTargetProperties'
+import Button from '@ui/base/Button'
+import DashboardCard from '@ui/DashboardCard'
+import cx from 'classnames'
+import { useRouter } from 'next/navigation'
+
+import type { InterfaceHunt } from '@/types/app'
 
 interface NextMoveDashboardProps {
-  hunts: InterfaceHunt[];
+  hunts: InterfaceHunt[]
 }
 
 const EmptyState = () => {
-  const router = useRouter();
+  const router = useRouter()
 
   return (
     <div
-      className={cx(
-        "w-full flex flex-col justify-center items-center gap-4 gap-y-5",
-        {
-          "py-3 px-4": true,
-          "py-4 px-4": false,
-        }
-      )}
+      className={cx('w-full flex flex-col justify-center items-center gap-4 gap-y-5', {
+        'py-3 px-4': true,
+        'py-4 px-4': false
+      })}
     >
       <p className="text-xl text-brand-primary-600 font-medium">
         Você ainda não está de olho em nenhum imóvel
@@ -30,36 +29,35 @@ const EmptyState = () => {
       <Button
         label="Começar agora!"
         size="large"
-        className={cx(
-          "bg-brand-primary-700 text-white hover:bg-brand-primary-800"
-        )}
-        onClick={() => router.push("/hunt/criar")}
+        className={cx('bg-brand-primary-700 text-white hover:bg-brand-primary-800')}
+        onClick={() => router.push('/hunt/criar')}
       />
     </div>
-  );
-};
+  )
+}
 
 const NextMoveDashboard = ({ hunts }: NextMoveDashboardProps) => {
-  const [properties, setProperties] = useState<TargetPropertyInterface[]>([]);
+  const [properties, setProperties] = useState<TargetPropertyInterface[]>([])
 
   useEffect(() => {
-    fetchPropertiesData();
-  }, []);
+    fetchPropertiesData()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   if (!hunts || properties.length <= 0) {
     return (
       <DashboardCard>
         <EmptyState />
       </DashboardCard>
-    );
+    )
   }
 
   async function fetchPropertiesData() {
-    if (!hunts || hunts.length <= 0) return;
+    if (!hunts || hunts.length <= 0) return
 
-    const data = await getAllTargetPropertiesfromHunt(hunts[0].id, 1, 6);
+    const data = await getAllTargetPropertiesfromHunt(hunts[0].id, 1, 6)
 
-    setProperties(data as TargetPropertyInterface[]);
+    setProperties(data as TargetPropertyInterface[])
   }
 
   return (
@@ -68,7 +66,7 @@ const NextMoveDashboard = ({ hunts }: NextMoveDashboardProps) => {
         <div key={property.id}>{property.id}</div>
       ))}
     </DashboardCard>
-  );
-};
+  )
+}
 
-export default NextMoveDashboard;
+export default NextMoveDashboard

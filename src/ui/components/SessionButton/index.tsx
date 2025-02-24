@@ -1,39 +1,41 @@
-"use client";
+'use client'
 
-import cx from "classnames";
-import { useSessionContext } from "@providers/AuthProvider";
-import Link from "next/link";
-import Button, { ButtonProps } from "../base/Button";
-import { btnBorderRadius, btnSize } from "../base/shared/buttonTheme";
+import { useSessionContext } from '@providers/AuthProvider'
+import cx from 'classnames'
+import Link from 'next/link'
+
+import type { ButtonProps } from '../base/Button'
+import Button from '../base/Button'
+import { btnBorderRadius, btnSize } from '../base/shared/buttonTheme'
 
 const SessionButton = ({
-  size = "medium",
-  fullWidth,
-}: Omit<ButtonProps, "borderRadius" | "label" | "uiType">) => {
-  const { user, logout } = useSessionContext();
+  size = 'medium',
+  fullWidth
+}: Omit<ButtonProps, 'borderRadius' | 'label' | 'uiType'>) => {
+  const { user, logout } = useSessionContext()
 
   if (user) {
-    return <Button onClick={logout} label="Sair" />;
+    return <Button onClick={logout} label="Sair" />
   } else {
     return (
       <Link
-        href={"/login"}
+        href={'/login'}
         className={cx(
           btnBorderRadius.md,
           btnSize[size],
           {
-            "w-full": fullWidth,
+            'w-full': fullWidth
           },
-          "border border-2",
-          "bg-transparent border-white hover:bg-brand-primary-600 hover:border-brand-primary-600",
-          "text-white hover:text-white",
-          "text-center tracking-wide flex justify-center items-center"
+          'border border-2',
+          'bg-transparent border-white hover:bg-brand-primary-600 hover:border-brand-primary-600',
+          'text-white hover:text-white',
+          'text-center tracking-wide flex justify-center items-center'
         )}
       >
         Entrar
       </Link>
-    );
+    )
   }
-};
+}
 
-export default SessionButton;
+export default SessionButton

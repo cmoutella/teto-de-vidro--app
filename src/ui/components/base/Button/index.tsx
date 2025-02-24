@@ -1,34 +1,26 @@
-"use client";
+'use client'
 
-import {
-  Button as ButtonHeadless,
-  ButtonProps as ButtonHeadlessProps,
-} from "@headlessui/react";
-import cx from "classnames";
-import {
-  btnBorderRadius,
-  btnSize,
-  ButtonRadius,
-  ButtonSize,
-  ButtonType,
-  roundedBtnSize,
-} from "../shared/buttonTheme";
-import { ReactNode } from "react";
+import type { ReactNode } from 'react'
+
+import type { ButtonProps as ButtonHeadlessProps } from '@headlessui/react'
+import { Button as ButtonHeadless } from '@headlessui/react'
+import cx from 'classnames'
+
+import type { ButtonRadius, ButtonSize } from '../shared/buttonTheme'
+import { btnBorderRadius, btnSize, roundedBtnSize } from '../shared/buttonTheme'
 
 export interface ButtonProps extends ButtonHeadlessProps {
-  uiType?: ButtonType;
-  size?: ButtonSize;
-  label: string | ReactNode;
-  fullWidth?: boolean;
-  borderRadius?: ButtonRadius;
-  rounded?: boolean;
-  flat?: boolean;
+  size?: ButtonSize
+  label: string | ReactNode
+  fullWidth?: boolean
+  borderRadius?: ButtonRadius
+  rounded?: boolean
+  flat?: boolean
 }
 
 const Button = ({
-  uiType = "default",
-  size = "medium",
-  borderRadius = "md",
+  size = 'medium',
+  borderRadius = 'md',
   flat = false,
   label,
   fullWidth,
@@ -37,22 +29,22 @@ const Button = ({
   disabled,
   ...otherProps
 }: ButtonProps) => {
-  const bSize = rounded ? roundedBtnSize[size] : btnSize[size];
+  const bSize = rounded ? roundedBtnSize[size] : btnSize[size]
 
   return (
     <ButtonHeadless
       className={cx(
-        { "cursor-pointer": !disabled },
+        { 'cursor-pointer': !disabled },
         bSize,
         {
-          "w-full": fullWidth,
+          'w-full': fullWidth
         },
         {
-          "hover:drop-shadow-md active:shadow-inner": !flat && !disabled,
+          'hover:drop-shadow-md active:shadow-inner': !flat && !disabled
         },
         btnBorderRadius[borderRadius],
-        { "rounded-full": rounded },
-        { "flex justify-center items-center": rounded },
+        { 'rounded-full': rounded },
+        { 'flex justify-center items-center': rounded },
         className
       )}
       disabled={disabled}
@@ -60,7 +52,7 @@ const Button = ({
     >
       {label}
     </ButtonHeadless>
-  );
-};
+  )
+}
 
-export default Button;
+export default Button

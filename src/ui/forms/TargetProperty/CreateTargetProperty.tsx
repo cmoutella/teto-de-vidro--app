@@ -1,131 +1,133 @@
-"use client";
-import { createHunt, CreateHuntRequestProps } from "@api/hunt/create";
-import { useSessionContext } from "@providers/AuthProvider";
-import Input from "@/ui/components/base/form/Input";
-import { FormSizes, FormTheme } from "@/ui/components/base/form/shared/style";
-import SubmitButton from "@/ui/components/base/form/SubmitButton";
-import CollapsableBox from "@/ui/components/CollapsableBox";
+'use client'
+import type { ChangeEvent, FormEvent } from 'react'
+import { useState } from 'react'
 
-import { ChangeEvent, FormEvent, useState } from "react";
+import type { CreateHuntRequestProps } from '@api/hunt/create'
+import { createHunt } from '@api/hunt/create'
+import { useSessionContext } from '@providers/AuthProvider'
+import type { FormSizes, FormTheme } from '@ui/base/shared/formTheme'
+import CollapsableBox from '@ui/CollapsableBox'
 
-interface CreateHuntFormProps {
-  onSuccess: (id: string) => void;
-  onFail: () => void;
+import SubmitButton from '@/ui/components/base/form/buttons/SubmitButton'
+import Input from '@/ui/components/base/form/inputs/Input'
+
+interface CreateTargetPropertyFormProps {
+  onSuccess: (_id: string) => void
+  onFail: () => void
 }
 
-const formThemeSize: FormSizes = "lg";
-const themePallete: FormTheme = "light";
+const formThemeSize: FormSizes = 'lg'
+const themePallete: FormTheme = 'light'
 
-const CreateHuntForm = ({ onSuccess, onFail }: CreateHuntFormProps) => {
-  const [adUrl, setAdUrl] = useState<string>("");
+const CreateTargetProperty = ({ onSuccess, onFail }: CreateTargetPropertyFormProps) => {
+  const [adUrl, setAdUrl] = useState<string>('')
 
-  const [addressBoxOpen, setAddressBoxOpen] = useState<boolean>(false);
-  const [postalCode, setPostalCode] = useState<string>("");
-  const [street, setStreet] = useState<string>("");
-  const [lotNumber, setLotNumber] = useState<string>("");
-  const [neighborhood, setNeighborhood] = useState<string>("");
-  const [uf, setUF] = useState<string>("");
-  const [city, setCity] = useState<string>("");
-  const [country, setCountry] = useState<string>("Brasil");
+  const [addressBoxOpen, setAddressBoxOpen] = useState<boolean>(false)
+  const [postalCode, setPostalCode] = useState<string>('')
+  const [street, setStreet] = useState<string>('')
+  const [lotNumber, setLotNumber] = useState<string>('')
+  const [neighborhood, setNeighborhood] = useState<string>('')
+  const [uf, setUF] = useState<string>('')
+  const [city, setCity] = useState<string>('')
+  const [country, setCountry] = useState<string>('Brasil')
 
-  const hasMinimalLotData =
-    !!street && !!neighborhood && !!city && !!uf && !!country;
+  const hasMinimalLotData = !!street && !!neighborhood && !!city && !!uf && !!country
 
   const handlePostalCode = (e: ChangeEvent<HTMLInputElement>) => {
     // formatação do postalCode
-    setPostalCode(e.target.value);
-  };
+    setPostalCode(e.target.value)
+  }
 
   const handleStreet = (e: ChangeEvent<HTMLInputElement>) => {
-    setStreet(e.target.value);
-  };
+    setStreet(e.target.value)
+  }
 
   const handleLotNumber = (e: ChangeEvent<HTMLInputElement>) => {
-    setLotNumber(e.target.value);
-  };
+    setLotNumber(e.target.value)
+  }
 
   const handleNeighborhood = (e: ChangeEvent<HTMLInputElement>) => {
-    setNeighborhood(e.target.value);
-  };
+    setNeighborhood(e.target.value)
+  }
   const handleCity = (e: ChangeEvent<HTMLInputElement>) => {
-    setCity(e.target.value);
-  };
+    setCity(e.target.value)
+  }
   const handleUF = (e: ChangeEvent<HTMLInputElement>) => {
-    setUF(e.target.value);
-  };
+    setUF(e.target.value)
+  }
   const handleCountry = (e: ChangeEvent<HTMLInputElement>) => {
-    setCountry(e.target.value);
-  };
+    setCountry(e.target.value)
+  }
 
-  const [block, setBlock] = useState<string>("");
-  const [propertyNumber, setPropertyNumber] = useState<string>("");
-  const [size, setSize] = useState<number>(0);
-  const [rooms, setRooms] = useState<number>(0);
-  const [bathrooms, setBathrooms] = useState<number>(0);
-  const [parkingSpots, setParkingSpots] = useState<number>(0);
+  const [block, setBlock] = useState<string>('')
+  const [propertyNumber, setPropertyNumber] = useState<string>('')
+  const [size, setSize] = useState<number>(0)
+  const [rooms, setRooms] = useState<number>(0)
+  const [bathrooms, setBathrooms] = useState<number>(0)
+  const [parkingSpots, setParkingSpots] = useState<number>(0)
 
   const handleBlock = (e: ChangeEvent<HTMLInputElement>) => {
-    setBlock(e.target.value);
-  };
+    setBlock(e.target.value)
+  }
 
   const handlePropertyNumber = (e: ChangeEvent<HTMLInputElement>) => {
-    setPropertyNumber(e.target.value);
-  };
+    setPropertyNumber(e.target.value)
+  }
 
   const handleSize = (e: ChangeEvent<HTMLInputElement>) => {
-    setSize(Number(e.target.value));
-  };
+    setSize(Number(e.target.value))
+  }
 
   const handleRooms = (e: ChangeEvent<HTMLInputElement>) => {
-    setRooms(Number(e.target.value));
-  };
+    setRooms(Number(e.target.value))
+  }
 
   const handleBathrooms = (e: ChangeEvent<HTMLInputElement>) => {
-    setBathrooms(Number(e.target.value));
-  };
+    setBathrooms(Number(e.target.value))
+  }
 
   const handleParkingSpots = (e: ChangeEvent<HTMLInputElement>) => {
-    setParkingSpots(Number(e.target.value));
-  };
+    setParkingSpots(Number(e.target.value))
+  }
 
-  const { user } = useSessionContext();
+  const { user } = useSessionContext()
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+    e.preventDefault()
 
-    if (!title || !user) return;
+    if (!hasMinimalLotData || !user) return
 
     const data: CreateHuntRequestProps = {
-      creatorId: user.id,
-    };
-
-    const res = await createHunt(data);
-
-    if (!res) {
-      onFail();
-      return;
+      creatorId: user.id
     }
 
-    onSuccess(res?.id);
-  };
+    const res = await createHunt(data)
+
+    if (!res) {
+      onFail()
+      return
+    }
+
+    onSuccess(res?.id)
+  }
 
   const handleChangeAdUrl = (e: ChangeEvent<HTMLInputElement>) => {
-    setAdUrl(e.target.value);
-  };
-  const handleGetAdData = (e: ChangeEvent<HTMLInputElement>) => {
-    const adURI = new URL(adUrl);
+    setAdUrl(e.target.value)
+  }
 
+  const handleGetAdData = (_e: ChangeEvent<HTMLInputElement>) => {
+    const _adURI = new URL(adUrl)
+
+    // TODO: Scrappers endpoint
     // identificar o dominio
     // executar o scrapper
-  };
+  }
 
   return (
     <div className="w-full">
       <form onSubmit={handleSubmit} className="w-full">
         <section className="w-full">
-          <h6 className="text-xl text-brand-primary-700">
-            Identificando o imóvel
-          </h6>
+          <h6 className="text-xl text-brand-primary-700">Identificando o imóvel</h6>
           <div className="grid md:grid-cols-12 gap-x-4 gap-y-5">
             <span className="col-span-12">
               <Input
@@ -300,7 +302,7 @@ const CreateHuntForm = ({ onSuccess, onFail }: CreateHuntFormProps) => {
         <SubmitButton isDisabled={!hasMinimalLotData} />
       </form>
     </div>
-  );
-};
+  )
+}
 
-export default CreateHuntForm;
+export default CreateTargetProperty

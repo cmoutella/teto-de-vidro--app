@@ -1,31 +1,31 @@
-import { SuccessResponse } from "@/types/apiPatterns";
-import { InterfaceHunt } from "@/types/app";
+import type { SuccessResponse } from '@/types/apiPatterns'
+import type { InterfaceHunt } from '@/types/app'
 
-export const getHuntById: (
-  huntId: string
-) => Promise<InterfaceHunt | undefined> = async (huntId) => {
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
+type GetHuntByIdRequest = (_huntId: string) => Promise<InterfaceHunt | undefined>
 
-  if (!baseUrl) return undefined;
+export const getHuntById: GetHuntByIdRequest = async (huntId) => {
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL
+
+  if (!baseUrl) return undefined
 
   try {
     const res = await fetch(`${baseUrl}/hunt/${huntId}`, {
-      method: "GET",
-      mode: "cors",
+      method: 'GET',
+      mode: 'cors',
       headers: {
-        "Content-Type": "application/json",
-      },
-    }).then((res) => res.json());
+        'Content-Type': 'application/json'
+      }
+    }).then((res) => res.json())
 
     if (res.error) {
-      throw Error("Não foi possível encontrar a informação solicitada");
+      throw Error('Não foi possível encontrar a informação solicitada')
     }
 
-    const { data } = res as SuccessResponse<InterfaceHunt>;
+    const { data } = res as SuccessResponse<InterfaceHunt>
 
-    return data;
-  } catch (err) {
+    return data
+  } catch (_err) {
     // TODO: toast
-    return undefined;
+    return undefined
   }
-};
+}

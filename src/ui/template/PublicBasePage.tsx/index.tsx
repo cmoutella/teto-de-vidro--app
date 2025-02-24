@@ -1,5 +1,6 @@
-import PublicNavbar from "@ui/Navbar/PublicNavbar";
-import { ReactNode } from "react";
+import type { ReactNode } from 'react'
+
+import PublicNavbar from '@ui/Navbar/PublicNavbar'
 
 const PublicBasePage = ({ children }: { children: ReactNode }) => {
   return (
@@ -7,7 +8,7 @@ const PublicBasePage = ({ children }: { children: ReactNode }) => {
       <PublicNavbar />
       {children}
     </div>
-  );
-};
+  )
+}
 
-export default PublicBasePage;
+export default PublicBasePage

@@ -1,5 +1,6 @@
-import { ReactNode } from "react";
-import PrivateNavbar from "@ui/Navbar/PrivateNavbar";
+import type { ReactNode } from 'react'
+
+import PrivateNavbar from '@ui/Navbar/PrivateNavbar'
 
 const PrivateBasePage = ({ children }: { children: ReactNode }) => {
   return (
@@ -7,7 +8,7 @@ const PrivateBasePage = ({ children }: { children: ReactNode }) => {
       <PrivateNavbar />
       <div className="w-full">{children}</div>
     </div>
-  );
-};
+  )
+}
 
-export default PrivateBasePage;
+export default PrivateBasePage
