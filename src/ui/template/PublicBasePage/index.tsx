@@ -2,7 +2,11 @@ import type { ReactNode } from 'react'
 
 import PublicNavbar from '@ui/Navbar/PublicNavbar'
 
-const PublicBasePage = ({ children }: { children: ReactNode }) => {
+interface PublicBasePageProps {
+  children: ReactNode
+}
+
+const PublicBasePage = ({ children }: PublicBasePageProps) => {
   return (
     <div className="w-full min-h-full">
       <PublicNavbar />
