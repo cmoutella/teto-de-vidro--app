@@ -9,6 +9,7 @@ import TargetPropertyList from '@ui/TargetPropertyList'
 
 import type { InterfaceHunt } from '@/types/app'
 
+import CreateTargetPropertyModal from './components/CreateTargetPropertyModal'
 import { DEFAULT_HUNT_LIST_PER_PAGE } from './consts/perPage'
 
 interface HuntViewProps {
@@ -20,6 +21,9 @@ const OneHuntView = ({ hunt }: HuntViewProps) => {
   const [totalPages, setTotalPages] = useState<number>(0)
   const [perPage, _setPerPage] = useState<number>(DEFAULT_HUNT_LIST_PER_PAGE)
   const [properties, setProperties] = useState<TargetPropertyInterface[]>([])
+
+  const [isTargetPropertyCreateModalOpen, setIsTargetPropertyCreateModalOpen] =
+    useState<boolean>(false)
 
   useEffect(() => {
     fetchPropertiesData()
@@ -56,12 +60,22 @@ const OneHuntView = ({ hunt }: HuntViewProps) => {
               <Button
                 label="Adicionar imóvel"
                 className={'bg-brand-primary-500 hover:bg-brand-primary-600 text-white'}
+                onClick={() => {
+                  console.log('Adicionar imóvel')
+                  setIsTargetPropertyCreateModalOpen(true)
+                }}
               />
             </div>
           </div>
         </div>
         <TargetPropertyList list={properties} page={page} totalPages={totalPages} perPage={8} />
       </div>
+      <CreateTargetPropertyModal
+        isOpen={isTargetPropertyCreateModalOpen}
+        setClose={() => {
+          setIsTargetPropertyCreateModalOpen(false)
+        }}
+      />
     </PrivateBasePage>
   )
 }
