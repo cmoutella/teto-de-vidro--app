@@ -1,4 +1,3 @@
-'use client'
 import SessionButton from '../SessionButton'
 
 const PublicNavbar = () => {

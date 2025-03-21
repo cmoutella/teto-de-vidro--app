@@ -1,8 +1,8 @@
-'use client'
-
-import { useSessionContext } from '@providers/AuthProvider'
 import cx from 'classnames'
 import Link from 'next/link'
+
+import { logout } from '@/utils/auth/logout'
+import { isUserAuthenticated } from '@/utils/auth/userAuthenticationAtClient'
 
 import type { ButtonProps } from '../base/Button'
 import Button from '../base/Button'
@@ -12,11 +12,9 @@ const SessionButton = ({
   size = 'medium',
   fullWidth
 }: Omit<ButtonProps, 'borderRadius' | 'label' | 'uiType'>) => {
-  const { user, logout } = useSessionContext()
+  const user = isUserAuthenticated()
 
-  if (user) {
-    return <Button onClick={logout} label="Sair" />
-  } else {
+  if (!user) {
     return (
       <Link
         href={'/login'}
@@ -35,6 +33,8 @@ const SessionButton = ({
         Entrar
       </Link>
     )
+  } else {
+    return <Button onClick={logout} label="Sair" />
   }
 }
 

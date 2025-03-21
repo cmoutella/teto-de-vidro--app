@@ -13,14 +13,26 @@ import { isTokenValid } from './token'
  * Busca nos headers pelos cookies para validar a autenticação
  */
 
-export async function isUserAuthenticated() {
+interface UserAuthenticatedOptions {
+  shouldNoCookieRedirect?: boolean
+  noCookieRedirect?: string
+}
+
+export async function isUserAuthenticated({
+  shouldNoCookieRedirect = true,
+  noCookieRedirect = '/'
+}: UserAuthenticatedOptions) {
   const reqCookies = await cookies()
 
   const cookieService = cookie()
   const authCookie = cookieService.server.get(appCokies.auth, reqCookies)
 
+  if (!authCookie && shouldNoCookieRedirect) {
+    redirect(noCookieRedirect)
+  }
+
   if (!authCookie) {
-    redirect('/')
+    return null
   }
 
   const data: UserAuth = JSON.parse(authCookie.value)

@@ -3,10 +3,10 @@ import { DEFAULT_HUNT_LIST_PER_PAGE } from '@pages/hunt/consts/perPage'
 import ListHuntView from '@pages/hunt/list'
 import { redirect } from 'next/navigation'
 
-import { isUserAuthenticated } from '@/utils/auth/userAuthentication'
+import { isUserAuthenticated } from '@/utils/auth/userAuthenticationAtServer'
 
 async function ListHuntsPage() {
-  const userLoggedIn = await isUserAuthenticated()
+  const userLoggedIn = await isUserAuthenticated({})
 
   if (!userLoggedIn) {
     redirect('/login')
