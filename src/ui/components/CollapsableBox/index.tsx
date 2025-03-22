@@ -15,7 +15,7 @@ function CollapsableBox({ open, label, children, toggleBox }: CollapsableBoxProp
     <Disclosure defaultOpen={open}>
       <DisclosureButton
         className={cx(
-          'flex items-center gap-2 w-full p-4 bg-brand-gray-300 hover:bg-brand-gray-500',
+          'flex items-center gap-2 w-full p-4 bg-brand-gray-300 hover:bg-brand-gray-500 text-brand-primary-900 font-medium',
           {
             'rounded-t-lg': open,
             'rounded-lg': !open
