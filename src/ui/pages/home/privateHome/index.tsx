@@ -1,20 +1,18 @@
 'use client'
 
-import { useSessionContext } from '@providers/AuthProvider'
 import PrivateBasePage from '@template/PrivateBasePage'
 
-import type { InterfaceHunt } from '@/types/app'
+import type { InterfaceHunt, InterfaceUser } from '@/types/app'
 import { genderVowel } from '@/utils/lang'
 
 import NextMoveDashboard from '../components/NextMove'
 
 interface PrivateHomeViewProps {
   hunts: InterfaceHunt[]
+  user: Omit<InterfaceUser, 'password'>
 }
 
-const PrivateHomeView = ({ hunts }: PrivateHomeViewProps) => {
-  const { user } = useSessionContext()
-
+const PrivateHomeView = ({ hunts, user }: PrivateHomeViewProps) => {
   const firstName = user?.name.split(' ')[0]
 
   return (
