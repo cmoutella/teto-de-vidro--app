@@ -3,8 +3,8 @@ export type FormTheme = 'light' | 'dark' | 'nude'
 export type InputFieldParts = 'wrapper' | 'input' | 'label' | 'helpText'
 
 export const iSizes: { [_key in FormSizes]: string } = {
-  md: 'py-1.5 px-3 rounded-lg',
-  lg: 'py-2 px-4 rounded-lg'
+  md: 'px-2 rounded-lg h-10',
+  lg: 'px-2 rounded-lg h-12'
 }
 
 export const formTheme: {
