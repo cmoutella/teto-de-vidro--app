@@ -1,7 +1,7 @@
 'use client'
 import { useEffect, useState } from 'react'
 
-import { getAllTargetPropertiesfromHunt } from '@api/hunt/getAllTargetProperties'
+import { getAllTargetPropertiesfromHunt } from '@requests/hunt/getAllTargetProperties'
 import DashboardCard from '@ui/DashboardCard'
 import { useRouter } from 'next/navigation'
 

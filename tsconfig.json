@@ -24,7 +24,7 @@
       "@template/*": ["./src/ui/template/*"],
       "@providers/*": ["./src/providers/*"],
       "@pages/*": ["./src/ui/pages/*"],
-      "@api/*": ["./src/api/*"]
+      "@requests/*": ["./src/requests/*"]
     }
   },
   "include": [

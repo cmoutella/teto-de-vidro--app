@@ -1,6 +1,6 @@
-import { getAllHuntsByUser } from '@api/hunt/getAllHuntsByUser'
 import PrivateHomeView from '@pages/home/privateHome'
 import PublicHomeView from '@pages/home/publicHome'
+import { getAllHuntsByUser } from '@requests/hunt/getAllHuntsByUser'
 import { cookies } from 'next/headers'
 
 import { appCokies } from '@/config/cookies'
@@ -28,5 +28,5 @@ export default async function Home() {
 
   const response = await getAllHuntsByUser(data.user.id, 1, 1)
 
-  return <PrivateHomeView hunts={response ?? []} />
+  return <PrivateHomeView user={data.user} hunts={response ?? []} />
 }

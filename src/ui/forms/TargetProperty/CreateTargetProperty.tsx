@@ -2,9 +2,9 @@
 import type { ChangeEvent, FormEvent } from 'react'
 import { useState } from 'react'
 
-import type { CreateHuntRequestProps } from '@api/hunt/create'
-import { createHunt } from '@api/hunt/create'
 import { useSessionContext } from '@providers/AuthProvider'
+import type { CreateHuntRequestProps } from '@requests/hunt/create'
+import { createHunt } from '@requests/hunt/create'
 import type { FormSizes, FormTheme } from '@ui/base/shared/formTheme'
 import CollapsableBox from '@ui/CollapsableBox'
 

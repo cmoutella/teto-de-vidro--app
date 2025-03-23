@@ -2,9 +2,9 @@
 import type { ChangeEvent, FormEvent } from 'react'
 import { useMemo, useState } from 'react'
 
-import type { CreateHuntRequestProps } from '@api/hunt/create'
-import { createHunt } from '@api/hunt/create'
 import { useSessionContext } from '@providers/AuthProvider'
+import type { CreateHuntRequestProps } from '@requests/hunt/create'
+import { createHunt } from '@requests/hunt/create'
 import SubmitButton from '@ui/base/form/buttons/SubmitButton'
 import Input from '@ui/base/form/inputs/Input'
 import InputPartialDate from '@ui/base/form/inputs/InputPartialDate'

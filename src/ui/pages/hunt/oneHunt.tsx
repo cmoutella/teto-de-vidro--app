@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 
-import { getAllTargetPropertiesfromHunt } from '@api/hunt/getAllTargetProperties'
+import { getAllTargetPropertiesfromHunt } from '@requests/hunt/getAllTargetProperties'
 import PrivateBasePage from '@template/PrivateBasePage'
 import Button from '@ui/base/Button'
 import TargetPropertyList from '@ui/TargetPropertyList'
