@@ -1,10 +1,10 @@
 'use client'
 import cx from 'classnames'
-
-import { isUserAuthenticated } from '@/utils/auth/userAuthenticationAtClient'
+import { useRouter } from 'next/navigation'
 
 import { logout } from '@/utils/auth/logout'
-import { useRouter } from 'next/navigation'
+import { isUserAuthenticated } from '@/utils/auth/userAuthenticationAtClient'
+
 import type { ButtonProps } from '../base/Button'
 import Button from '../base/Button'
 import { btnBorderRadius, btnSize } from '../base/shared/buttonTheme'
