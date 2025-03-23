@@ -40,12 +40,14 @@ const CreateTargetPropertyForm = ({ onSuccess, onFail, huntId }: CreateTargetPro
       .required('Campo obrigatório')
       .min(2, 'Mínimo 2 letras')
       .max(2, 'Máximo 2 letras'),
-    lotNumber: Yup.string()
+    lotNumber: Yup.string(),
+    price: Yup.number().required()
   })
 
   const formik = useFormik({
     initialValues: {
       adUrl: '',
+      nickname: '',
       postalCode: '',
       street: '',
       neighborhood: '',
@@ -58,7 +60,9 @@ const CreateTargetPropertyForm = ({ onSuccess, onFail, huntId }: CreateTargetPro
       size: 0,
       rooms: 1,
       bathrooms: 1,
-      parkingSpots: 0
+      parkingSpots: 0,
+      iptu: 0,
+      price: 0
     },
     validationSchema,
     onSubmit: handleSubmit
@@ -132,6 +136,20 @@ const CreateTargetPropertyForm = ({ onSuccess, onFail, huntId }: CreateTargetPro
                 size="xxlarge"
                 onClick={fetchAdFillForm}
                 className="bg-brand-primary-400 hover:bg-brand-primary-800 text-brand-primary-900 hover:text-white min-w-20"
+              />
+            </span>
+          </div>
+          <div className="grid md:grid-cols-12 gap-x-4 gap-y-5">
+            <span className="col-span-12 flex flex-row items-end gap-4">
+              <Input
+                label="Título"
+                description="Dê um nome para identificar esse imóvel"
+                name="nickname"
+                themeSize={formThemeSize}
+                theme={themePallete}
+                placeholder={`Apelido do imóvel`}
+                value={formik.values.nickname}
+                onChange={formik.handleChange}
               />
             </span>
           </div>
@@ -290,6 +308,30 @@ const CreateTargetPropertyForm = ({ onSuccess, onFail, huntId }: CreateTargetPro
             </CollapsableBox>
           </div>
         </section>
+        <div className="grid md:grid-cols-12 gap-x-4 gap-y-5">
+          <span className="col-span-4 flex flex-row items-end gap-4">
+            <Input
+              label="Valor"
+              name="nickname"
+              themeSize={formThemeSize}
+              theme={themePallete}
+              placeholder={`Apelido do imóvel`}
+              value={formik.values.price}
+              onChange={formik.handleChange}
+            />
+          </span>
+          <span className="col-span-4 flex flex-row items-end gap-4">
+            <Input
+              label="IPTU"
+              name="iptu"
+              themeSize={formThemeSize}
+              theme={themePallete}
+              placeholder={`Apelido do imóvel`}
+              value={formik.values.iptu}
+              onChange={formik.handleChange}
+            />
+          </span>
+        </div>
         <SubmitButton isDisabled={!formik.isValid || formik.isSubmitting} />
       </form>
     </div>
