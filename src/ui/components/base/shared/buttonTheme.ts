@@ -3,7 +3,7 @@ export type ButtonSize = 'xsmall' | 'small' | 'medium' | 'large' | 'xlarge' | 'x
 export type ButtonRadius = 'none' | 'sm' | 'md' | 'lg' | 'xl'
 
 export const btnSize: { [_key in ButtonSize]: string } = {
-  xsmall: 'py-0.5 px-2 text-xs',
+  xsmall: 'py-0.5 px-1 text-xs',
   small: 'py-1 px-2 text-sm',
   medium: 'py-1.5 px-2 min-w-16 text-sm',
   large: 'py-2 px-2.5 min-w-20 text-sm',

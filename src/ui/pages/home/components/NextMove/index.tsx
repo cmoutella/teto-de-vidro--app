@@ -113,8 +113,10 @@ function Property({ target }: { target: TargetPropertyInterface }) {
           {target.neighborhood}/{target.city}
         </p>
       </span>
-      <span className="col-span-2 flex items-center">
-        <p className="text-xs">Última atualização {lastUpdateMessage(target.updatedAt)}</p>
+      <span className="col-span-2 flex items-center justify-end">
+        <p className="text-xs text-right">
+          Última atualização {lastUpdateMessage(target.updatedAt)}
+        </p>
       </span>
     </div>
   )

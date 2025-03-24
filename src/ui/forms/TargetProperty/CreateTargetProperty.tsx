@@ -324,6 +324,7 @@ const CreateTargetPropertyForm = ({ onSuccess, onFail, huntId }: CreateTargetPro
             <Input
               label="IPTU"
               name="iptu"
+              type="number"
               themeSize={formThemeSize}
               theme={themePallete}
               placeholder={`Apelido do imóvel`}

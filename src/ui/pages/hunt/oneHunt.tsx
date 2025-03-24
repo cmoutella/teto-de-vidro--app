@@ -63,6 +63,7 @@ const OneHuntView = ({ hunt }: HuntViewProps) => {
               <Button
                 label="Adicionar imóvel"
                 className={'bg-brand-primary-500 hover:bg-brand-primary-600 text-white'}
+                size="large"
                 onClick={() => {
                   setIsTargetPropertyCreateModalOpen(true)
                 }}

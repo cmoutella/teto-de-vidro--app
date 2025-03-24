@@ -18,7 +18,7 @@ function TargetPropertyList({
   }
 
   return (
-    <div className="container">
+    <div className="container flex flex-col gap-2">
       {list.map((tp) => {
         return (
           <div key={tp.id} className="w-full">
