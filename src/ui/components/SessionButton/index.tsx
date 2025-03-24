@@ -1,20 +1,18 @@
-'use client'
 import cx from 'classnames'
 import { useRouter } from 'next/navigation'
 
+import type { InterfaceUser } from '@/types/app'
 import { logout } from '@/utils/auth/logout'
-import { isUserAuthenticated } from '@/utils/auth/userAuthenticationAtClient'
 
 import type { ButtonProps } from '../base/Button'
 import Button from '../base/Button'
 import { btnBorderRadius, btnSize } from '../base/shared/buttonTheme'
 
-const SessionButton = ({
-  size = 'medium',
-  fullWidth
-}: Omit<ButtonProps, 'borderRadius' | 'label' | 'uiType'>) => {
-  const user = isUserAuthenticated()
+interface SessionButtonProps extends Omit<ButtonProps, 'borderRadius' | 'label' | 'uiType'> {
+  user: Omit<InterfaceUser, 'password'> | null
+}
 
+const SessionButton = ({ size = 'medium', fullWidth, user }: SessionButtonProps) => {
   const router = useRouter()
 
   const handleClick = () => {
