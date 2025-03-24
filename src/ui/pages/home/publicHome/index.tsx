@@ -4,7 +4,7 @@ import PublicBasePage from '@/ui/template/PublicBasePage'
 
 const PublicHomeView = () => {
   return (
-    <PublicBasePage>
+    <PublicBasePage user={null}>
       <div className="w-full p-20 flex justify-center items-center">
         <div className="container flex flex-col gap-5">
           <h1>PUBLIC HOME</h1>

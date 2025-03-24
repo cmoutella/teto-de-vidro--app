@@ -1,6 +1,5 @@
 'use client'
 
-import PrivateBasePage from '@template/PrivateBasePage'
 import { useRouter } from 'next/navigation'
 
 import CreateHuntForm from '@/ui/forms/Hunt/CreateHunt'
@@ -13,19 +12,17 @@ const CreateHuntView = () => {
   }
 
   return (
-    <PrivateBasePage>
-      <div className="w-full flex justify-center flex-col items-center px-14 py-10 gap-3">
-        <div className="container px-20 mb-10">
-          <h1 className="text-3xl text-brand-primary-800 font-semibold">Nova mudança</h1>
-        </div>
-        <div className="container px-20">
-          <CreateHuntForm
-            onSuccess={(createdId: string) => handleSuccess(createdId)}
-            onFail={() => {}}
-          />
-        </div>
+    <div className="w-full flex justify-center flex-col items-center px-14 py-10 gap-3">
+      <div className="container px-20 mb-10">
+        <h1 className="text-3xl text-brand-primary-800 font-semibold">Nova mudança</h1>
       </div>
-    </PrivateBasePage>
+      <div className="container px-20">
+        <CreateHuntForm
+          onSuccess={(createdId: string) => handleSuccess(createdId)}
+          onFail={() => {}}
+        />
+      </div>
+    </div>
   )
 }
 

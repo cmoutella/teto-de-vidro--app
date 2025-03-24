@@ -16,7 +16,7 @@ const PrivateHomeView = ({ hunts, user }: PrivateHomeViewProps) => {
   const firstName = user?.name.split(' ')[0]
 
   return (
-    <PrivateBasePage>
+    <PrivateBasePage user={user}>
       <div className="w-full flex justify-center flex-col items-center px-14 py-10 gap-3">
         {user && (
           <div className="container py-2">

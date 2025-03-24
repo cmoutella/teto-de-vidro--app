@@ -3,9 +3,8 @@
 import { useEffect, useState } from 'react'
 
 import { getAllTargetPropertiesfromHunt } from '@requests/hunt/getAllTargetProperties'
-import PrivateBasePage from '@template/PrivateBasePage'
 import Button from '@ui/base/Button'
-import TargetPropertyList from '@ui/TargetPropertyList'
+import TargetPropertyList from '@ui/TargetProperty/TargetPropertyList'
 
 import type { InterfaceHunt } from '@/types/app'
 
@@ -47,10 +46,9 @@ const OneHuntView = ({ hunt }: HuntViewProps) => {
   }
 
   return (
-    <PrivateBasePage>
+    <div className="w-full">
       <div className="w-full flex justify-center flex-col items-center px-14 py-10 gap-3">
-        {/* HEADER */}
-        <div className="w-full flex justify-center">
+        <div className="w-full flex justify-center mb-6">
           <div className="container">
             <div className="flex flex-row items-start w-full justify-between">
               <div className="flex flex-col gap-y-1.5 justify-start items-start">
@@ -82,7 +80,7 @@ const OneHuntView = ({ hunt }: HuntViewProps) => {
         }}
         onSuccess={handleUpdateSuccess}
       />
-    </PrivateBasePage>
+    </div>
   )
 }
 
