@@ -22,15 +22,20 @@ const OneHuntView = ({ hunt }: HuntViewProps) => {
   const [perPage, _setPerPage] = useState<number>(DEFAULT_HUNT_LIST_PER_PAGE)
   const [properties, setProperties] = useState<TargetPropertyInterface[]>([])
 
+  // Modal
   const [isTargetPropertyCreateModalOpen, setIsTargetPropertyCreateModalOpen] =
     useState<boolean>(false)
+
+  function handleUpdateSuccess() {
+    fetchPropertiesData()
+  }
 
   useEffect(() => {
     fetchPropertiesData()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  const fetchPropertiesData = async () => {
+  async function fetchPropertiesData() {
     const data = await getAllTargetPropertiesfromHunt(hunt.id, page, perPage)
 
     if (!data || data.length <= 0) {
@@ -70,11 +75,12 @@ const OneHuntView = ({ hunt }: HuntViewProps) => {
         <TargetPropertyList list={properties} page={page} totalPages={totalPages} perPage={8} />
       </div>
       <CreateTargetPropertyModal
+        huntId={hunt.id}
         isOpen={isTargetPropertyCreateModalOpen}
         setClose={() => {
           setIsTargetPropertyCreateModalOpen(false)
         }}
-        huntId={hunt.id}
+        onSuccess={handleUpdateSuccess}
       />
     </PrivateBasePage>
   )

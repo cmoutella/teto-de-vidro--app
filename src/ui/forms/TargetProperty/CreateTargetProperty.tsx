@@ -25,11 +25,10 @@ const formThemeSize: FormSizes = 'lg'
 const themePallete: FormTheme = 'light'
 
 const CreateTargetPropertyForm = ({ onSuccess, onFail, huntId }: CreateTargetPropertyFormProps) => {
-  const [adUrl, setAdUrl] = useState<string>('')
   const [addressBoxOpen, setAddressBoxOpen] = useState<boolean>(false)
 
   const validationSchema = Yup.object({
-    adUrl: Yup.string(),
+    adURL: Yup.string(),
     postalCode: Yup.string()
       .matches(/^\d{5}-\d{3}$/, 'O CEP deve estar no formato 12345-678')
       .min(9, 'O CEP deve conter 8 dígitos'),
@@ -46,7 +45,7 @@ const CreateTargetPropertyForm = ({ onSuccess, onFail, huntId }: CreateTargetPro
 
   const formik = useFormik({
     initialValues: {
-      adUrl: '',
+      adURL: '',
       nickname: '',
       postalCode: '',
       street: '',
@@ -78,8 +77,6 @@ const CreateTargetPropertyForm = ({ onSuccess, onFail, huntId }: CreateTargetPro
       ...values
     }
 
-    console.log('submit data', data)
-
     const res = await createTargetProperty(data)
 
     if (!res) {
@@ -91,7 +88,7 @@ const CreateTargetPropertyForm = ({ onSuccess, onFail, huntId }: CreateTargetPro
   }
 
   const fetchAdFillForm = () => {
-    const ad = formik.values.adUrl
+    const ad = formik.values.adURL
 
     if (!ad) return
 
@@ -126,11 +123,11 @@ const CreateTargetPropertyForm = ({ onSuccess, onFail, huntId }: CreateTargetPro
               <Input
                 label="Anúncio do imóvel"
                 description="Vamos auto preencher o resto do formulário com dados objetidos no anúncio"
-                name="adUrl"
+                name="adURL"
                 themeSize={formThemeSize}
                 theme={themePallete}
                 placeholder={`Cole aqui o link do anúncio`}
-                value={formik.values.adUrl}
+                value={formik.values.adURL}
                 onChange={formik.handleChange}
               />
               <Button

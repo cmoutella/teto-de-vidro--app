@@ -21,8 +21,6 @@ export const createTargetProperty: CreateTargetPropertyRequest = async (bodyData
       body: JSON.stringify(bodyData)
     }).then((res) => res.json())
 
-    console.log('res', res)
-
     if (res.error) {
       throw Error('Não foi possível criar agora, tente novamente mais tarde')
     }

@@ -3,20 +3,25 @@ import Modal from '@ui/base/Modal'
 import CreateTargetPropertyForm from '@/ui/forms/TargetProperty/CreateTargetProperty'
 
 export interface CreateTargetPropertyModalProps {
+  huntId: string
   isOpen: boolean
   setClose: () => void
-  huntId: string
+  onSuccess?: () => void
 }
 
 export default function CreateTargetPropertyModal({
+  huntId,
   isOpen,
   setClose,
-  huntId
+  onSuccess
 }: CreateTargetPropertyModalProps) {
   function handleSuccess() {
-    console.log('success')
+    onSuccess && onSuccess()
+    setClose()
   }
+
   function handleFail() {
+    // TODO: CreateTargetProperty handle fail
     console.log('fail')
   }
 
