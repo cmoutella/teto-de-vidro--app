@@ -1,5 +1,9 @@
 interface TargetPropertyInterface {
   id: string
+
+  createdAt: string
+  updatedAt: string
+
   huntId: string
   adURL: string
   nickname: string
