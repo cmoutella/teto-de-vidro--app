@@ -3,9 +3,11 @@ import { useEffect, useState } from 'react'
 
 import { getAllTargetPropertiesfromHunt } from '@requests/hunt/getAllTargetProperties'
 import DashboardCard from '@ui/DashboardCard'
+import cx from 'classnames'
 import { useRouter } from 'next/navigation'
 
 import type { InterfaceHunt } from '@/types/app'
+import Button from '@/ui/components/base/Button'
 import { Loading } from '@/ui/components/base/Loading'
 import EmptyState from '@/ui/components/EmptyState'
 
@@ -26,6 +28,7 @@ const NextMoveDashboard = ({ hunts }: NextMoveDashboardProps) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
+  // Não tem hunts
   if (!hunts || hunts.length <= 0) {
     return (
       <DashboardCard>
@@ -40,6 +43,7 @@ const NextMoveDashboard = ({ hunts }: NextMoveDashboardProps) => {
     )
   }
 
+  // Tem hunt mas não tem targets
   if (properties.length <= 0) {
     return (
       <DashboardCard>
@@ -64,11 +68,41 @@ const NextMoveDashboard = ({ hunts }: NextMoveDashboardProps) => {
     setLoading(false)
   }
 
+  // Tem hunt e tem target
   return (
     <DashboardCard>
       {loading && <Loading />}
-      {!loading && properties.map((property) => <div key={property.id}>{property.id}</div>)}
+      {!loading && hunts[0].title && (
+        <h2 className="text-xl font-medium text-brand-primary-900 mb-3"># {hunts[0].title}</h2>
+      )}
+      {!loading &&
+        properties.map((property) => (
+          <div key={property.id} className="w-full">
+            <Property target={property} />
+          </div>
+        ))}
+      {!loading && (
+        <Button
+          label="Ver todos"
+          className={cx('bg-brand-primary-600 hover:bg-brand-primary-700 text-white mt-4')}
+          onClick={() => router.push(`hunt/${hunts[0].id}`)}
+          size="large"
+        />
+      )}
     </DashboardCard>
+  )
+}
+
+function Property({ target }: { target: TargetPropertyInterface }) {
+  return (
+    <div
+      className={cx(
+        'w-full',
+        'border border-brand-primary-500 bg-brand-primary-300 rounded-lg px-3 py-2'
+      )}
+    >
+      <h3>{target.nickname}</h3>
+    </div>
   )
 }
 
