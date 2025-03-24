@@ -8,7 +8,7 @@ type InputWrapperProps = {
 }
 
 const InputWrapper = ({ children, classNames }: InputWrapperProps) => {
-  const wrapperBaseStyle = 'block w-full flex flex-row justify-between gap-2 relative'
+  const wrapperBaseStyle = 'block w-full flex flex-row justify-between items-center gap-2 relative'
 
   return <div className={cx(wrapperBaseStyle, classNames)}>{children}</div>
 }

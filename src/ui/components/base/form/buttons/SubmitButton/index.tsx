@@ -14,6 +14,7 @@ function SubmitButton({ isDisabled }: SubmitButtonProps) {
         'bg-brand-gray-500 disabled:bg-brand-gray-500': isDisabled
       })}
       type="submit"
+      size="xxlarge"
       disabled={isDisabled}
     />
   )

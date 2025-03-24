@@ -16,7 +16,7 @@ const InputRaw = ({ theme = 'light', themeSize = 'md', ...otherProps }: InputPro
         formTheme[theme].input,
         baseInputStyle,
         iSizes[themeSize],
-        'focus:outline-none focus:bg-transparent active:bg-transparent w-full placeholder:text-brand-gray-400'
+        'focus:outline-none focus:bg-transparent active:bg-transparent w-full placeholder:text-brand-gray-400 border-box'
       )}
       {...otherProps}
     />

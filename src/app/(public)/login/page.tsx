@@ -1,6 +1,17 @@
 import LoginView from '@pages/login'
+import { redirect } from 'next/navigation'
 
-const LoginPage = () => {
+import { isUserAuthenticated } from '@/utils/auth/userAuthenticationAtServer'
+
+const LoginPage = async () => {
+  const userSignedIn = await isUserAuthenticated({ shouldNoCookieRedirect: false })
+
+  console.log('user', userSignedIn)
+
+  if (userSignedIn?.id) {
+    redirect('/')
+  }
+
   return <LoginView />
 }
 

@@ -1,107 +1,83 @@
 'use client'
-import type { ChangeEvent, FormEvent } from 'react'
+import type { ReactNode } from 'react'
 import { useState } from 'react'
 
-import type { CreateHuntRequestProps } from '@api/hunt/create'
-import { createHunt } from '@api/hunt/create'
 import { useSessionContext } from '@providers/AuthProvider'
 import type { FormSizes, FormTheme } from '@ui/base/shared/formTheme'
 import CollapsableBox from '@ui/CollapsableBox'
+import { useFormik } from 'formik'
+import * as Yup from 'yup'
 
+import type { CreateTargetPropertyRequestProps } from '@/requests/targetProperty/create'
+import { createTargetProperty } from '@/requests/targetProperty/create'
+import { CEPService } from '@/services/cep'
+import Button from '@/ui/components/base/Button'
 import SubmitButton from '@/ui/components/base/form/buttons/SubmitButton'
 import Input from '@/ui/components/base/form/inputs/Input'
 
 interface CreateTargetPropertyFormProps {
   onSuccess: (_id: string) => void
   onFail: () => void
+  huntId: string
 }
 
 const formThemeSize: FormSizes = 'lg'
 const themePallete: FormTheme = 'light'
 
-const CreateTargetProperty = ({ onSuccess, onFail }: CreateTargetPropertyFormProps) => {
-  const [adUrl, setAdUrl] = useState<string>('')
-
+const CreateTargetPropertyForm = ({ onSuccess, onFail, huntId }: CreateTargetPropertyFormProps) => {
   const [addressBoxOpen, setAddressBoxOpen] = useState<boolean>(false)
-  const [postalCode, setPostalCode] = useState<string>('')
-  const [street, setStreet] = useState<string>('')
-  const [lotNumber, setLotNumber] = useState<string>('')
-  const [neighborhood, setNeighborhood] = useState<string>('')
-  const [uf, setUF] = useState<string>('')
-  const [city, setCity] = useState<string>('')
-  const [country, setCountry] = useState<string>('Brasil')
 
-  const hasMinimalLotData = !!street && !!neighborhood && !!city && !!uf && !!country
+  const validationSchema = Yup.object({
+    adURL: Yup.string(),
+    postalCode: Yup.string()
+      .matches(/^\d{5}-\d{3}$/, 'O CEP deve estar no formato 12345-678')
+      .min(9, 'O CEP deve conter 8 dígitos'),
+    street: Yup.string().required('Campo obrigatório'),
+    neighborhood: Yup.string().required('Campo obrigatório'),
+    city: Yup.string().required('Campo obrigatório'),
+    uf: Yup.string()
+      .required('Campo obrigatório')
+      .min(2, 'Mínimo 2 letras')
+      .max(2, 'Máximo 2 letras'),
+    lotNumber: Yup.string(),
+    price: Yup.number().required()
+  })
 
-  const handlePostalCode = (e: ChangeEvent<HTMLInputElement>) => {
-    // formatação do postalCode
-    setPostalCode(e.target.value)
-  }
-
-  const handleStreet = (e: ChangeEvent<HTMLInputElement>) => {
-    setStreet(e.target.value)
-  }
-
-  const handleLotNumber = (e: ChangeEvent<HTMLInputElement>) => {
-    setLotNumber(e.target.value)
-  }
-
-  const handleNeighborhood = (e: ChangeEvent<HTMLInputElement>) => {
-    setNeighborhood(e.target.value)
-  }
-  const handleCity = (e: ChangeEvent<HTMLInputElement>) => {
-    setCity(e.target.value)
-  }
-  const handleUF = (e: ChangeEvent<HTMLInputElement>) => {
-    setUF(e.target.value)
-  }
-  const handleCountry = (e: ChangeEvent<HTMLInputElement>) => {
-    setCountry(e.target.value)
-  }
-
-  const [block, setBlock] = useState<string>('')
-  const [propertyNumber, setPropertyNumber] = useState<string>('')
-  const [size, setSize] = useState<number>(0)
-  const [rooms, setRooms] = useState<number>(0)
-  const [bathrooms, setBathrooms] = useState<number>(0)
-  const [parkingSpots, setParkingSpots] = useState<number>(0)
-
-  const handleBlock = (e: ChangeEvent<HTMLInputElement>) => {
-    setBlock(e.target.value)
-  }
-
-  const handlePropertyNumber = (e: ChangeEvent<HTMLInputElement>) => {
-    setPropertyNumber(e.target.value)
-  }
-
-  const handleSize = (e: ChangeEvent<HTMLInputElement>) => {
-    setSize(Number(e.target.value))
-  }
-
-  const handleRooms = (e: ChangeEvent<HTMLInputElement>) => {
-    setRooms(Number(e.target.value))
-  }
-
-  const handleBathrooms = (e: ChangeEvent<HTMLInputElement>) => {
-    setBathrooms(Number(e.target.value))
-  }
-
-  const handleParkingSpots = (e: ChangeEvent<HTMLInputElement>) => {
-    setParkingSpots(Number(e.target.value))
-  }
+  const formik = useFormik({
+    initialValues: {
+      adURL: '',
+      nickname: '',
+      postalCode: '',
+      street: '',
+      neighborhood: '',
+      city: '',
+      uf: '',
+      country: 'Brasil',
+      block: '0',
+      lotNumber: '',
+      propertyNumber: '',
+      size: 0,
+      rooms: 1,
+      bathrooms: 1,
+      parkingSpots: 0,
+      iptu: 0,
+      price: 0
+    },
+    validationSchema,
+    onSubmit: handleSubmit
+  })
 
   const { user } = useSessionContext()
 
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
+  async function handleSubmit(values: CreateTargetPropertyRequestProps) {
+    if (!formik.isValid || !user) return
 
-    if (!hasMinimalLotData || !user) return
-
-    const data: CreateHuntRequestProps = {
-      creatorId: user.id
+    const data: CreateTargetPropertyRequestProps = {
+      huntId: huntId,
+      ...values
     }
 
-    const res = await createHunt(data)
+    const res = await createTargetProperty(data)
 
     if (!res) {
       onFail()
@@ -111,198 +87,263 @@ const CreateTargetProperty = ({ onSuccess, onFail }: CreateTargetPropertyFormPro
     onSuccess(res?.id)
   }
 
-  const handleChangeAdUrl = (e: ChangeEvent<HTMLInputElement>) => {
-    setAdUrl(e.target.value)
-  }
+  const fetchAdFillForm = () => {
+    const ad = formik.values.adURL
 
-  const handleGetAdData = (_e: ChangeEvent<HTMLInputElement>) => {
-    const _adURI = new URL(adUrl)
+    if (!ad) return
 
     // TODO: Scrappers endpoint
     // identificar o dominio
     // executar o scrapper
   }
 
+  async function completeFieldsByCEP(e: React.FocusEvent<HTMLInputElement>) {
+    const postalCode = e.target.value
+
+    const cep = CEPService()
+
+    const data = await cep.get(postalCode.replace(/\D/g, ''))
+
+    if (!data) return
+
+    for (const dt in data) {
+      formik.setFieldValue(dt, data[dt] ?? '')
+    }
+  }
+
   return (
     <div className="w-full">
-      <form onSubmit={handleSubmit} className="w-full">
-        <section className="w-full">
-          <h6 className="text-xl text-brand-primary-700">Identificando o imóvel</h6>
+      <form onSubmit={formik.handleSubmit} className="w-full flex flex-col gap-6">
+        <section className="w-full flex flex-col gap-4">
+          <h3 className="text-xl text-brand-primary-700 pb-0.5 border-b-brand-gray-400 border-b-2 w-3/4 uppercase">
+            Incluir imóvel de interesse
+          </h3>
           <div className="grid md:grid-cols-12 gap-x-4 gap-y-5">
-            <span className="col-span-12">
+            <span className="col-span-12 flex flex-row items-end gap-4">
               <Input
                 label="Anúncio do imóvel"
                 description="Vamos auto preencher o resto do formulário com dados objetidos no anúncio"
-                name="adUrl"
+                name="adURL"
                 themeSize={formThemeSize}
                 theme={themePallete}
                 placeholder={`Cole aqui o link do anúncio`}
-                value={adUrl}
-                onChange={handleChangeAdUrl}
-                onBlur={handleGetAdData}
+                value={formik.values.adURL}
+                onChange={formik.handleChange}
+              />
+              <Button
+                label="Preencher"
+                size="xxlarge"
+                onClick={fetchAdFillForm}
+                className="bg-brand-primary-400 hover:bg-brand-primary-800 text-brand-primary-900 hover:text-white min-w-20"
               />
             </span>
           </div>
-          <CollapsableBox
-            label="Endereço"
-            open={addressBoxOpen}
-            toggleBox={() => setAddressBoxOpen(!addressBoxOpen)}
-          >
-            <div className="w-full grid md:grid-cols-12 gap-x-4 gap-y-5">
-              <p className="col-span-12 mb-2">Endereço principal</p>
-              <span className="col-span-4">
-                <Input
-                  label="CEP"
-                  name="postalCode"
-                  themeSize={formThemeSize}
-                  theme={themePallete}
-                  placeholder="00000-000"
-                  value={postalCode}
-                  onChange={handlePostalCode}
-                />
-              </span>
-              <span className="col-span-6">
-                <Input
-                  label="Rua / Estrada / Logradouro"
-                  name="street"
-                  themeSize={formThemeSize}
-                  theme={themePallete}
-                  value={street}
-                  onChange={handleStreet}
-                />
-              </span>
-              <span className="col-span-2">
-                <Input
-                  label="Número"
-                  name="lotNumber"
-                  themeSize={formThemeSize}
-                  theme={themePallete}
-                  placeholder={`Mudança de ${new Date().getFullYear()}`}
-                  value={lotNumber}
-                  onChange={handleLotNumber}
-                />
-              </span>
-              <span className="col-span-3">
-                <Input
-                  label="Bairro"
-                  name="neighborhood"
-                  themeSize={formThemeSize}
-                  theme={themePallete}
-                  placeholder={`Mudança de ${new Date().getFullYear()}`}
-                  value={neighborhood}
-                  onChange={handleNeighborhood}
-                />
-              </span>
-              <span className="col-span-3">
-                <Input
-                  label="Cidade"
-                  name="city"
-                  themeSize={formThemeSize}
-                  theme={themePallete}
-                  placeholder={`Mudança de ${new Date().getFullYear()}`}
-                  value={city}
-                  onChange={handleCity}
-                />
-              </span>
-              <span className="col-span-3">
-                <Input
-                  label="Estado"
-                  name="uf"
-                  themeSize={formThemeSize}
-                  theme={themePallete}
-                  placeholder={`Mudança de ${new Date().getFullYear()}`}
-                  value={uf}
-                  onChange={handleUF}
-                />
-              </span>
-              <span className="col-span-3">
-                <Input
-                  label="País"
-                  name="country"
-                  themeSize={formThemeSize}
-                  theme={themePallete}
-                  placeholder={`Mudança de ${new Date().getFullYear()}`}
-                  value={country}
-                  onChange={handleCountry}
-                />
-              </span>
-            </div>
-            <div className="w-full grid md:grid-cols-12 gap-x-4 gap-y-5">
-              <p className="col-span-12 mb-2">Imóvel</p>
-              <span className="col-span-4">
-                <Input
-                  label="Identificação"
-                  description="Apartamento, casa"
-                  name="propertyNumber"
-                  themeSize={formThemeSize}
-                  theme={themePallete}
-                  placeholder="301 A"
-                  value={propertyNumber}
-                  onChange={handlePropertyNumber}
-                />
-              </span>
-              <span className="col-span-4">
-                <Input
-                  label="Bloco"
-                  description="Se não houver, deixar 0"
-                  name="block"
-                  themeSize={formThemeSize}
-                  theme={themePallete}
-                  value={block}
-                  onChange={handleBlock}
-                />
-              </span>
-              <span className="col-span-4">
-                <Input
-                  label="Tamanho"
-                  description="Em metros quadrados"
-                  name="size"
-                  themeSize={formThemeSize}
-                  theme={themePallete}
-                  value={size}
-                  onChange={handleSize}
-                />
-              </span>
-              <span className="col-span-3">
-                <Input
-                  label="Quartos"
-                  name="rooms"
-                  type="number"
-                  themeSize={formThemeSize}
-                  theme={themePallete}
-                  value={rooms}
-                  onChange={handleRooms}
-                />
-              </span>
-              <span className="col-span-3">
-                <Input
-                  label="Banheiros"
-                  name="bathrooms"
-                  type="number"
-                  themeSize={formThemeSize}
-                  theme={themePallete}
-                  value={bathrooms}
-                  onChange={handleBathrooms}
-                />
-              </span>
-              <span className="col-span-3">
-                <Input
-                  label="Vagas de Garagem"
-                  name="parkingSpots"
-                  type="number"
-                  themeSize={formThemeSize}
-                  theme={themePallete}
-                  value={parkingSpots}
-                  onChange={handleParkingSpots}
-                />
-              </span>
-            </div>
-          </CollapsableBox>
+          <div className="grid md:grid-cols-12 gap-x-4 gap-y-5">
+            <span className="col-span-12 flex flex-row items-end gap-4">
+              <Input
+                label="Título"
+                description="Dê um nome para identificar esse imóvel"
+                name="nickname"
+                themeSize={formThemeSize}
+                theme={themePallete}
+                placeholder={`Apelido do imóvel`}
+                value={formik.values.nickname}
+                onChange={formik.handleChange}
+              />
+            </span>
+          </div>
+          <div className="w-full">
+            <CollapsableBox
+              label="Endereço"
+              open={addressBoxOpen}
+              toggleBox={() => setAddressBoxOpen(!addressBoxOpen)}
+            >
+              <div className="w-full grid md:grid-cols-12 gap-x-4 gap-y-5 mt-2">
+                <FormSectionLabel>Endereço principal</FormSectionLabel>
+                <span className="col-span-4">
+                  <Input
+                    label="CEP"
+                    name="postalCode"
+                    themeSize={formThemeSize}
+                    theme={themePallete}
+                    placeholder="00000-000"
+                    value={formik.values.postalCode}
+                    onChange={formik.handleChange}
+                    onBlur={completeFieldsByCEP}
+                  />
+                </span>
+                <span className="col-span-6">
+                  <Input
+                    label="Rua / Estrada / Logradouro"
+                    name="street"
+                    themeSize={formThemeSize}
+                    theme={themePallete}
+                    value={formik.values.street}
+                    onChange={formik.handleChange}
+                  />
+                </span>
+                <span className="col-span-2">
+                  <Input
+                    label="Número"
+                    name="lotNumber"
+                    themeSize={formThemeSize}
+                    theme={themePallete}
+                    placeholder={`123`}
+                    value={formik.values.lotNumber}
+                    onChange={formik.handleChange}
+                  />
+                </span>
+                <span className="col-span-3">
+                  <Input
+                    label="Bairro"
+                    name="neighborhood"
+                    themeSize={formThemeSize}
+                    theme={themePallete}
+                    value={formik.values.neighborhood}
+                    onChange={formik.handleChange}
+                  />
+                </span>
+                <span className="col-span-3">
+                  <Input
+                    label="Cidade"
+                    name="city"
+                    themeSize={formThemeSize}
+                    theme={themePallete}
+                    value={formik.values.city}
+                    onChange={formik.handleChange}
+                  />
+                </span>
+                <span className="col-span-3">
+                  <Input
+                    label="Estado"
+                    name="uf"
+                    themeSize={formThemeSize}
+                    theme={themePallete}
+                    value={formik.values.uf}
+                    onChange={formik.handleChange}
+                  />
+                </span>
+                <span className="col-span-3">
+                  <Input
+                    label="País"
+                    name="country"
+                    themeSize={formThemeSize}
+                    theme={themePallete}
+                    value={formik.values.country}
+                    onChange={formik.handleChange}
+                  />
+                </span>
+              </div>
+              <div className="w-full grid md:grid-cols-12 gap-x-4 gap-y-5 mt-6">
+                <FormSectionLabel>Imóvel</FormSectionLabel>
+                <span className="col-span-4">
+                  <Input
+                    label="Identificação"
+                    description="Apartamento, casa"
+                    name="propertyNumber"
+                    themeSize={formThemeSize}
+                    theme={themePallete}
+                    placeholder="301 A"
+                    value={formik.values.propertyNumber}
+                    onChange={formik.handleChange}
+                  />
+                </span>
+                <span className="col-span-4">
+                  <Input
+                    label="Bloco"
+                    description="Se não houver, deixar 0"
+                    name="block"
+                    themeSize={formThemeSize}
+                    theme={themePallete}
+                    value={formik.values.block}
+                    onChange={formik.handleChange}
+                  />
+                </span>
+                <span className="col-span-4">
+                  <Input
+                    label="Tamanho"
+                    description="Em metros quadrados"
+                    name="size"
+                    themeSize={formThemeSize}
+                    theme={themePallete}
+                    value={formik.values.size}
+                    onChange={formik.handleChange}
+                  />
+                </span>
+                <span className="col-span-3">
+                  <Input
+                    label="Quartos"
+                    name="rooms"
+                    type="number"
+                    themeSize={formThemeSize}
+                    theme={themePallete}
+                    value={formik.values.rooms}
+                    onChange={formik.handleChange}
+                  />
+                </span>
+                <span className="col-span-3">
+                  <Input
+                    label="Banheiros"
+                    name="bathrooms"
+                    type="number"
+                    themeSize={formThemeSize}
+                    theme={themePallete}
+                    value={formik.values.bathrooms}
+                    onChange={formik.handleChange}
+                  />
+                </span>
+                <span className="col-span-3">
+                  <Input
+                    label="Vagas de Garagem"
+                    name="parkingSpots"
+                    type="number"
+                    themeSize={formThemeSize}
+                    theme={themePallete}
+                    value={formik.values.parkingSpots}
+                    onChange={formik.handleChange}
+                  />
+                </span>
+              </div>
+            </CollapsableBox>
+          </div>
         </section>
-        <SubmitButton isDisabled={!hasMinimalLotData} />
+        <div className="grid md:grid-cols-12 gap-x-4 gap-y-5">
+          <span className="col-span-4 flex flex-row items-end gap-4">
+            <Input
+              label="Valor"
+              name="price"
+              type="number"
+              themeSize={formThemeSize}
+              theme={themePallete}
+              placeholder={`Apelido do imóvel`}
+              value={formik.values.price}
+              onChange={formik.handleChange}
+            />
+          </span>
+          <span className="col-span-4 flex flex-row items-end gap-4">
+            <Input
+              label="IPTU"
+              name="iptu"
+              themeSize={formThemeSize}
+              theme={themePallete}
+              placeholder={`Apelido do imóvel`}
+              value={formik.values.iptu}
+              onChange={formik.handleChange}
+            />
+          </span>
+        </div>
+        <SubmitButton isDisabled={!formik.isValid || formik.isSubmitting} />
       </form>
     </div>
   )
 }
 
-export default CreateTargetProperty
+function FormSectionLabel({ children }: { children: ReactNode | string }) {
+  return (
+    <p className="col-span-12 mb-2 text-brand-primary-900 font-semibold uppercase border-b-brand-gray-400 border-b-2">
+      {children}
+    </p>
+  )
+}
+
+export default CreateTargetPropertyForm

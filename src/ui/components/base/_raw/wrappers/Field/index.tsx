@@ -1,15 +1,14 @@
 import type { ReactNode } from 'react'
 
+import type { InputProps as InputHeadlessProps } from '@headlessui/react'
 import {
   Description as DescriptionHeadless,
   Field as FieldHeadless,
   Label as LabelHeadless
 } from '@headlessui/react'
-import type { InputProps as InputHeadlessProps } from '@headlessui/react'
 import cx from 'classnames'
 
-import type { FormSizes, FormTheme } from '../../../shared/style'
-import { formTheme, iSizes } from '../../../shared/style'
+import { formTheme, iSizes, type FormSizes, type FormTheme } from '../../../shared/formTheme'
 import InputWrapper from '../Input'
 
 interface InputProps extends InputHeadlessProps {

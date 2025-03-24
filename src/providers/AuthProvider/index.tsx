@@ -1,7 +1,7 @@
 'use client'
 import { createContext, useContext, useMemo, useState } from 'react'
 
-import { authLogin } from '@api/auth/login'
+import { authLogin } from '@requests/auth/login'
 import { useRouter } from 'next/navigation'
 
 import { getUserFn, handleUserResponse } from '@/services/auth'

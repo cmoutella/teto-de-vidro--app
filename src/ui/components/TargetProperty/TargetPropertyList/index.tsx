@@ -1,3 +1,5 @@
+import TargetPropertyItem from '../TargetPropertyItem'
+
 interface TargetPropertyListProps {
   list: TargetPropertyInterface[]
   page: number
@@ -16,12 +18,12 @@ function TargetPropertyList({
   }
 
   return (
-    <div>
+    <div className="container">
       {list.map((tp) => {
         return (
-          <>
-            {tp.id}: {tp.nickname}
-          </>
+          <div key={tp.id} className="w-full">
+            <TargetPropertyItem target={tp} />
+          </div>
         )
       })}
     </div>

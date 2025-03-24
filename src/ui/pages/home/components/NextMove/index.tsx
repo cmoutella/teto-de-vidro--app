@@ -1,71 +1,108 @@
+'use client'
 import { useEffect, useState } from 'react'
 
-import { getAllTargetPropertiesfromHunt } from '@api/hunt/getAllTargetProperties'
-import Button from '@ui/base/Button'
+import { getAllTargetPropertiesfromHunt } from '@requests/hunt/getAllTargetProperties'
 import DashboardCard from '@ui/DashboardCard'
 import cx from 'classnames'
 import { useRouter } from 'next/navigation'
 
 import type { InterfaceHunt } from '@/types/app'
+import Button from '@/ui/components/base/Button'
+import { Loading } from '@/ui/components/base/Loading'
+import EmptyState from '@/ui/components/EmptyState'
 
 interface NextMoveDashboardProps {
   hunts: InterfaceHunt[]
 }
 
-const EmptyState = () => {
-  const router = useRouter()
-
-  return (
-    <div
-      className={cx('w-full flex flex-col justify-center items-center gap-4 gap-y-5', {
-        'py-3 px-4': true,
-        'py-4 px-4': false
-      })}
-    >
-      <p className="text-xl text-brand-primary-600 font-medium">
-        Você ainda não está de olho em nenhum imóvel
-      </p>
-      {/*  imagem aqui */}
-      <Button
-        label="Começar agora!"
-        size="large"
-        className={cx('bg-brand-primary-700 text-white hover:bg-brand-primary-800')}
-        onClick={() => router.push('/hunt/criar')}
-      />
-    </div>
-  )
-}
-
 const NextMoveDashboard = ({ hunts }: NextMoveDashboardProps) => {
   const [properties, setProperties] = useState<TargetPropertyInterface[]>([])
+  const [loading, setLoading] = useState<boolean>(false)
+
+  const router = useRouter()
 
   useEffect(() => {
-    fetchPropertiesData()
+    if (hunts && hunts.length >= 1) {
+      fetchPropertiesData()
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  if (!hunts || properties.length <= 0) {
+  // Não tem hunts
+  if (!hunts || hunts.length <= 0) {
     return (
       <DashboardCard>
-        <EmptyState />
+        <EmptyState
+          description="Você ainda não está de olho em nenhum imóvel"
+          action={{
+            label: 'Começar agora!',
+            do: () => router.push('/hunt/criar')
+          }}
+        />
+      </DashboardCard>
+    )
+  }
+
+  // Tem hunt mas não tem targets
+  if (properties.length <= 0) {
+    return (
+      <DashboardCard>
+        <EmptyState
+          description="Inclua os imóveis que você gostou e torne essa busca mais fácil!"
+          action={{
+            label: 'Começar agora!',
+            do: () => router.push(`hunt/${hunts[0].id}`)
+          }}
+        />
       </DashboardCard>
     )
   }
 
   async function fetchPropertiesData() {
     if (!hunts || hunts.length <= 0) return
+    setLoading(true)
 
     const data = await getAllTargetPropertiesfromHunt(hunts[0].id, 1, 6)
 
     setProperties(data as TargetPropertyInterface[])
+    setLoading(false)
   }
 
+  // Tem hunt e tem target
   return (
     <DashboardCard>
-      {properties.map((property) => (
-        <div key={property.id}>{property.id}</div>
-      ))}
+      {loading && <Loading />}
+      {!loading && hunts[0].title && (
+        <h2 className="text-xl font-medium text-brand-primary-900 mb-3"># {hunts[0].title}</h2>
+      )}
+      {!loading &&
+        properties.map((property) => (
+          <div key={property.id} className="w-full">
+            <Property target={property} />
+          </div>
+        ))}
+      {!loading && (
+        <Button
+          label="Ver todos"
+          className={cx('bg-brand-primary-600 hover:bg-brand-primary-700 text-white mt-4')}
+          onClick={() => router.push(`hunt/${hunts[0].id}`)}
+          size="large"
+        />
+      )}
     </DashboardCard>
+  )
+}
+
+function Property({ target }: { target: TargetPropertyInterface }) {
+  return (
+    <div
+      className={cx(
+        'w-full',
+        'border border-brand-primary-500 bg-brand-primary-300 rounded-lg px-3 py-2'
+      )}
+    >
+      <h3>{target.nickname}</h3>
+    </div>
   )
 }
 

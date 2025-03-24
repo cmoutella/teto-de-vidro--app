@@ -1,10 +1,10 @@
 import type { ReactNode } from 'react'
 
-import PrivateNavbar from '@ui/Navbar/PrivateNavbar'
+import PublicNavbar from '@ui/Navbar/PublicNavbar'
 
 import type { InterfaceUser } from '@/types/app'
 
-const PrivateBasePage = ({
+const PublicBasePage = ({
   children,
   user
 }: {
@@ -13,10 +13,10 @@ const PrivateBasePage = ({
 }) => {
   return (
     <div className="w-full min-h-full">
-      <PrivateNavbar user={user} />
-      <div className="w-full">{children}</div>
+      <PublicNavbar user={user} />
+      {children}
     </div>
   )
 }
 
-export default PrivateBasePage
+export default PublicBasePage
