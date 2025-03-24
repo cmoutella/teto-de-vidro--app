@@ -74,6 +74,7 @@ const OneHuntView = ({ hunt }: HuntViewProps) => {
         setClose={() => {
           setIsTargetPropertyCreateModalOpen(false)
         }}
+        huntId={hunt.id}
       />
     </PrivateBasePage>
   )

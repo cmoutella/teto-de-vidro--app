@@ -5,11 +5,13 @@ import CreateTargetPropertyForm from '@/ui/forms/TargetProperty/CreateTargetProp
 export interface CreateTargetPropertyModalProps {
   isOpen: boolean
   setClose: () => void
+  huntId: string
 }
 
 export default function CreateTargetPropertyModal({
   isOpen,
-  setClose
+  setClose,
+  huntId
 }: CreateTargetPropertyModalProps) {
   function handleSuccess() {
     console.log('success')
@@ -20,7 +22,7 @@ export default function CreateTargetPropertyModal({
 
   return (
     <Modal isOpen={isOpen} setClose={setClose} size="large">
-      <CreateTargetPropertyForm onSuccess={handleSuccess} onFail={handleFail} />
+      <CreateTargetPropertyForm onSuccess={handleSuccess} onFail={handleFail} huntId={huntId} />
     </Modal>
   )
 }

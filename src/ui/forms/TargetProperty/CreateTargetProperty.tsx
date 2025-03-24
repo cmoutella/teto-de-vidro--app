@@ -78,6 +78,8 @@ const CreateTargetPropertyForm = ({ onSuccess, onFail, huntId }: CreateTargetPro
       ...values
     }
 
+    console.log('submit data', data)
+
     const res = await createTargetProperty(data)
 
     if (!res) {
@@ -312,7 +314,8 @@ const CreateTargetPropertyForm = ({ onSuccess, onFail, huntId }: CreateTargetPro
           <span className="col-span-4 flex flex-row items-end gap-4">
             <Input
               label="Valor"
-              name="nickname"
+              name="price"
+              type="number"
               themeSize={formThemeSize}
               theme={themePallete}
               placeholder={`Apelido do imóvel`}
