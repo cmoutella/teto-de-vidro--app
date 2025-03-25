@@ -2,15 +2,17 @@ import { useState } from 'react'
 
 import cx from 'classnames'
 
+import type { InterfaceHunt } from '@/types/app'
 import { lastUpdateMessage } from '@/utils/string/lastUpdateMessage'
 
 import Button from '../../base/Button'
 
 interface TargetPropertyItemProps {
   target: TargetPropertyInterface
+  hunt: InterfaceHunt
 }
 
-export default function TargetPropertyItem({ target }: TargetPropertyItemProps) {
+export default function TargetPropertyItem({ target, hunt }: TargetPropertyItemProps) {
   const [isOpen, setIsOpen] = useState<boolean>(false)
 
   return (
@@ -48,37 +50,39 @@ export default function TargetPropertyItem({ target }: TargetPropertyItemProps) 
             <div className="text-xs">ACTIONS</div>
           </div>
           <div className="w-full">
-            {/* dados exibidos quando aluguel */}
-            <div className="grid grid-cols-12">
-              <div className="col-span-1 flex flex-col items-center">
-                <p className="text-sm font-semibold whitespace-nowrap">TAMANHO</p>
-                <p>{target.size === 0 ? '?' : `${target.size}m2`}</p>
+            {(hunt.type === 'rent' || hunt.type === 'either') && (
+              <div className="grid grid-cols-12">
+                <div className="col-span-1 flex flex-col items-center">
+                  <p className="text-sm font-semibold whitespace-nowrap">TAMANHO</p>
+                  <p>{target.size === 0 ? '?' : `${target.size}m2`}</p>
+                </div>
+                <div className="col-span-1 flex flex-col items-center">
+                  <p className="text-sm font-semibold whitespace-nowrap">VALOR</p>
+                  <p>R$ {target.price}</p>
+                </div>
+                <div className="col-span-1 flex flex-col items-center">
+                  <p className="text-sm font-semibold whitespace-nowrap">CONDOMÍNIO</p>
+                  <p>
+                    R${' '}
+                    {!target.condoPricing || target.condoPricing === 0 ? '?' : target.condoPricing}
+                  </p>
+                </div>
+                <div className="col-span-1 flex flex-col items-center">
+                  <p className="text-sm font-semibold whitespace-nowrap">IPTU</p>
+                  <p>R$ {target.iptu === 0 ? '?' : target.iptu}</p>
+                </div>
+                <div className="col-span-1 flex flex-col items-cente font-semibold">
+                  <p className="text-sm font-semibold whitespace-nowrap">TOTAL</p>
+                  <p className="text-lg">
+                    R$ {target.price + (target.condoPricing ?? 0) + target.iptu}
+                  </p>
+                </div>
+                <div className="col-span-2 flex flex-col items-cente">
+                  <p className="text-sm font-semibold whitespace-nowrap">ETAPA</p>
+                  <p>{target.huntingStage}</p>
+                </div>
               </div>
-              <div className="col-span-1 flex flex-col items-center">
-                <p className="text-sm font-semibold whitespace-nowrap">VALOR</p>
-                <p>R$ {target.price}</p>
-              </div>
-              <div className="col-span-1 flex flex-col items-center">
-                <p className="text-sm font-semibold whitespace-nowrap">CONDOMÍNIO</p>
-                <p>
-                  R$ {!target.condoPricing || target.condoPricing === 0 ? '?' : target.condoPricing}
-                </p>
-              </div>
-              <div className="col-span-1 flex flex-col items-center">
-                <p className="text-sm font-semibold whitespace-nowrap">IPTU</p>
-                <p>R$ {target.iptu === 0 ? '?' : target.iptu}</p>
-              </div>
-              <div className="col-span-1 flex flex-col items-cente font-semibold">
-                <p className="text-sm font-semibold whitespace-nowrap">TOTAL</p>
-                <p className="text-lg">
-                  R$ {target.price + (target.condoPricing ?? 0) + target.iptu}
-                </p>
-              </div>
-              <div className="col-span-2 flex flex-col items-cente">
-                <p className="text-sm font-semibold whitespace-nowrap">ETAPA</p>
-                <p>{target.huntingStage}</p>
-              </div>
-            </div>
+            )}
           </div>
         </div>
       </div>

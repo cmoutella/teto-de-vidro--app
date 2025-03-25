@@ -71,7 +71,13 @@ const OneHuntView = ({ hunt }: HuntViewProps) => {
             </div>
           </div>
         </div>
-        <TargetPropertyList list={properties} page={page} totalPages={totalPages} perPage={8} />
+        <TargetPropertyList
+          list={properties}
+          page={page}
+          totalPages={totalPages}
+          perPage={8}
+          hunt={hunt}
+        />
       </div>
       <CreateTargetPropertyModal
         huntId={hunt.id}

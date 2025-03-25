@@ -1,3 +1,5 @@
+import type { InterfaceHunt } from '@/types/app'
+
 import TargetPropertyItem from '../TargetPropertyItem'
 
 interface TargetPropertyListProps {
@@ -5,13 +7,15 @@ interface TargetPropertyListProps {
   page: number
   totalPages: number
   perPage: number
+  hunt: InterfaceHunt
 }
 
 function TargetPropertyList({
   list,
   page: _page,
   totalPages: _totalPages,
-  perPage: _perPage
+  perPage: _perPage,
+  hunt: hunt
 }: TargetPropertyListProps) {
   if (list.length <= 0) {
     return <>Ainda não tem nenhum imóvel</>
@@ -22,7 +26,7 @@ function TargetPropertyList({
       {list.map((tp) => {
         return (
           <div key={tp.id} className="w-full">
-            <TargetPropertyItem target={tp} />
+            <TargetPropertyItem target={tp} hunt={hunt} />
           </div>
         )
       })}
