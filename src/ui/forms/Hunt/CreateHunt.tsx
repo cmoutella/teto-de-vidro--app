@@ -175,7 +175,7 @@ const CreateHuntForm = ({ onSuccess, onFail }: CreateHuntFormProps) => {
 
         <div className="flex flex-col gap-2 col-span-12 justify-center items-center pt-5">
           <span className="text-brand-gray-700 text-xs pb-2">Você pode alterar depois</span>
-          <SubmitButton isDisabled={!formik.isValid || formik.isSubmitting} />
+          <SubmitButton isDisabled={!formik.isValid || formik.isSubmitting} label="Criar" />
         </div>
       </form>
     </div>

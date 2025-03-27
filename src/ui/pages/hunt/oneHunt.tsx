@@ -8,9 +8,11 @@ import TargetPropertyList from '@ui/TargetProperty/TargetPropertyList'
 
 import { HuntProvider, useHuntContext } from '@/providers/HuntProvider'
 import type { InterfaceHunt } from '@/types/app'
+import type { TargetPropertyInterface } from '@/types/targetProperty'
 
 import CreateTargetPropertyModal from './components/CreateTargetPropertyModal'
 import { EditHuntModal } from './components/EditHuntModal'
+import { EditTargetPropertyModal } from './components/EditTargetPropertyModal'
 import { DEFAULT_HUNT_LIST_PER_PAGE } from './consts/perPage'
 
 interface HuntViewProps {
@@ -29,6 +31,19 @@ const HuntView = () => {
   const [isTargetPropertyCreateModalOpen, setIsTargetPropertyCreateModalOpen] =
     useState<boolean>(false)
   const [isEditHuntModalOpen, setIsEditHuntModalOpen] = useState<boolean>(false)
+  const [isEditTargetPropertyModalOpen, setIsEditTargetPropertyModalOpen] = useState<boolean>(false)
+  const [editTargetProperty, setEditTargetProperty] = useState<TargetPropertyInterface | undefined>(
+    undefined
+  )
+
+  function openEditTargetModal(target: TargetPropertyInterface) {
+    setIsEditTargetPropertyModalOpen(true)
+    setEditTargetProperty(target)
+  }
+  function closeEditTargetModal() {
+    setIsEditTargetPropertyModalOpen(false)
+    setEditTargetProperty(undefined)
+  }
 
   useEffect(() => {
     fetchPropertiesData()
@@ -86,7 +101,13 @@ const HuntView = () => {
             </div>
           </div>
         </div>
-        <TargetPropertyList list={properties} page={page} totalPages={totalPages} perPage={8} />
+        <TargetPropertyList
+          list={properties}
+          page={page}
+          totalPages={totalPages}
+          perPage={8}
+          openEditModal={openEditTargetModal}
+        />
       </div>
       <CreateTargetPropertyModal
         huntId={(hunt as InterfaceHunt).id}
@@ -100,6 +121,11 @@ const HuntView = () => {
         setClose={() => {
           setIsEditHuntModalOpen(false)
         }}
+      />
+      <EditTargetPropertyModal
+        isOpen={isEditTargetPropertyModalOpen}
+        setClose={closeEditTargetModal}
+        target={editTargetProperty}
       />
     </div>
   )

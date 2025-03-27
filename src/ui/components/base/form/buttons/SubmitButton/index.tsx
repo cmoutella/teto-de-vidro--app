@@ -3,12 +3,13 @@ import cx from 'classnames'
 
 interface SubmitButtonProps {
   isDisabled: boolean
+  label: string
 }
 
-function SubmitButton({ isDisabled }: SubmitButtonProps) {
+function SubmitButton({ isDisabled, label }: SubmitButtonProps) {
   return (
     <Button
-      label="Criar"
+      label={label}
       className={cx('min-w-36 w-1/6  text-white', {
         'hover:bg-brand-primary-800 bg-brand-primary-700': !isDisabled,
         'bg-brand-gray-500 disabled:bg-brand-gray-500': isDisabled

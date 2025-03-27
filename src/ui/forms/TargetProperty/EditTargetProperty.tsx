@@ -9,26 +9,30 @@ import { useFormik } from 'formik'
 import * as Yup from 'yup'
 
 import type { CreateTargetPropertyRequestProps } from '@/requests/targetProperty/create'
-import { createTargetProperty } from '@/requests/targetProperty/create'
+import { editTargetProperty } from '@/requests/targetProperty/edit'
 import { CEPService } from '@/services/cep'
-import Button from '@/ui/components/base/Button'
+import type { TargetPropertyInterface } from '@/types/targetProperty'
 import SubmitButton from '@/ui/components/base/form/buttons/SubmitButton'
 import Input from '@/ui/components/base/form/inputs/Input'
 
 interface CreateTargetPropertyFormProps {
   onSuccess: (_id: string) => void
   onFail: () => void
-  huntId: string
+  currentData: TargetPropertyInterface
 }
 
 const formThemeSize: FormSizes = 'lg'
 const themePallete: FormTheme = 'light'
 
-const CreateTargetPropertyForm = ({ onSuccess, onFail, huntId }: CreateTargetPropertyFormProps) => {
+const EditTargetPropertyForm = ({
+  onSuccess,
+  onFail,
+  currentData
+}: CreateTargetPropertyFormProps) => {
   const [addressBoxOpen, setAddressBoxOpen] = useState<boolean>(false)
+  const [priceBoxOpen, setPriceBoxOpen] = useState<boolean>(true)
 
   const validationSchema = Yup.object({
-    adURL: Yup.string(),
     postalCode: Yup.string()
       .matches(/^\d{5}-\d{3}$/, 'O CEP deve estar no formato 12345-678')
       .min(9, 'O CEP deve conter 8 dígitos'),
@@ -45,23 +49,23 @@ const CreateTargetPropertyForm = ({ onSuccess, onFail, huntId }: CreateTargetPro
 
   const formik = useFormik({
     initialValues: {
-      adURL: '',
-      nickname: '',
-      postalCode: '',
-      street: '',
-      neighborhood: '',
-      city: '',
-      uf: '',
-      country: 'Brasil',
-      block: '0',
-      lotNumber: '',
-      propertyNumber: '',
-      size: 0,
-      rooms: 1,
-      bathrooms: 1,
-      parkingSpots: 0,
-      iptu: 0,
-      price: 0
+      nickname: currentData.nickname ?? '',
+      postalCode: currentData.postalCode ?? '',
+      street: currentData.street ?? '',
+      neighborhood: currentData.neighborhood ?? '',
+      city: currentData.city ?? '',
+      uf: currentData.uf ?? '',
+      country: currentData.country ?? 'Brasil',
+      block: currentData.block ?? '0',
+      lotNumber: currentData.lotNumber ?? '',
+      propertyNumber: currentData.number ?? '',
+      size: currentData.size ?? 0,
+      rooms: currentData.rooms ?? 1,
+      bathrooms: currentData.bathrooms ?? 1,
+      parkingSpots: currentData.parking ?? 0,
+      iptu: currentData.iptu ?? 0,
+      condoPricing: currentData.condoPricing ?? 0,
+      price: currentData.price ?? 0
     },
     validationSchema,
     onSubmit: handleSubmit
@@ -73,11 +77,11 @@ const CreateTargetPropertyForm = ({ onSuccess, onFail, huntId }: CreateTargetPro
     if (!formik.isValid || !user) return
 
     const data: CreateTargetPropertyRequestProps = {
-      huntId: huntId,
+      huntId: currentData.huntId,
       ...values
     }
 
-    const res = await createTargetProperty(data)
+    const res = await editTargetProperty(currentData.id, data)
 
     if (!res) {
       onFail()
@@ -85,16 +89,6 @@ const CreateTargetPropertyForm = ({ onSuccess, onFail, huntId }: CreateTargetPro
     }
 
     onSuccess(res?.id)
-  }
-
-  const fetchAdFillForm = () => {
-    const ad = formik.values.adURL
-
-    if (!ad) return
-
-    // TODO: Scrappers endpoint
-    // identificar o dominio
-    // executar o scrapper
   }
 
   async function completeFieldsByCEP(e: React.FocusEvent<HTMLInputElement>) {
@@ -118,26 +112,6 @@ const CreateTargetPropertyForm = ({ onSuccess, onFail, huntId }: CreateTargetPro
           <h3 className="text-xl text-brand-primary-700 pb-0.5 border-b-brand-gray-400 border-b-2 w-3/4 uppercase">
             Incluir imóvel de interesse
           </h3>
-          <div className="grid md:grid-cols-12 gap-x-4 gap-y-5">
-            <span className="col-span-12 flex flex-row items-end gap-4">
-              <Input
-                label="Anúncio do imóvel"
-                description="Vamos auto preencher o resto do formulário com dados objetidos no anúncio"
-                name="adURL"
-                themeSize={formThemeSize}
-                theme={themePallete}
-                placeholder={`Cole aqui o link do anúncio`}
-                value={formik.values.adURL}
-                onChange={formik.handleChange}
-              />
-              <Button
-                label="Preencher"
-                size="xxlarge"
-                onClick={fetchAdFillForm}
-                className="bg-brand-primary-400 hover:bg-brand-primary-800 text-brand-primary-900 hover:text-white min-w-20"
-              />
-            </span>
-          </div>
           <div className="grid md:grid-cols-12 gap-x-4 gap-y-5">
             <span className="col-span-12 flex flex-row items-end gap-4">
               <Input
@@ -307,36 +281,61 @@ const CreateTargetPropertyForm = ({ onSuccess, onFail, huntId }: CreateTargetPro
               </div>
             </CollapsableBox>
           </div>
+          <div className="w-full">
+            <CollapsableBox
+              label="Custos"
+              open={priceBoxOpen}
+              toggleBox={() => setPriceBoxOpen(!priceBoxOpen)}
+            >
+              <div className="w-full grid md:grid-cols-12 gap-x-4 gap-y-5 mt-2">
+                <FormSectionLabel>Custos Mensais</FormSectionLabel>
+                <span className="col-span-4 flex flex-row items-end gap-4">
+                  <Input
+                    label="Aluguel"
+                    name="price"
+                    type="number"
+                    themeSize={formThemeSize}
+                    theme={themePallete}
+                    placeholder={`Aluguel`}
+                    value={formik.values.price}
+                    onChange={formik.handleChange}
+                    fieldSymbol="R$"
+                  />
+                </span>
+                <span className="col-span-4 flex flex-row items-end gap-4">
+                  <Input
+                    label="Condomínio"
+                    name="condoPricing"
+                    type="number"
+                    themeSize={formThemeSize}
+                    theme={themePallete}
+                    placeholder={`Valor do condomínio`}
+                    value={formik.values.condoPricing}
+                    onChange={formik.handleChange}
+                    fieldSymbol="R$"
+                  />
+                </span>
+                <span className="col-span-4 flex flex-row items-end gap-4">
+                  <Input
+                    label="IPTU"
+                    name="iptu"
+                    type="number"
+                    themeSize={formThemeSize}
+                    theme={themePallete}
+                    placeholder={`Valor do IPTU por mês`}
+                    value={formik.values.iptu}
+                    onChange={formik.handleChange}
+                    fieldSymbol="R$"
+                  />
+                </span>
+              </div>
+            </CollapsableBox>
+          </div>
         </section>
-        <div className="grid md:grid-cols-12 gap-x-4 gap-y-5">
-          <span className="col-span-4 flex flex-row items-end gap-4">
-            <Input
-              label="Valor"
-              name="price"
-              type="number"
-              themeSize={formThemeSize}
-              theme={themePallete}
-              placeholder={`Apelido do imóvel`}
-              value={formik.values.price}
-              onChange={formik.handleChange}
-              fieldSymbol="R$"
-            />
-          </span>
-          <span className="col-span-4 flex flex-row items-end gap-4">
-            <Input
-              label="IPTU"
-              name="iptu"
-              type="number"
-              themeSize={formThemeSize}
-              theme={themePallete}
-              placeholder={`Apelido do imóvel`}
-              value={formik.values.iptu}
-              onChange={formik.handleChange}
-              fieldSymbol="R$"
-            />
-          </span>
-        </div>
-        <SubmitButton isDisabled={!formik.isValid || formik.isSubmitting} label="Criar" />
+        <SubmitButton
+          label="Salvar alterações"
+          isDisabled={!formik.isValid || formik.isSubmitting}
+        />
       </form>
     </div>
   )
@@ -350,4 +349,4 @@ function FormSectionLabel({ children }: { children: ReactNode | string }) {
   )
 }
 
-export default CreateTargetPropertyForm
+export default EditTargetPropertyForm

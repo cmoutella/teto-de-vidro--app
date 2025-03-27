@@ -12,9 +12,14 @@ import { StagePill } from './StagePill'
 interface TargetPropertyItemProps {
   target: TargetPropertyInterface
   hunt: InterfaceHunt
+  openEditModal: (_t: TargetPropertyInterface) => void
 }
 
-export default function TargetPropertyItem({ target, hunt }: TargetPropertyItemProps) {
+export default function TargetPropertyItem({
+  target,
+  hunt,
+  openEditModal
+}: TargetPropertyItemProps) {
   const [isOpen, setIsOpen] = useState<boolean>(false)
 
   const totalPricing = useMemo(() => {
@@ -29,10 +34,11 @@ export default function TargetPropertyItem({ target, hunt }: TargetPropertyItemP
     }
 
     if (totalPricing < hunt.maxBudget) {
-      return -(1 - totalPricing / hunt.maxBudget) * 100
+      return -((1 - totalPricing / hunt.maxBudget) * 100)
     }
 
     return 0
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [hunt])
 
   return (
@@ -67,7 +73,15 @@ export default function TargetPropertyItem({ target, hunt }: TargetPropertyItemP
             <div className="flex items-center flex-row justify-start gap-2">
               <h3 className="font-semibold text-2xl">{target.nickname}</h3>
             </div>
-            <div className="text-xs">ACTIONS</div>
+            <div className="text-xs">
+              <Button
+                label="Editar"
+                className={cx(
+                  'border border-brand-primary-500 text-brand-primary-600 hover:border-brand-primary-600 hover:bg-brand-primary-600 hover:text-white'
+                )}
+                onClick={() => openEditModal(target)}
+              />
+            </div>
           </div>
           <div className="w-full">
             {(hunt.type === 'rent' || hunt.type === 'either') && (
@@ -87,10 +101,10 @@ export default function TargetPropertyItem({ target, hunt }: TargetPropertyItemP
                   <p className="text-sm font-semibold whitespace-nowrap">IPTU</p>
                   <p>R$ {target.iptu === 0 ? '?' : target.iptu}</p>
                 </div>
-                <div className="col-span-1 flex flex-col items-cente font-semibold">
+                <div className="col-span-1 flex flex-col items-cente">
                   <p className="text-sm font-semibold whitespace-nowrap">TOTAL</p>
                   <div className="flex items-center whitespace-nowrap relative">
-                    <p className="text-lg whitespace-nowrap">R$ {totalPricing}</p>
+                    <p className="text-lg whitespace-nowrap font-semibold">R$ {totalPricing}</p>
                     {budgetDeviant !== 0 && <BudgetDiff diff={budgetDeviant} />}
                   </div>
                 </div>
@@ -194,9 +208,11 @@ export default function TargetPropertyItem({ target, hunt }: TargetPropertyItemP
 }
 
 function BudgetDiff({ diff }: { diff: number }) {
-  const baseStyles = 'text-xs font-normal absolute -top-2 right-1 tracking-wider'
+  const baseStyles = 'text-xs font-medium absolute -top-2 right-1 tracking-wider'
 
   if (diff > 0) {
     return <span className={cx('text-red-800', baseStyles)}>+{diff.toFixed(1)}%</span>
-  } else <span className={cx('text-green-800', baseStyles)}>-{diff.toFixed(1)}%</span>
+  }
+
+  return <span className={cx('text-green-800', baseStyles)}>{diff.toFixed(1)}%</span>
 }
