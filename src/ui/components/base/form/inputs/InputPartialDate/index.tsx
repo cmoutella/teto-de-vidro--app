@@ -5,14 +5,16 @@ import type { Option } from '@raw/Select'
 import SelectRaw from '@raw/Select'
 import FieldWrapper from '@raw/wrappers/Field'
 import type { FormSizes, FormTheme } from '@ui/base/shared/formTheme'
+import { isSameMonth } from 'date-fns'
+import { addDays } from 'date-fns/addDays'
 
 interface InputPartialDateProps {
   label?: string
   description?: string
   theme?: FormTheme
   themeSize?: FormSizes
-  onChange: (_d: Date) => void
-  date?: Date
+  onChange: (_d: string) => void
+  date?: string
 }
 
 const monthOptions: Option[] = [
@@ -48,8 +50,14 @@ const InputPartialDate = ({
   themeSize = 'md',
   onChange
 }: InputPartialDateProps) => {
-  const [year, setYear] = useState<string | undefined>(date?.getFullYear().toString() ?? undefined)
-  const [month, setMonth] = useState<string | undefined>(date?.getMonth().toString() ?? undefined)
+  const initialDate = date ? new Date(date) : addDays(new Date(), 1)
+
+  const [year, setYear] = useState<string | undefined>(
+    initialDate.getFullYear().toString() ?? undefined
+  )
+  const [month, setMonth] = useState<string | undefined>(
+    initialDate.getMonth().toString() ?? undefined
+  )
 
   const handleMonthChange = (e: ChangeEvent<HTMLSelectElement>) => {
     e.preventDefault()
@@ -69,9 +77,14 @@ const InputPartialDate = ({
     if (!year || !month) {
       return
     }
-    const date = new Date(Number(year), Number(month), 1)
 
-    onChange(date as Date)
+    const date = new Date(Number(year), Number(month), initialDate.getDate())
+
+    if (isSameMonth(date, initialDate)) {
+      return
+    }
+
+    onChange(date.toISOString())
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [year, month])
 

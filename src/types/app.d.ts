@@ -62,4 +62,6 @@ export interface InterfaceHunt {
   livingPeople?: number
   livingPets?: number
   targets: string[]
+  lowerBudget: number
+  higherBudget: number
 }
