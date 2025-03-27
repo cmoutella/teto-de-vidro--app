@@ -3,6 +3,7 @@ import { createContext, useContext, useEffect, useState } from 'react'
 
 import { getAllTargetPropertiesfromHunt } from '@/requests/hunt/getAllTargetProperties'
 import { getHuntById } from '@/requests/hunt/getById'
+import { deleteTargetProperty } from '@/requests/targetProperty/delete'
 import type { InterfaceHunt } from '@/types/app'
 import type { TargetPropertyInterface } from '@/types/targetProperty'
 import { DEFAULT_HUNT_LIST_PER_PAGE } from '@/ui/pages/hunt/consts/perPage'
@@ -17,6 +18,7 @@ interface HuntContext {
   totalPages: number
   properties: TargetPropertyInterface[]
   fetchProperties: () => void
+  removeTargetProperty: (_t: string) => void
 }
 
 const DEFAULT_VALUES = {
@@ -27,7 +29,8 @@ const DEFAULT_VALUES = {
   setPerPage: (_p: number) => {},
   totalPages: 1,
   properties: [],
-  fetchProperties: () => {}
+  fetchProperties: () => {},
+  removeTargetProperty: (_t: string) => {}
 }
 
 const HuntContext = createContext<HuntContext>(DEFAULT_VALUES)
@@ -85,6 +88,16 @@ export const HuntProvider = ({
     setProperties(data as TargetPropertyInterface[])
   }
 
+  async function removeTargetProperty(id: string) {
+    const res = await deleteTargetProperty(id)
+
+    if (res) {
+      await getProperties()
+    } else {
+      // handle delete fail
+    }
+  }
+
   const value = {
     update: updateHuntView,
     hunt: hunt,
@@ -94,7 +107,8 @@ export const HuntProvider = ({
     setPerPage,
     totalPages,
     properties,
-    fetchProperties: getProperties
+    fetchProperties: getProperties,
+    removeTargetProperty
   }
 
   return <HuntContext.Provider value={value}>{children}</HuntContext.Provider>

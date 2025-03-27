@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react'
 
 import cx from 'classnames'
 
+import { useHuntContext } from '@/providers/HuntProvider'
 import type { InterfaceHunt } from '@/types/app'
 import type { TargetPropertyInterface } from '@/types/targetProperty'
 import { lastUpdateMessage } from '@/utils/string/lastUpdateMessage'
@@ -21,6 +22,8 @@ export default function TargetPropertyItem({
   openEditModal
 }: TargetPropertyItemProps) {
   const [isOpen, setIsOpen] = useState<boolean>(false)
+
+  const { removeTargetProperty } = useHuntContext()
 
   const totalPricing = useMemo(() => {
     return target.price + (target.condoPricing ?? 0) + target.iptu
@@ -73,13 +76,21 @@ export default function TargetPropertyItem({
             <div className="flex items-center flex-row justify-start gap-2">
               <h3 className="font-semibold text-2xl">{target.nickname}</h3>
             </div>
-            <div className="text-xs">
+            <div className="text-xs flex flex-row gap-0.5">
               <Button
                 label="Editar"
                 className={cx(
                   'border border-brand-primary-500 text-brand-primary-600 hover:border-brand-primary-600 hover:bg-brand-primary-600 hover:text-white'
                 )}
                 onClick={() => openEditModal(target)}
+              />
+              {/* TODO: icone trash */}
+              <Button
+                label="T"
+                className={cx(
+                  'border border-red-500 text-red-600 hover:border-red-600 hover:bg-red-600 hover:text-white min-w-10'
+                )}
+                onClick={() => removeTargetProperty(target.id)}
               />
             </div>
           </div>
