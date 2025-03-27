@@ -264,6 +264,7 @@ const CreateTargetPropertyForm = ({ onSuccess, onFail, huntId }: CreateTargetPro
                     label="Tamanho"
                     description="Em metros quadrados"
                     name="size"
+                    type="number"
                     themeSize={formThemeSize}
                     theme={themePallete}
                     value={formik.values.size}
