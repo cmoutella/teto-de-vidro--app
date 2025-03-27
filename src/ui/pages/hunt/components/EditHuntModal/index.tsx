@@ -16,12 +16,12 @@ export function EditHuntModal({ isOpen, setClose }: EditHuntModalProps) {
 
   const { hunt, update } = useHuntContext()
 
-  function onSuccess() {
-    update()
+  function onSuccess(updatedHunt: InterfaceHunt) {
+    update(updatedHunt)
   }
 
-  function handleSuccess() {
-    onSuccess()
+  function handleSuccess(updatedHunt: InterfaceHunt) {
+    onSuccess(updatedHunt)
     setClose()
   }
 

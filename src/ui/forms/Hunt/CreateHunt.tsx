@@ -46,8 +46,8 @@ const CreateHuntForm = ({ onSuccess, onFail }: CreateHuntFormProps) => {
       movingExpected: addDays(new Date(), 1).toISOString(),
       livingPeople: 1,
       livingPets: 0,
-      lowerBudget: 0,
-      higherBudget: 0
+      minBudget: 0,
+      maxBudget: 0
     },
     validationSchema,
     validateOnChange: true,
@@ -146,11 +146,11 @@ const CreateHuntForm = ({ onSuccess, onFail }: CreateHuntFormProps) => {
                   <span className="col-span-1">
                     <Input
                       label="Orçamento mínimo"
-                      name="lowerBudget"
+                      name="minBudget"
                       type="number"
                       themeSize={formThemeSize}
                       theme={themePallete}
-                      value={formik.values.lowerBudget}
+                      value={formik.values.minBudget}
                       onChange={formik.handleChange}
                       fieldSymbol="R$"
                     />
@@ -158,11 +158,11 @@ const CreateHuntForm = ({ onSuccess, onFail }: CreateHuntFormProps) => {
                   <span className="col-span-1">
                     <Input
                       label="Orçamento máximo"
-                      name="higherBudget"
+                      name="maxBudget"
                       type="number"
                       themeSize={formThemeSize}
                       theme={themePallete}
-                      value={formik.values.higherBudget}
+                      value={formik.values.maxBudget}
                       onChange={formik.handleChange}
                       fieldSymbol="R$"
                     />

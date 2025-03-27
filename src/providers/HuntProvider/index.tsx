@@ -5,7 +5,7 @@ import { getHuntById } from '@/requests/hunt/getById'
 import type { InterfaceHunt } from '@/types/app'
 
 interface HuntContext {
-  update: () => void
+  update: (_h?: InterfaceHunt) => void
   hunt?: InterfaceHunt
 }
 
@@ -34,16 +34,17 @@ export const HuntProvider = ({
 }) => {
   const [hunt, setHunt] = useState<InterfaceHunt>(initialHuntData)
 
-  async function updateHuntView() {
-    const updatedHunt = await getHuntById(hunt.id)
+  async function updateHuntView(updated?: InterfaceHunt) {
+    if (!updated) {
+      const updatedHunt = await getHuntById(hunt.id)
 
-    if (updatedHunt) {
-      setHunt(updatedHunt)
+      if (updatedHunt) {
+        setHunt(updatedHunt)
+      }
+    } else {
+      setHunt(updated)
     }
   }
-
-  // TODO: esse nao ta rolando, pq?
-  // eslint-disable-next-line react-hooks/exhaustive-deps
 
   const value = {
     update: updateHuntView,

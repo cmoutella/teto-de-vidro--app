@@ -16,7 +16,7 @@ import { editHunt } from '@/requests/hunt/edit'
 import type { InterfaceHunt } from '@/types/app'
 
 interface EditHuntFormProps {
-  onSuccess: () => void
+  onSuccess: (_h: InterfaceHunt) => void
   onFail: () => void
   currentData: InterfaceHunt
 }
@@ -52,10 +52,10 @@ const EditHuntForm = ({ onSuccess, onFail, currentData }: EditHuntFormProps) => 
       title: currentData.title ?? '',
       type: currentData.type,
       movingExpected: initMovingExpected,
-      livingPeople: currentData.livingPeople,
-      livingPets: currentData.livingPets,
-      lowerBudget: currentData.lowerBudget,
-      higherBudget: currentData.higherBudget
+      livingPeople: currentData.livingPeople ?? 1,
+      livingPets: currentData.livingPets ?? 0,
+      minBudget: currentData.minBudget ?? 0,
+      maxBudget: currentData.maxBudget ?? 0
     },
     validationSchema,
     validateOnChange: true,
@@ -79,7 +79,7 @@ const EditHuntForm = ({ onSuccess, onFail, currentData }: EditHuntFormProps) => 
       return
     }
 
-    onSuccess()
+    onSuccess(res)
   }
 
   return (
@@ -154,11 +154,11 @@ const EditHuntForm = ({ onSuccess, onFail, currentData }: EditHuntFormProps) => 
                   <span className="col-span-1">
                     <Input
                       label="Orçamento mínimo"
-                      name="lowerBudget"
+                      name="minBudget"
                       type="number"
                       themeSize={formThemeSize}
                       theme={themePallete}
-                      value={formik.values.lowerBudget}
+                      value={formik.values.minBudget}
                       onChange={formik.handleChange}
                       fieldSymbol="R$"
                     />
@@ -166,11 +166,11 @@ const EditHuntForm = ({ onSuccess, onFail, currentData }: EditHuntFormProps) => 
                   <span className="col-span-1">
                     <Input
                       label="Orçamento máximo"
-                      name="higherBudget"
+                      name="maxBudget"
                       type="number"
                       themeSize={formThemeSize}
                       theme={themePallete}
-                      value={formik.values.higherBudget}
+                      value={formik.values.maxBudget}
                       onChange={formik.handleChange}
                       fieldSymbol="R$"
                     />
