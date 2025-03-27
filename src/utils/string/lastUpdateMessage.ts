@@ -20,7 +20,6 @@ export function lastUpdateMessage(updateDate: string) {
   }
 
   const diffInDays = differenceInDays(new Date(), updatedAt)
-  console.log()
 
   if (diffInDays <= 5) {
     return `há ${diffInDays.toString()} semanas`
