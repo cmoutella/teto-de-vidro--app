@@ -1,7 +1,4 @@
 'use client'
-import type { ChangeEvent, FormEvent } from 'react'
-import { useMemo, useState } from 'react'
-
 import { useSessionContext } from '@providers/AuthProvider'
 import type { CreateHuntRequestProps } from '@requests/hunt/create'
 import { createHunt } from '@requests/hunt/create'
@@ -10,8 +7,10 @@ import Input from '@ui/base/form/inputs/Input'
 import InputPartialDate from '@ui/base/form/inputs/InputPartialDate'
 import DropdownSelect from '@ui/base/form/selects/DropdownSelect'
 import type { FormSizes, FormTheme } from '@ui/base/shared/formTheme'
-
-import type { CONTRACT_TYPE } from '@/types/app'
+import { addDays, isToday } from 'date-fns'
+import { isFuture } from 'date-fns/isFuture'
+import { useFormik } from 'formik'
+import * as Yup from 'yup'
 
 interface CreateHuntFormProps {
   onSuccess: (_id: string) => void
@@ -22,32 +21,47 @@ const formThemeSize: FormSizes = 'lg'
 const themePallete: FormTheme = 'light'
 
 const CreateHuntForm = ({ onSuccess, onFail }: CreateHuntFormProps) => {
-  const [title, setTitle] = useState<string>('')
-  const [type, setType] = useState<CONTRACT_TYPE>('either')
-  const [movingDate, setMovingDate] = useState<Date | undefined>()
-  const [livingPeople, setLivingPeople] = useState<number>(1)
-  const [livingPets, setLivingPets] = useState<number>(0)
-  const [lowerBudget, setLowerBudget] = useState<number>(0)
-  const [higherBudget, setHigherBudget] = useState<number>(0)
+  const validationSchema = Yup.object({
+    type: Yup.string().required(),
+    movingExpected: Yup.string().test(
+      'A expectativa de mudança deve ser uma data no futuro',
+      (value) => {
+        if (!value) {
+          // Retorna verdadeiro para ignorar a validação quando o valor está ausente
+          return true
+        }
 
-  const submitButtonDisabled = useMemo(() => {
-    return !title
-  }, [title])
+        const inputedDate = new Date(value)
+
+        const validDate = isFuture(inputedDate) && !isToday(inputedDate)
+        return validDate
+      }
+    )
+  })
+
+  const formik = useFormik({
+    initialValues: {
+      title: '',
+      type: 'either',
+      movingExpected: addDays(new Date(), 1).toISOString(),
+      livingPeople: 1,
+      livingPets: 0,
+      lowerBudget: 0,
+      higherBudget: 0
+    },
+    validationSchema,
+    validateOnChange: true,
+    onSubmit: handleSubmit
+  })
 
   const { user } = useSessionContext()
 
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-
-    if (!title || !user) return
+  async function handleSubmit(values: Omit<CreateHuntRequestProps, 'creatorId'>) {
+    if (!formik.isValid || !user) return
 
     const data: CreateHuntRequestProps = {
       creatorId: user.id,
-      title: title,
-      type: type,
-      movingExpected: movingDate?.toISOString(),
-      livingPeople: livingPeople,
-      livingPets: livingPets
+      ...values
     }
 
     const res = await createHunt(data)
@@ -60,33 +74,9 @@ const CreateHuntForm = ({ onSuccess, onFail }: CreateHuntFormProps) => {
     onSuccess(res?.id)
   }
 
-  const handleTitle = (e: ChangeEvent<HTMLInputElement>) => {
-    setTitle(e.target.value)
-  }
-
-  const handleType = (e: ChangeEvent<HTMLSelectElement>) => {
-    setType(e.target.value as CONTRACT_TYPE)
-  }
-
-  const handlePeople = (e: ChangeEvent<HTMLInputElement>) => {
-    setLivingPeople(Number(e.target.value))
-  }
-
-  const handlePets = (e: ChangeEvent<HTMLInputElement>) => {
-    setLivingPets(Number(e.target.value))
-  }
-
-  const handleLowerBudget = (e: ChangeEvent<HTMLInputElement>) => {
-    setLowerBudget(Number(e.target.value))
-  }
-
-  const handleHigherBudget = (e: ChangeEvent<HTMLInputElement>) => {
-    setHigherBudget(Number(e.target.value))
-  }
-
   return (
     <div className="w-full flex justify-center flex-col items-center px-14 py-10 gap-3">
-      <form onSubmit={handleSubmit} className="w-full grid md:grid-cols-12 gap-x-4 gap-y-5">
+      <form onSubmit={formik.handleSubmit} className="w-full grid md:grid-cols-12 gap-x-4 gap-y-5">
         <span className="col-span-8">
           <Input
             label="Dê um título para esta mudança"
@@ -95,33 +85,33 @@ const CreateHuntForm = ({ onSuccess, onFail }: CreateHuntFormProps) => {
             themeSize={formThemeSize}
             theme={themePallete}
             placeholder={`Mudança de ${new Date().getFullYear()}`}
-            value={title}
-            onChange={handleTitle}
+            value={formik.values.title}
+            onChange={formik.handleChange}
           />
         </span>
         <span className="col-span-4">
           <DropdownSelect
             label="Tipo de busca"
             description="Apenas para aluguel? Compra?"
-            name="housingType"
+            name="type"
             options={[
               { value: 'buy', label: 'Compra' },
               { value: 'rent', label: 'Aluguel' },
-              { value: 'either', label: '?' }
+              { value: 'either', label: 'Aluguel ou Compra' }
             ]}
             themeSize={formThemeSize}
             theme={themePallete}
-            defaultValue={type}
-            onChange={handleType}
+            value={formik.values.type}
+            onChange={formik.handleChange}
           />
         </span>
         <span className="col-span-4">
           <InputPartialDate
-            date={movingDate}
+            date={formik.values.movingExpected}
             label="Data da mudança?"
             themeSize={formThemeSize}
             theme={themePallete}
-            onChange={setMovingDate}
+            onChange={(d: string) => formik.setFieldValue('movingExpected', d)}
           />
         </span>
         <span className="col-span-4">
@@ -131,8 +121,8 @@ const CreateHuntForm = ({ onSuccess, onFail }: CreateHuntFormProps) => {
             type="number"
             themeSize={formThemeSize}
             theme={themePallete}
-            value={livingPeople}
-            onChange={handlePeople}
+            value={formik.values.livingPeople}
+            onChange={formik.handleChange}
           />
         </span>
         <span className="col-span-4">
@@ -142,40 +132,50 @@ const CreateHuntForm = ({ onSuccess, onFail }: CreateHuntFormProps) => {
             type="number"
             themeSize={formThemeSize}
             theme={themePallete}
-            value={livingPets}
-            onChange={handlePets}
+            value={formik.values.livingPets}
+            onChange={formik.handleChange}
           />
         </span>
-        <div className="row col-span-12 flex flex-row justify-end gap-x-4 gap-y-5">
-          <span className="col-span-4 col-start-5 col-end-9">
-            <Input
-              label="Orçamento mínimo"
-              name="livingPets"
-              type="number"
-              themeSize={formThemeSize}
-              theme={themePallete}
-              value={lowerBudget}
-              onChange={handleLowerBudget}
-              fieldSymbol="R$"
-            />
-          </span>
-          <span className="col-span-4 col-start-9 col-end-13">
-            <Input
-              label="Orçamento máximo"
-              name="livingPets"
-              type="number"
-              themeSize={formThemeSize}
-              theme={themePallete}
-              value={higherBudget}
-              onChange={handleHigherBudget}
-              fieldSymbol="R$"
-            />
-          </span>
+        <div className="row col-span-12">
+          <div className="grid grid-cols-12 gap-x-4  gap-y-5">
+            <span className="col-span-4"></span>
+            <span className="col-span-4"></span>
+            <div className="col-span-4 col-start-9 col-end-13">
+              <div className="flex flex-row gap-x-4 justify-end">
+                <div className="grid grid-cols-2 w-full gap-x-4">
+                  <span className="col-span-1">
+                    <Input
+                      label="Orçamento mínimo"
+                      name="lowerBudget"
+                      type="number"
+                      themeSize={formThemeSize}
+                      theme={themePallete}
+                      value={formik.values.lowerBudget}
+                      onChange={formik.handleChange}
+                      fieldSymbol="R$"
+                    />
+                  </span>
+                  <span className="col-span-1">
+                    <Input
+                      label="Orçamento máximo"
+                      name="higherBudget"
+                      type="number"
+                      themeSize={formThemeSize}
+                      theme={themePallete}
+                      value={formik.values.higherBudget}
+                      onChange={formik.handleChange}
+                      fieldSymbol="R$"
+                    />
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
 
         <div className="flex flex-col gap-2 col-span-12 justify-center items-center pt-5">
           <span className="text-brand-gray-700 text-xs pb-2">Você pode alterar depois</span>
-          <SubmitButton isDisabled={submitButtonDisabled} />
+          <SubmitButton isDisabled={!formik.isValid || formik.isSubmitting} />
         </div>
       </form>
     </div>
