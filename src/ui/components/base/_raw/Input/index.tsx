@@ -1,25 +1,51 @@
+import { Fragment } from 'react'
+
 import type { InputProps as InputHeadlessProps } from '@headlessui/react'
 import { Input as InputHeadless } from '@headlessui/react'
-import type { FormSizes, FormTheme } from '@ui/base/shared/formTheme'
-import { baseInputStyle, formTheme, iSizes } from '@ui/base/shared/formTheme'
+import {
+  baseInputStyle,
+  formTheme,
+  iSizes,
+  type FormSizes,
+  type FormTheme
+} from '@ui/base/shared/formTheme'
 import cx from 'classnames'
 
 interface InputProps extends InputHeadlessProps {
   theme?: FormTheme
   themeSize?: FormSizes
+  hasBeforeSymbol?: boolean
+  hasAfterSymbol?: boolean
 }
 
-const InputRaw = ({ theme = 'light', themeSize = 'md', ...otherProps }: InputProps) => {
+// TODO: hasAfterSymbol
+
+const InputRaw = ({
+  theme = 'light',
+  themeSize = 'md',
+  hasBeforeSymbol,
+  ...otherProps
+}: InputProps) => {
   return (
-    <InputHeadless
-      className={cx(
-        formTheme[theme].input,
-        baseInputStyle,
-        iSizes[themeSize],
-        'focus:outline-none focus:bg-transparent active:bg-transparent w-full placeholder:text-brand-gray-400 border-box'
+    <InputHeadless as={Fragment} {...otherProps}>
+      {({ focus, hover }: { focus: boolean; hover: boolean }) => (
+        <input
+          className={cx(
+            'border px-2.5 bg-white',
+            formTheme[theme].wrapper,
+            formTheme[theme].input,
+            baseInputStyle,
+            iSizes[themeSize],
+            focus && 'bg-brand-primary-100',
+            hover && 'shadow',
+            {
+              'pl-8': hasBeforeSymbol,
+              'pl-2.5': !hasBeforeSymbol
+            }
+          )}
+        />
       )}
-      {...otherProps}
-    />
+    </InputHeadless>
   )
 }
 

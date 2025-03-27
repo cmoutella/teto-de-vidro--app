@@ -8,8 +8,7 @@ import {
 } from '@headlessui/react'
 import cx from 'classnames'
 
-import { formTheme, iSizes, type FormSizes, type FormTheme } from '../../../shared/formTheme'
-import InputWrapper from '../Input'
+import { formTheme, type FormSizes, type FormTheme } from '../../../shared/formTheme'
 
 interface InputProps extends InputHeadlessProps {
   label?: string
@@ -19,13 +18,7 @@ interface InputProps extends InputHeadlessProps {
   children: ReactNode
 }
 
-const FieldWrapper = ({
-  label,
-  description,
-  theme = 'light',
-  themeSize = 'md',
-  children
-}: InputProps) => {
+const FieldWrapper = ({ label, description, theme = 'light', children }: InputProps) => {
   return (
     <FieldHeadless className="flex flex-col gap-3 w-full">
       {(label || description) && (
@@ -42,15 +35,7 @@ const FieldWrapper = ({
           )}
         </span>
       )}
-      <InputWrapper
-        classNames={cx(
-          iSizes[themeSize],
-          formTheme[theme].wrapper,
-          'data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-brand-primary-400'
-        )}
-      >
-        {children}
-      </InputWrapper>
+      <div className="relative w-full">{children}</div>
     </FieldHeadless>
   )
 }
