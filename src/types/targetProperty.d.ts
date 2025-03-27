@@ -1,3 +1,16 @@
+export type PropertyHuntingStage =
+  | 'new'
+  | 'iniciated'
+  | 'returned'
+  | 'disappeared'
+  | 'unavailable'
+  | 'scheduled'
+  | 'visited'
+  | 'quit'
+  | 'submitted'
+  | 'approved'
+  | 'denied'
+
 interface TargetPropertyInterface {
   id: string
 
@@ -10,7 +23,7 @@ interface TargetPropertyInterface {
   price: number
   iptu: number
   priority: number
-  huntingStage: string
+  huntingStage: PropertyHuntingStage
   isActive: true
   visitDate: string
   realtor: string

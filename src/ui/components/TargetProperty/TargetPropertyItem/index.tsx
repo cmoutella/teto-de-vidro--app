@@ -1,11 +1,13 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 
 import cx from 'classnames'
 
 import type { InterfaceHunt } from '@/types/app'
+import type { TargetPropertyInterface } from '@/types/targetProperty'
 import { lastUpdateMessage } from '@/utils/string/lastUpdateMessage'
 
 import Button from '../../base/Button'
+import { StagePill } from './StagePill'
 
 interface TargetPropertyItemProps {
   target: TargetPropertyInterface
@@ -14,6 +16,24 @@ interface TargetPropertyItemProps {
 
 export default function TargetPropertyItem({ target, hunt }: TargetPropertyItemProps) {
   const [isOpen, setIsOpen] = useState<boolean>(false)
+
+  const totalPricing = useMemo(() => {
+    return target.price + (target.condoPricing ?? 0) + target.iptu
+  }, [target])
+
+  const budgetDeviant = useMemo(() => {
+    if (!hunt.maxBudget && !hunt.minBudget) return 0
+
+    if (totalPricing > hunt.maxBudget) {
+      return (totalPricing / hunt.maxBudget - 1) * 100
+    }
+
+    if (totalPricing < hunt.maxBudget) {
+      return -(1 - totalPricing / hunt.maxBudget) * 100
+    }
+
+    return 0
+  }, [hunt])
 
   return (
     <div className={cx('w-full rounded-md relative')}>
@@ -51,11 +71,7 @@ export default function TargetPropertyItem({ target, hunt }: TargetPropertyItemP
           </div>
           <div className="w-full">
             {(hunt.type === 'rent' || hunt.type === 'either') && (
-              <div className="grid grid-cols-12">
-                <div className="col-span-1 flex flex-col items-center">
-                  <p className="text-sm font-semibold whitespace-nowrap">TAMANHO</p>
-                  <p>{target.size === 0 ? '?' : `${target.size}m2`}</p>
-                </div>
+              <div className="grid grid-cols-12 gap-2">
                 <div className="col-span-1 flex flex-col items-center">
                   <p className="text-sm font-semibold whitespace-nowrap">VALOR</p>
                   <p>R$ {target.price}</p>
@@ -73,13 +89,20 @@ export default function TargetPropertyItem({ target, hunt }: TargetPropertyItemP
                 </div>
                 <div className="col-span-1 flex flex-col items-cente font-semibold">
                   <p className="text-sm font-semibold whitespace-nowrap">TOTAL</p>
-                  <p className="text-lg">
-                    R$ {target.price + (target.condoPricing ?? 0) + target.iptu}
-                  </p>
+                  <div className="flex items-center whitespace-nowrap relative">
+                    <p className="text-lg whitespace-nowrap">R$ {totalPricing}</p>
+                    {budgetDeviant !== 0 && <BudgetDiff diff={budgetDeviant} />}
+                  </div>
+                </div>
+                <div className="col-span-1 flex flex-col items-center">
+                  <p className="text-sm font-semibold whitespace-nowrap">TAMANHO</p>
+                  <p>{target.size === 0 ? '?' : `${target.size}m2`}</p>
                 </div>
                 <div className="col-span-2 flex flex-col items-cente">
-                  <p className="text-sm font-semibold whitespace-nowrap">ETAPA</p>
-                  <p>{target.huntingStage}</p>
+                  <p className="text-sm font-semibold whitespace-nowrap mb-1">ETAPA</p>
+                  <div>
+                    <StagePill stage={target.huntingStage} />
+                  </div>
                 </div>
               </div>
             )}
@@ -168,4 +191,12 @@ export default function TargetPropertyItem({ target, hunt }: TargetPropertyItemP
       )}
     </div>
   )
+}
+
+function BudgetDiff({ diff }: { diff: number }) {
+  const baseStyles = 'text-xs font-normal absolute -top-2 right-1 tracking-wider'
+
+  if (diff > 0) {
+    return <span className={cx('text-red-800', baseStyles)}>+{diff.toFixed(1)}%</span>
+  } else <span className={cx('text-green-800', baseStyles)}>-{diff.toFixed(1)}%</span>
 }
