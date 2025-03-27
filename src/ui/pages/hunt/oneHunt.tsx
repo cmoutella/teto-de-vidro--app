@@ -1,8 +1,7 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 
-import { getAllTargetPropertiesfromHunt } from '@requests/hunt/getAllTargetProperties'
 import Button from '@ui/base/Button'
 import TargetPropertyList from '@ui/TargetProperty/TargetPropertyList'
 
@@ -13,19 +12,13 @@ import type { TargetPropertyInterface } from '@/types/targetProperty'
 import CreateTargetPropertyModal from './components/CreateTargetPropertyModal'
 import { EditHuntModal } from './components/EditHuntModal'
 import { EditTargetPropertyModal } from './components/EditTargetPropertyModal'
-import { DEFAULT_HUNT_LIST_PER_PAGE } from './consts/perPage'
 
 interface HuntViewProps {
   hunt: InterfaceHunt
 }
 
 const HuntView = () => {
-  const [page, _setPage] = useState<number>(1)
-  const [totalPages, setTotalPages] = useState<number>(0)
-  const [perPage, _setPerPage] = useState<number>(DEFAULT_HUNT_LIST_PER_PAGE)
-  const [properties, setProperties] = useState<TargetPropertyInterface[]>([])
-
-  const { hunt } = useHuntContext()
+  const { hunt, properties, page, totalPages } = useHuntContext()
 
   // Modal
   const [isTargetPropertyCreateModalOpen, setIsTargetPropertyCreateModalOpen] =
@@ -43,22 +36,6 @@ const HuntView = () => {
   function closeEditTargetModal() {
     setIsEditTargetPropertyModalOpen(false)
     setEditTargetProperty(undefined)
-  }
-
-  useEffect(() => {
-    fetchPropertiesData()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-
-  async function fetchPropertiesData() {
-    const data = await getAllTargetPropertiesfromHunt((hunt as InterfaceHunt).id, page, perPage)
-
-    if (!data || data.length <= 0) {
-      // TODO: tooltip de feedback
-      setTotalPages(0)
-    }
-
-    setProperties(data as TargetPropertyInterface[])
   }
 
   return (

@@ -1,3 +1,4 @@
+import { useHuntContext } from '@/providers/HuntProvider'
 import type { TargetPropertyInterface } from '@/types/targetProperty'
 import Modal from '@/ui/components/base/Modal'
 import EditTargetPropertyForm from '@/ui/forms/TargetProperty/EditTargetProperty'
@@ -14,8 +15,11 @@ export function EditTargetPropertyModal({ isOpen, setClose, target }: EditHuntMo
     console.log('fail EditHunt')
   }
 
+  const { fetchProperties } = useHuntContext()
+
   function handleSuccess() {
     setClose()
+    fetchProperties()
   }
 
   return (
