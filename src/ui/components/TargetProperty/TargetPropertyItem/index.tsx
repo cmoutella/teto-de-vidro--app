@@ -20,7 +20,7 @@ export default function TargetPropertyItem({ target, hunt }: TargetPropertyItemP
       {/* HEADER */}
       <div
         className={cx(
-          'w-full px-4 py-5 bg-brand-primary-300 text-brand-primary-900 flex flex-row gap-3',
+          'w-full px-4 py-5 bg-brand-primary-200 border border-brand-primary-200 text-brand-primary-900 flex flex-row gap-3',
           {
             'rounded-md': !isOpen,
             'rounded-t-md': isOpen

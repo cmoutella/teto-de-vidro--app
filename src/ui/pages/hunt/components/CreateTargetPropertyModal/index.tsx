@@ -1,22 +1,27 @@
 import Modal from '@ui/base/Modal'
 
+import { useHuntContext } from '@/providers/HuntProvider'
 import CreateTargetPropertyForm from '@/ui/forms/TargetProperty/CreateTargetProperty'
 
 export interface CreateTargetPropertyModalProps {
   huntId: string
   isOpen: boolean
   setClose: () => void
-  onSuccess?: () => void
 }
 
 export default function CreateTargetPropertyModal({
   huntId,
   isOpen,
-  setClose,
-  onSuccess
+  setClose
 }: CreateTargetPropertyModalProps) {
+  const { update } = useHuntContext()
+
+  function onSuccess() {
+    update()
+  }
+
   function handleSuccess() {
-    onSuccess && onSuccess()
+    onSuccess()
     setClose()
   }
 
