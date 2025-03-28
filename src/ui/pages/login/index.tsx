@@ -2,12 +2,12 @@
 import type { ChangeEvent, FormEvent } from 'react'
 import { useState } from 'react'
 
-import { EyeIcon, EyeSlashIcon } from '@heroicons/react/20/solid'
 import { useSessionContext } from '@providers/AuthProvider'
 import cx from 'classnames'
 
 import Button from '@/ui/components/base/Button'
 import Input from '@/ui/components/base/form/inputs/Input'
+import Icon from '@/ui/components/base/Icon'
 
 const LoginView = () => {
   const [email, setEmail] = useState<string | undefined>(undefined)
@@ -36,7 +36,12 @@ const LoginView = () => {
   }
 
   const EyeButton = () => {
-    const eye = passwordVisible ? <EyeSlashIcon /> : <EyeIcon />
+    const style = 'text-brand-gray-600'
+    const eye = passwordVisible ? (
+      <Icon icon="eye-slash" className={style} />
+    ) : (
+      <Icon icon="eye" className={style} />
+    )
 
     return (
       <span

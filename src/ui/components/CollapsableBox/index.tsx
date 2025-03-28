@@ -3,6 +3,8 @@ import type { ReactNode } from 'react'
 import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/react'
 import cx from 'classnames'
 
+import Icon from '../base/Icon'
+
 interface CollapsableBoxProps {
   children: ReactNode
   label: string
@@ -36,7 +38,7 @@ function CollapsableBox({ open, label, resume, children, toggleBox }: Collapsabl
             </span>
           )}
         </span>
-        {/* <ChevronDownIcon className={cx("w-5", { "rotate-180": open })} /> */}
+        {open ? <Icon icon="chevron-up" /> : <Icon icon="chevron-down" />}
       </DisclosureButton>
       <DisclosurePanel className="w-full border border-brand-gray-300 p-4 rounded-b-lg">
         {children}

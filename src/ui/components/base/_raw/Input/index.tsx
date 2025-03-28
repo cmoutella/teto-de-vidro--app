@@ -18,8 +18,6 @@ interface InputProps extends InputHeadlessProps {
   hasAfterSymbol?: boolean
 }
 
-// TODO: hasAfterSymbol
-
 const InputRaw = ({
   theme = 'light',
   themeSize = 'md',
@@ -44,7 +42,7 @@ const InputRaw = ({
               'pl-2.5': !hasBeforeSymbol
             },
             {
-              'pr-8': hasAfterSymbol,
+              'pr-10': hasAfterSymbol,
               'pr-2.5': !hasAfterSymbol
             }
           )}

@@ -46,13 +46,7 @@ const Input = ({
         {...otherProps}
       />
       {iconButton && (
-        <span
-          className={cx(
-            'absolute px-2.5 right-0 top-0 translate-y-[3px]',
-            formTheme[theme].input,
-            symbolPadding[themeSize]
-          )}
-        >
+        <span className={cx('absolute px-2.5 right-0 top-0', symbolPadding[themeSize])}>
           {iconButton}
         </span>
       )}
