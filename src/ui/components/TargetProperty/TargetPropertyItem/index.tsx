@@ -8,6 +8,7 @@ import type { TargetPropertyInterface } from '@/types/targetProperty'
 import { lastUpdateMessage } from '@/utils/string/lastUpdateMessage'
 
 import Button from '../../base/Button'
+import Icon from '../../base/Icon'
 import { StagePill } from './StagePill'
 
 interface TargetPropertyItemProps {
@@ -84,11 +85,10 @@ export default function TargetPropertyItem({
                 )}
                 onClick={() => openEditModal(target)}
               />
-              {/* TODO: icone trash */}
               <Button
-                label="T"
+                label={<Icon icon="trash" size="xs" />}
                 className={cx(
-                  'border border-red-500 text-red-600 hover:border-red-600 hover:bg-red-600 hover:text-white min-w-10'
+                  'border border-red-500 text-red-600 hover:border-red-600 hover:bg-red-600 hover:text-white !min-w-11 !w-11 flex justify-center'
                 )}
                 onClick={() => removeTargetProperty(target.id)}
               />

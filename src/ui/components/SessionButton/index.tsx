@@ -17,7 +17,7 @@ const SessionButton = ({ size = 'medium', fullWidth, user }: SessionButtonProps)
   const router = useRouter()
 
   const handleClick = () => {
-    user ? router.push('/login') : logout()
+    !user ? router.push('/login') : logout()
   }
 
   return (

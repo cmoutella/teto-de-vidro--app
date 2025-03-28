@@ -45,7 +45,11 @@ const Input = ({
         hasAfterSymbol={!!iconButton}
         {...otherProps}
       />
-      {iconButton && <span>{iconButton}</span>}
+      {iconButton && (
+        <span className={cx('absolute px-2.5 right-0 top-0', symbolPadding[themeSize])}>
+          {iconButton}
+        </span>
+      )}
     </FieldWrapper>
   )
 }

@@ -4,6 +4,7 @@ import type { SelectProps as SelectHeadlessProps } from '@headlessui/react'
 import { Select as SelectHeadless } from '@headlessui/react'
 import cx from 'classnames'
 
+import Icon from '../../Icon'
 import type { FormSizes, FormTheme } from '../../shared/formTheme'
 import { baseInputStyle, formTheme, iSizes, symbolPadding } from '../../shared/formTheme'
 
@@ -54,11 +55,11 @@ const SelectRaw = ({
       </SelectHeadless>
       <span
         className={cx(
-          'absolute right-2 top-0 -translate-y-[2px] font-sm',
+          'absolute right-2 top-0 -translate-y-[3px] font-sm',
           symbolPadding[themeSize]
         )}
       >
-        {/* TODO: ICON chevron donw */}V
+        <Icon icon="chevron-down" mode="mini" />
       </span>
     </div>
   )
