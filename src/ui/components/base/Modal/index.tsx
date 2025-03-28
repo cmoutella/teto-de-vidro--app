@@ -33,7 +33,7 @@ export default function Modal({ children, isOpen, size = 'small', setClose }: Mo
       <ModalWrapper>
         <div
           className={cx(
-            `min-w-10/12 max-h-full overflow-y-scroll flex flex-col justify-start items-center mt-16 relative bg-white rounded-lg p-4`,
+            `min-w-10/12 !max-w-11/12 mx-4 max-h-full overflow-y-scroll flex flex-col justify-start items-center mt-16 relative bg-white rounded-lg p-4`,
             sizeClasses[size]
           )}
         >
@@ -41,7 +41,7 @@ export default function Modal({ children, isOpen, size = 'small', setClose }: Mo
             label="X"
             onClick={setClose}
             className={cx(
-              'absolute right-4 top-4 z-25 rounded-full bg-white !h-7 !w-7 !min-w-7 flex justify-center items-center'
+              'fixed right-4 top-4 z-25 rounded-full bg-white !h-7 !w-7 !min-w-7 flex justify-center items-center'
             )}
           />
           <div className="container">{children}</div>
