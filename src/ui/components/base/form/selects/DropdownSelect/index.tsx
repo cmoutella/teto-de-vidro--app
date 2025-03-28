@@ -10,6 +10,7 @@ import FieldWrapper from '@raw/wrappers/Field'
 import type { FormSizes, FormTheme } from '@ui/base/shared/formTheme'
 export interface DropdownSelectProps extends SelectHeadlessProps {
   label?: string
+  value: string
   description?: string
   options: Option[]
   theme?: FormTheme
@@ -20,14 +21,12 @@ const DropdownSelect = ({
   label,
   description,
   options,
-  defaultValue,
+  value,
   theme = 'light',
   themeSize = 'md',
   ...otherProps
 }: DropdownSelectProps) => {
-  const [selectedValue, setSelectedValue] = useState<string | undefined>(
-    (defaultValue as string) ?? options[0].value
-  )
+  const [selectedValue, setSelectedValue] = useState<string | undefined>(value as string)
 
   const handleChange = (e: ChangeEvent<HTMLSelectElement>) => {
     e.preventDefault()

@@ -1,4 +1,5 @@
 import type { SuccessResponse } from '@/types/apiPatterns'
+import type { TargetPropertyInterface } from '@/types/targetProperty'
 
 type GetAllTargetPropertiesfromHuntRequest = (
   _huntId: string,

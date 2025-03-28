@@ -7,9 +7,11 @@ import cx from 'classnames'
 import { useRouter } from 'next/navigation'
 
 import type { InterfaceHunt } from '@/types/app'
+import type { TargetPropertyInterface } from '@/types/targetProperty'
 import Button from '@/ui/components/base/Button'
 import { Loading } from '@/ui/components/base/Loading'
 import EmptyState from '@/ui/components/EmptyState'
+import { lastUpdateMessage } from '@/utils/string/lastUpdateMessage'
 
 interface NextMoveDashboardProps {
   hunts: InterfaceHunt[]
@@ -75,12 +77,14 @@ const NextMoveDashboard = ({ hunts }: NextMoveDashboardProps) => {
       {!loading && hunts[0].title && (
         <h2 className="text-xl font-medium text-brand-primary-900 mb-3"># {hunts[0].title}</h2>
       )}
-      {!loading &&
-        properties.map((property) => (
-          <div key={property.id} className="w-full">
-            <Property target={property} />
-          </div>
-        ))}
+      <div className="w-full flex flex-col gap-0.5">
+        {!loading &&
+          properties.map((property) => (
+            <div key={property.id} className="w-full">
+              <Property target={property} />
+            </div>
+          ))}
+      </div>
       {!loading && (
         <Button
           label="Ver todos"
@@ -97,11 +101,26 @@ function Property({ target }: { target: TargetPropertyInterface }) {
   return (
     <div
       className={cx(
-        'w-full',
-        'border border-brand-primary-500 bg-brand-primary-300 rounded-lg px-3 py-2'
+        'w-full grid grid-cols-12',
+        'border border-brand-primary-300 bg-brand-primary-100 rounded-lg px-3 py-2.5 text-brand-primary-800'
       )}
     >
-      <h3>{target.nickname}</h3>
+      <span className="col-span-4 flex items-center">
+        <h3 className="font-medium leading-none">{target.nickname}</h3>
+      </span>
+      <span className="col-span-2 flex items-center">
+        <p className="leading-none text-sm">Total: R$ {target.price}</p>
+      </span>
+      <span className="col-span-4 flex items-center">
+        <p className="leading-none text-sm">
+          {target.neighborhood}/{target.city}
+        </p>
+      </span>
+      <span className="col-span-2 flex items-center justify-end">
+        <p className="text-xs text-right">
+          Última atualização {lastUpdateMessage(target.updatedAt)}
+        </p>
+      </span>
     </div>
   )
 }

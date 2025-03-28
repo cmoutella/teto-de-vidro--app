@@ -4,7 +4,8 @@ import type { InputProps as InputHeadlessProps } from '@headlessui/react'
 import InputRaw from '@raw/Input'
 import FieldWrapper from '@raw/wrappers/Field'
 import type { FormSizes, FormTheme } from '@ui/base/shared/formTheme'
-import { formTheme } from '@ui/base/shared/formTheme'
+import { formTheme, symbolPadding } from '@ui/base/shared/formTheme'
+import cx from 'classnames'
 
 interface InputProps extends InputHeadlessProps {
   label?: string
@@ -26,8 +27,24 @@ const Input = ({
 }: InputProps) => {
   return (
     <FieldWrapper label={label} description={description} theme={theme} themeSize={themeSize}>
-      {fieldSymbol && <span className={formTheme[theme].input}>{fieldSymbol}</span>}
-      <InputRaw theme={theme} themeSize={themeSize} {...otherProps} />
+      {fieldSymbol && (
+        <span
+          className={cx(
+            'absolute px-2.5 -translate-y-[1px]',
+            formTheme[theme].input,
+            symbolPadding[themeSize]
+          )}
+        >
+          {fieldSymbol}
+        </span>
+      )}
+      <InputRaw
+        theme={theme}
+        themeSize={themeSize}
+        hasBeforeSymbol={!!fieldSymbol}
+        hasAfterSymbol={!!iconButton}
+        {...otherProps}
+      />
       {iconButton && <span>{iconButton}</span>}
     </FieldWrapper>
   )

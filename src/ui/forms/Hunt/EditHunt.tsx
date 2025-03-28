@@ -1,26 +1,30 @@
 'use client'
 import { useSessionContext } from '@providers/AuthProvider'
 import type { CreateHuntRequestProps } from '@requests/hunt/create'
-import { createHunt } from '@requests/hunt/create'
 import SubmitButton from '@ui/base/form/buttons/SubmitButton'
 import Input from '@ui/base/form/inputs/Input'
 import InputPartialDate from '@ui/base/form/inputs/InputPartialDate'
 import DropdownSelect from '@ui/base/form/selects/DropdownSelect'
 import type { FormSizes, FormTheme } from '@ui/base/shared/formTheme'
-import { addDays, isToday } from 'date-fns'
+import { isToday, lastDayOfMonth } from 'date-fns'
+import { addDays } from 'date-fns/addDays'
 import { isFuture } from 'date-fns/isFuture'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
 
-interface CreateHuntFormProps {
-  onSuccess: (_id: string) => void
+import { editHunt } from '@/requests/hunt/edit'
+import type { InterfaceHunt } from '@/types/app'
+
+interface EditHuntFormProps {
+  onSuccess: (_h: InterfaceHunt) => void
   onFail: () => void
+  currentData: InterfaceHunt
 }
 
 const formThemeSize: FormSizes = 'lg'
 const themePallete: FormTheme = 'light'
 
-const CreateHuntForm = ({ onSuccess, onFail }: CreateHuntFormProps) => {
+const EditHuntForm = ({ onSuccess, onFail, currentData }: EditHuntFormProps) => {
   const validationSchema = Yup.object({
     type: Yup.string().required(),
     movingExpected: Yup.string().test(
@@ -39,15 +43,19 @@ const CreateHuntForm = ({ onSuccess, onFail }: CreateHuntFormProps) => {
     )
   })
 
+  const initMovingExpected = currentData.movingExpected
+    ? lastDayOfMonth(new Date(currentData.movingExpected)).toISOString()
+    : addDays(new Date(), 1).toISOString()
+
   const formik = useFormik({
     initialValues: {
-      title: '',
-      type: 'either',
-      movingExpected: addDays(new Date(), 1).toISOString(),
-      livingPeople: 1,
-      livingPets: 0,
-      minBudget: 0,
-      maxBudget: 0
+      title: currentData.title ?? '',
+      type: currentData.type,
+      movingExpected: initMovingExpected,
+      livingPeople: currentData.livingPeople ?? 1,
+      livingPets: currentData.livingPets ?? 0,
+      minBudget: currentData.minBudget ?? 0,
+      maxBudget: currentData.maxBudget ?? 0
     },
     validationSchema,
     validateOnChange: true,
@@ -64,14 +72,14 @@ const CreateHuntForm = ({ onSuccess, onFail }: CreateHuntFormProps) => {
       ...values
     }
 
-    const res = await createHunt(data)
+    const res = await editHunt(currentData.id, data)
 
     if (!res) {
       onFail()
       return
     }
 
-    onSuccess(res?.id)
+    onSuccess(res)
   }
 
   return (
@@ -174,12 +182,14 @@ const CreateHuntForm = ({ onSuccess, onFail }: CreateHuntFormProps) => {
         </div>
 
         <div className="flex flex-col gap-2 col-span-12 justify-center items-center pt-5">
-          <span className="text-brand-gray-700 text-xs pb-2">Você pode alterar depois</span>
-          <SubmitButton isDisabled={!formik.isValid || formik.isSubmitting} label="Criar" />
+          <SubmitButton
+            isDisabled={!formik.isValid || formik.isSubmitting}
+            label="Salvar alterações"
+          />
         </div>
       </form>
     </div>
   )
 }
 
-export default CreateHuntForm
+export default EditHuntForm

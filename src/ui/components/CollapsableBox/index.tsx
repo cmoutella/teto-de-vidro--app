@@ -8,9 +8,10 @@ interface CollapsableBoxProps {
   label: string
   open: boolean
   toggleBox: () => void
+  resume?: string
 }
 
-function CollapsableBox({ open, label, children, toggleBox }: CollapsableBoxProps) {
+function CollapsableBox({ open, label, resume, children, toggleBox }: CollapsableBoxProps) {
   return (
     <Disclosure defaultOpen={open}>
       <DisclosureButton
@@ -21,13 +22,20 @@ function CollapsableBox({ open, label, children, toggleBox }: CollapsableBoxProp
             'rounded-lg': !open
           },
           {
-            'bg-brand-gray-200 hover:bg-brand-gray-500': !open,
-            'bg-brand-gray-500 text-white': open
+            'bg-brand-gray-200 hover:bg-brand-gray-600 hover:text-white': !open,
+            'bg-brand-gray-600 text-white': open
           }
         )}
         onClick={toggleBox}
       >
-        {label}
+        <span className="w-full flex flex-row items-center justify-start gap-5">
+          <span>{label}</span>
+          {resume && !open && (
+            <span className="text-sm font-normal opacity-85 leading-none translate-y-0.5">
+              {resume}
+            </span>
+          )}
+        </span>
         {/* <ChevronDownIcon className={cx("w-5", { "rotate-180": open })} /> */}
       </DisclosureButton>
       <DisclosurePanel className="w-full border border-brand-gray-300 p-4 rounded-b-lg">

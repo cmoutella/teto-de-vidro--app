@@ -8,14 +8,9 @@ export interface ValidatedAddress {
   ibge: string
 }
 
-export interface ValidatedAddressTranslated {
-  postalCode: string
-  street: string
-  streetNumber: string
-  neighborhood: string
-  city: string
-  uf: string
-}
+export type AddressKeys = 'postalCode' | 'street' | 'streetNumber' | 'neighborhood' | 'city' | 'uf'
+
+export type ValidatedAddressTranslated = Record<AddressKeys, string>
 
 export function CEPService() {
   const CEP_URL = process.env.NEXT_PUBLIC_OPENCEP_API
