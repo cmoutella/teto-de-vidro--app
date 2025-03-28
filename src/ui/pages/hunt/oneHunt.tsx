@@ -40,13 +40,13 @@ const HuntView = () => {
 
   return (
     <div className="w-full">
-      <div className="w-full flex justify-center flex-col items-center px-14 py-10 gap-3">
-        <div className="w-full flex justify-center mb-6">
+      <div className="w-full flex justify-center flex-col items-center px-3 sm:px-14 py-5 sm:py-10 gap-3">
+        <div className="w-full flex justify-center mb-2 sm:mb-6">
           <div className="container">
-            <div className="flex flex-row items-start w-full justify-between">
+            <div className="flex flex-col-reverse sm:flex-row sm:items-start w-full sm:justify-between gap-5">
               <div className="flex flex-col gap-y-1.5 justify-start items-start">
                 <div className="flex flex-row items-center justify-start gap-x-2">
-                  <h3 className="text-2xl font-medium text-brand-primary-900">
+                  <h3 className="text-xl sm:text-2xl font-medium text-brand-primary-900">
                     # {(hunt as InterfaceHunt).title}
                   </h3>
                 </div>
