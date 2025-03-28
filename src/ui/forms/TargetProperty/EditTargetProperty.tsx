@@ -1,6 +1,6 @@
 'use client'
 import type { ReactNode } from 'react'
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 
 import { useSessionContext } from '@providers/AuthProvider'
 import type { FormSizes, FormTheme } from '@ui/base/shared/formTheme'
@@ -10,6 +10,7 @@ import * as Yup from 'yup'
 
 import type { CreateTargetPropertyRequestProps } from '@/requests/targetProperty/create'
 import { editTargetProperty } from '@/requests/targetProperty/edit'
+import type { AddressKeys } from '@/services/cep'
 import { CEPService } from '@/services/cep'
 import type { TargetPropertyInterface } from '@/types/targetProperty'
 import SubmitButton from '@/ui/components/base/form/buttons/SubmitButton'
@@ -101,9 +102,18 @@ const EditTargetPropertyForm = ({
     if (!data) return
 
     for (const dt in data) {
-      formik.setFieldValue(dt, data[dt] ?? '')
+      formik.setFieldValue(dt, data[dt as AddressKeys] ?? '')
     }
   }
+
+  const address = useMemo(() => {
+    if (!formik.values.street) return 'Complete as informações de endereço'
+
+    const complementAddress = formik.values.propertyNumber && `,  ${formik.values.propertyNumber}`
+    const baseAddress = `${formik.values.street ?? '?'}${formik.values.lotNumber && `, ${formik.values.lotNumber}`}${complementAddress}`
+    const locationAddress = ` - ${formik.values.city ?? '?'},  ${formik.values.uf ?? '?'}`
+    return `${baseAddress}${locationAddress}`
+  }, [formik])
 
   return (
     <div className="w-full">
@@ -129,6 +139,7 @@ const EditTargetPropertyForm = ({
           <div className="w-full">
             <CollapsableBox
               label="Endereço"
+              resume={address}
               open={addressBoxOpen}
               toggleBox={() => setAddressBoxOpen(!addressBoxOpen)}
             >
