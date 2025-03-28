@@ -14,7 +14,7 @@ const PublicBasePage = ({
   return (
     <div className="w-full min-h-full">
       <PublicNavbar user={user} />
-      {children}
+      <div className="w-full overflow-y-scroll">{children}</div>
     </div>
   )
 }

@@ -14,7 +14,7 @@ const PrivateBasePage = ({
   return (
     <div className="w-full min-h-full">
       <PrivateNavbar user={user} />
-      <div className="w-full">{children}</div>
+      <div className="w-full overflow-y-scroll">{children}</div>
     </div>
   )
 }
