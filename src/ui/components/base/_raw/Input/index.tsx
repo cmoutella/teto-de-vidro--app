@@ -24,6 +24,7 @@ const InputRaw = ({
   theme = 'light',
   themeSize = 'md',
   hasBeforeSymbol,
+  hasAfterSymbol,
   ...otherProps
 }: InputProps) => {
   return (
@@ -41,6 +42,10 @@ const InputRaw = ({
             {
               'pl-8': hasBeforeSymbol,
               'pl-2.5': !hasBeforeSymbol
+            },
+            {
+              'pr-8': hasAfterSymbol,
+              'pr-2.5': !hasAfterSymbol
             }
           )}
         />

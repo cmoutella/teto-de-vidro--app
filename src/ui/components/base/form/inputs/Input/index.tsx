@@ -45,7 +45,17 @@ const Input = ({
         hasAfterSymbol={!!iconButton}
         {...otherProps}
       />
-      {iconButton && <span>{iconButton}</span>}
+      {iconButton && (
+        <span
+          className={cx(
+            'absolute px-2.5 right-0 top-0 translate-y-[3px]',
+            formTheme[theme].input,
+            symbolPadding[themeSize]
+          )}
+        >
+          {iconButton}
+        </span>
+      )}
     </FieldWrapper>
   )
 }

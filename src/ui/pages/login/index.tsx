@@ -2,6 +2,7 @@
 import type { ChangeEvent, FormEvent } from 'react'
 import { useState } from 'react'
 
+import { EyeIcon, EyeSlashIcon } from '@heroicons/react/20/solid'
 import { useSessionContext } from '@providers/AuthProvider'
 import cx from 'classnames'
 
@@ -35,7 +36,7 @@ const LoginView = () => {
   }
 
   const EyeButton = () => {
-    const eye = passwordVisible ? 'XX' : 'OO'
+    const eye = passwordVisible ? <EyeSlashIcon /> : <EyeIcon />
 
     return (
       <span

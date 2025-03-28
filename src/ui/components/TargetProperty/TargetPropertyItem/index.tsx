@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react'
 
+import { TrashIcon } from '@heroicons/react/16/solid'
 import cx from 'classnames'
 
 import { useHuntContext } from '@/providers/HuntProvider'
@@ -84,7 +85,7 @@ export default function TargetPropertyItem({
                 )}
                 onClick={() => openEditModal(target)}
               />
-              {/* TODO: icone trash */}
+              <TrashIcon />
               <Button
                 label="T"
                 className={cx(

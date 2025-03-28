@@ -63,6 +63,7 @@ export const HuntProvider = ({
     if (hunt) {
       getProperties()
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [hunt])
 
   async function updateHuntView(updated?: InterfaceHunt) {
