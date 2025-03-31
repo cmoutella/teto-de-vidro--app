@@ -3,6 +3,8 @@ import puppeteer from 'puppeteer'
 import { extractAddress } from '@/utils/address/extractAddressData'
 import { removeBrl } from '@/utils/string/removeBRLCoin'
 
+import { sanitizeZap } from './vendors/zapimoveis'
+
 export async function webScraper(url: string) {
   const host = new URL(url).hostname
 
@@ -24,8 +26,6 @@ export async function webScraper(url: string) {
 
   async function scrapeZap() {
     const adData: Record<string, string | string[] | number> = {}
-
-    await page.screenshot({ path: `screenshot.png` })
 
     /**
      * PREÇO DE
@@ -96,17 +96,17 @@ export async function webScraper(url: string) {
       '.address-info-value',
       (elements) => elements.textContent?.trim() || ''
     )
-    const addressData: Record<string, string> = extractAddress(address)
-    console.log('address', addressData)
+    const addressData: Record<string, string | null> = extractAddress(address)
 
     for (const d in addressData) {
-      console.log('d', d)
-      adData[d] = addressData[d]
+      if (addressData[d]) {
+        adData[d] = addressData[d]
+      }
     }
 
     await browser.close()
 
-    return adData
+    return sanitizeZap(adData)
   }
 
   function getHostScraperFunction(domain: string) {

@@ -1,5 +1,5 @@
 export function extractAddress(address: string) {
-  const addressRegex = /^(.*?),\s*(\d+)\s*-\s*(.*?),\s*(.*?)\s*-\s*([A-Z]{2})$/
+  const addressRegex = /^(.*?)(?:,\s*(\d+))?\s*-\s*(.*?),\s*(.*?)\s*-\s*([A-Z]{2})$/
 
   const match = address.match(addressRegex)
 
@@ -10,10 +10,10 @@ export function extractAddress(address: string) {
   const [, street, number, neighborhood, city, uf] = match
 
   return {
-    street,
-    number,
-    neighborhood,
-    city,
-    uf
+    street: street.trim(),
+    lotNumber: number ? number.trim() : null,
+    neighborhood: neighborhood.trim(),
+    city: city.trim(),
+    uf: uf.trim()
   }
 }

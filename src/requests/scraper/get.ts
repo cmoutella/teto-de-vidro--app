@@ -1,8 +1,9 @@
+import type { AdScrapedData } from '@/services/web-scraper/shared/type'
 import type { SuccessResponse } from '@/types/apiPatterns'
 
 export type ScraperRequestProps = { url: string }
 
-type ScraperRequest = (_bodyData: ScraperRequestProps) => Promise<unknown | undefined>
+type ScraperRequest = (_bodyData: ScraperRequestProps) => Promise<AdScrapedData | undefined>
 
 export const scraper: ScraperRequest = async (bodyData) => {
   const baseUrl = 'http://localhost:3000'
@@ -23,7 +24,7 @@ export const scraper: ScraperRequest = async (bodyData) => {
       throw Error('O serviço scraper não está disponível')
     }
 
-    const { data } = res as SuccessResponse<unknown>
+    const { data } = res as SuccessResponse<AdScrapedData>
 
     return data
   } catch (_err) {
