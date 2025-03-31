@@ -1,15 +1,18 @@
 'use client'
 import type { ReactNode } from 'react'
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 
 import { useSessionContext } from '@providers/AuthProvider'
 import type { FormSizes, FormTheme } from '@ui/base/shared/formTheme'
 import CollapsableBox from '@ui/CollapsableBox'
+import cx from 'classnames'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
 
+import { scraper } from '@/requests/scraper/get'
 import type { CreateTargetPropertyRequestProps } from '@/requests/targetProperty/create'
 import { createTargetProperty } from '@/requests/targetProperty/create'
+import type { AddressKeys } from '@/services/cep'
 import { CEPService } from '@/services/cep'
 import Button from '@/ui/components/base/Button'
 import SubmitButton from '@/ui/components/base/form/buttons/SubmitButton'
@@ -31,7 +34,8 @@ const CreateTargetPropertyForm = ({ onSuccess, onFail, huntId }: CreateTargetPro
     adURL: Yup.string(),
     postalCode: Yup.string()
       .matches(/^\d{5}-\d{3}$/, 'O CEP deve estar no formato 12345-678')
-      .min(9, 'O CEP deve conter 8 dígitos'),
+      .min(9, 'O CEP deve conter 8 dígitos')
+      .optional(),
     street: Yup.string().required('Campo obrigatório'),
     neighborhood: Yup.string().required('Campo obrigatório'),
     city: Yup.string().required('Campo obrigatório'),
@@ -40,7 +44,8 @@ const CreateTargetPropertyForm = ({ onSuccess, onFail, huntId }: CreateTargetPro
       .min(2, 'Mínimo 2 letras')
       .max(2, 'Máximo 2 letras'),
     lotNumber: Yup.string(),
-    price: Yup.number().required()
+    price: Yup.number().required(),
+    iptu: Yup.number()
   })
 
   const formik = useFormik({
@@ -87,18 +92,26 @@ const CreateTargetPropertyForm = ({ onSuccess, onFail, huntId }: CreateTargetPro
     onSuccess(res?.id)
   }
 
-  const fetchAdFillForm = () => {
+  async function fetchAdFillForm() {
     const ad = formik.values.adURL
 
     if (!ad) return
 
-    // TODO: Scrappers endpoint
-    // identificar o dominio
-    // executar o scrapper
+    const res = await scraper({ url: ad })
+
+    for (const entry in res) {
+      formik.setFieldValue(entry, res[entry])
+    }
+
+    if (res?.rentPrice || res?.condoPrice) {
+      formik.setFieldValue('price', res?.rentPrice ?? res?.condoPrice)
+    }
   }
 
   async function completeFieldsByCEP(e: React.FocusEvent<HTMLInputElement>) {
     const postalCode = e.target.value
+
+    if (!postalCode) return
 
     const cep = CEPService()
 
@@ -107,9 +120,18 @@ const CreateTargetPropertyForm = ({ onSuccess, onFail, huntId }: CreateTargetPro
     if (!data) return
 
     for (const dt in data) {
-      formik.setFieldValue(dt, data[dt] ?? '')
+      formik.setFieldValue(dt, data[dt as AddressKeys] ?? '')
     }
   }
+
+  const address = useMemo(() => {
+    if (!formik.values.street) return 'Complete as informações de endereço'
+
+    const complementAddress = formik.values.propertyNumber && `,  ${formik.values.propertyNumber}`
+    const baseAddress = `${formik.values.street ?? '?'}${formik.values.lotNumber && `, ${formik.values.lotNumber}`}${complementAddress}`
+    const locationAddress = ` - ${formik.values.city ?? '?'},  ${formik.values.uf ?? '?'}`
+    return `${baseAddress}${locationAddress}`
+  }, [formik])
 
   return (
     <div className="w-full">
@@ -134,7 +156,10 @@ const CreateTargetPropertyForm = ({ onSuccess, onFail, huntId }: CreateTargetPro
                 label="Preencher"
                 size="xxlarge"
                 onClick={fetchAdFillForm}
-                className="bg-brand-primary-400 hover:bg-brand-primary-800 text-brand-primary-900 hover:text-white min-w-20"
+                className={cx(
+                  'bg-brand-primary-400 hover:bg-brand-primary-800 text-brand-primary-900 hover:text-white min-w-20 disabled:bg-slate-300 disabled:text-slate-500'
+                )}
+                disabled={formik.values.adURL === ''}
               />
             </span>
           </div>
@@ -155,6 +180,7 @@ const CreateTargetPropertyForm = ({ onSuccess, onFail, huntId }: CreateTargetPro
           <div className="w-full">
             <CollapsableBox
               label="Endereço"
+              resume={address}
               open={addressBoxOpen}
               toggleBox={() => setAddressBoxOpen(!addressBoxOpen)}
             >
