@@ -26,6 +26,7 @@ const SelectRaw = ({
   selected,
   theme = 'light',
   themeSize = 'md',
+  className,
   ...otherProps
 }: DropdownSelectProps) => {
   return (
@@ -34,13 +35,14 @@ const SelectRaw = ({
         {({ focus, hover }) => (
           <select
             className={cx(
-              'border px-2.5 bg-white appearance-none',
+              'border px-2.5 appearance-none',
               formTheme[theme].wrapper,
               formTheme[theme].input,
               baseInputStyle,
               iSizes[themeSize],
               focus && 'bg-brand-primary-100',
-              hover && 'shadow'
+              hover && 'shadow',
+              className
             )}
           >
             {options.map((opt) => {
@@ -53,12 +55,7 @@ const SelectRaw = ({
           </select>
         )}
       </SelectHeadless>
-      <span
-        className={cx(
-          'absolute right-2 top-0 -translate-y-[3px] font-sm',
-          symbolPadding[themeSize]
-        )}
-      >
+      <span className={cx('absolute top-0 font-sm', symbolPadding[themeSize])}>
         <Icon icon="chevron-down" mode="mini" />
       </span>
     </div>
