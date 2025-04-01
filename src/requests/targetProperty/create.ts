@@ -1,4 +1,5 @@
 import type { SuccessResponse } from '@/types/apiPatterns'
+import type { TargetPropertyInterface } from '@/types/targetProperty'
 
 export type CreateTargetPropertyRequestProps = Partial<TargetPropertyInterface>
 
@@ -7,12 +8,10 @@ type CreateTargetPropertyRequest = (
 ) => Promise<TargetPropertyInterface | undefined>
 
 export const createTargetProperty: CreateTargetPropertyRequest = async (bodyData) => {
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL
-
-  if (!baseUrl) return undefined
+  const baseUrl = 'http://localhost:3000'
 
   try {
-    const res = await fetch(`${baseUrl}/target-property`, {
+    const res = await fetch(`${baseUrl}/api/target-property/create`, {
       method: 'POST',
       mode: 'cors',
       headers: {

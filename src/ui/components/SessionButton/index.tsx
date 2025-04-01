@@ -16,8 +16,13 @@ interface SessionButtonProps extends Omit<ButtonProps, 'borderRadius' | 'label' 
 const SessionButton = ({ size = 'medium', fullWidth, user }: SessionButtonProps) => {
   const router = useRouter()
 
+  function handleLogout() {
+    logout()
+    router.push('/')
+  }
+
   const handleClick = () => {
-    !user ? router.push('/login') : logout()
+    !user ? router.push('/login') : handleLogout()
   }
 
   return (

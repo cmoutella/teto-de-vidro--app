@@ -14,7 +14,7 @@ export default {
       'always',
       ['sentence-case', 'kebab-case', 'pascal-case', 'camel-case']
     ] as [RuleConfigSeverity, RuleConfigCondition, TargetCaseType[]],
-    'scope-min-length': [RuleConfigSeverity.Error, 'always', 3] as const,
+    'scope-min-length': [RuleConfigSeverity.Error, 'always', 2] as const,
     'subject-min-length': [RuleConfigSeverity.Error, 'always', 5] as const,
     'subject-case': [RuleConfigSeverity.Error, 'always', ['lower-case', 'sentence-case']] as [
       RuleConfigSeverity,

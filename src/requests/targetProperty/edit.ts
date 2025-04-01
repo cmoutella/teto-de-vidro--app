@@ -9,18 +9,16 @@ type EditHuntRequest = (
 ) => Promise<TargetPropertyInterface | undefined>
 
 export const editTargetProperty: EditHuntRequest = async (id, bodyData) => {
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL
-
-  if (!baseUrl) return undefined
+  const baseUrl = 'http://localhost:3000'
 
   try {
-    const res = await fetch(`${baseUrl}/target-property/${id}`, {
+    const res = await fetch(`${baseUrl}/api/target-property/update`, {
       method: 'PUT',
       mode: 'cors',
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify(bodyData)
+      body: JSON.stringify({ id, data: bodyData })
     }).then((res) => res.json())
 
     if (res.error) {
