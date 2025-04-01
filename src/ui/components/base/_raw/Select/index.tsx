@@ -6,7 +6,13 @@ import cx from 'classnames'
 
 import Icon from '../../Icon'
 import type { FormSizes, FormTheme } from '../../shared/formTheme'
-import { baseInputStyle, formTheme, iSizes, symbolPadding } from '../../shared/formTheme'
+import {
+  afterSymbolPosition,
+  baseInputStyle,
+  formTheme,
+  iSizes,
+  symbolPadding
+} from '../../shared/formTheme'
 
 export interface Option {
   label: string
@@ -55,7 +61,13 @@ const SelectRaw = ({
           </select>
         )}
       </SelectHeadless>
-      <span className={cx('absolute top-0 font-sm', symbolPadding[themeSize])}>
+      <span
+        className={cx(
+          'absolute top-0 font-sm',
+          symbolPadding[themeSize],
+          afterSymbolPosition[themeSize]
+        )}
+      >
         <Icon icon="chevron-down" mode="mini" />
       </span>
     </div>
