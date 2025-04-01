@@ -6,9 +6,9 @@ import type { InterfaceHunt } from '@/types/app'
 export async function POST(req: Request) {
   const body = await req.json()
 
-  if (!body.userId) {
+  if (!body.huntId) {
     return NextResponse.json(
-      { error: 'Dados insuficiêntes para buscar pelas hunts' },
+      { error: 'Dados insuficiêntes para buscar os targets da hunt' },
       { status: 400 }
     )
   }
@@ -19,7 +19,7 @@ export async function POST(req: Request) {
 
   try {
     const res = await fetch(
-      `${baseUrl}/hunt/search/${body.userId}?page=${body.page}&limit=${body.perPage}`,
+      `${baseUrl}/target-property/search/${body.huntId}?page=${body.page}&limit=${body.perPage}`,
       {
         method: 'GET',
         mode: 'cors',
@@ -30,7 +30,7 @@ export async function POST(req: Request) {
     ).then((res) => res.json())
 
     if (res.error) {
-      throw Error('Não foi possivel buscar as hunts do usuário')
+      throw Error('Não foi possivel buscar os targets dessa hunt agora')
     }
 
     const { data } = res as SuccessResponse<InterfaceHunt>
