@@ -1,14 +1,14 @@
 import type { SuccessResponse } from '@/types/apiPatterns'
 import type { TargetPropertyInterface } from '@/types/targetProperty'
 
-export type EditHuntRequestProps = Omit<TargetPropertyInterface, 'id' | 'targets'>
+export type EditTargetRequestProps = Partial<Omit<TargetPropertyInterface, 'id' | 'targets'>>
 
-type EditHuntRequest = (
+type EditTargetRequest = (
   _id: string,
-  _bodyData: EditHuntRequestProps
+  _bodyData: EditTargetRequestProps
 ) => Promise<TargetPropertyInterface | undefined>
 
-export const editTargetProperty: EditHuntRequest = async (id, bodyData) => {
+export const editTargetProperty: EditTargetRequest = async (id, bodyData) => {
   const baseUrl = 'http://localhost:3000'
 
   try {
