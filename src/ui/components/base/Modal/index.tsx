@@ -4,7 +4,7 @@ import cx from 'classnames'
 
 import Button from '../Button'
 
-type ModalSize = 'small' | 'medium' | 'large'
+export type ModalSize = 'small' | 'medium' | 'large'
 
 export interface ModalProps {
   children: ReactNode
