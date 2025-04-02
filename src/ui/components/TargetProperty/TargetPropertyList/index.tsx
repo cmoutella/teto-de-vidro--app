@@ -9,15 +9,13 @@ interface TargetPropertyListProps {
   page: number
   totalPages: number
   perPage: number
-  openEditModal: (_t: TargetPropertyInterface) => void
 }
 
 function TargetPropertyList({
   list,
   page: _page,
   totalPages: _totalPages,
-  perPage: _perPage,
-  openEditModal
+  perPage: _perPage
 }: TargetPropertyListProps) {
   const { hunt } = useHuntContext()
 
@@ -30,11 +28,7 @@ function TargetPropertyList({
       {list.map((tp) => {
         return (
           <div key={tp.id} className="w-full">
-            <TargetPropertyItem
-              target={tp}
-              hunt={hunt as InterfaceHunt}
-              openEditModal={openEditModal}
-            />
+            <TargetPropertyItem target={tp} hunt={hunt as InterfaceHunt} />
           </div>
         )
       })}
