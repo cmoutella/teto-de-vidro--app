@@ -15,10 +15,17 @@ interface InputProps extends InputHeadlessProps {
   description?: string
   theme?: FormTheme
   themeSize?: FormSizes
+  errorMessage?: string
   children: ReactNode
 }
 
-const FieldWrapper = ({ label, description, theme = 'light', children }: InputProps) => {
+const FieldWrapper = ({
+  label,
+  description,
+  theme = 'light',
+  children,
+  errorMessage
+}: InputProps) => {
   return (
     <FieldHeadless className="flex flex-col gap-3 w-full">
       {(label || description) && (
@@ -36,6 +43,13 @@ const FieldWrapper = ({ label, description, theme = 'light', children }: InputPr
         </span>
       )}
       <div className="relative w-full">{children}</div>
+      <div
+        className={cx('text-sm text-red-600 -my-2.5', {
+          invisible: !errorMessage
+        })}
+      >
+        {errorMessage}
+      </div>
     </FieldHeadless>
   )
 }
