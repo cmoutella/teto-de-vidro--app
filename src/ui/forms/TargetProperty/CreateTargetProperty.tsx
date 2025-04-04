@@ -157,7 +157,7 @@ const CreateTargetPropertyForm = ({ onSuccess, onFail, huntId }: CreateTargetPro
                 size="xxlarge"
                 onClick={fetchAdFillForm}
                 className={cx(
-                  'bg-brand-primary-400 hover:bg-brand-primary-800 text-brand-primary-900 hover:text-white min-w-20 disabled:bg-slate-300 disabled:text-slate-500'
+                  'bg-brand-primary-400 hover:bg-brand-primary-800 text-brand-primary-900 hover:text-white min-w-20 disabled:bg-slate-300 disabled:text-slate-500 translate-y-2'
                 )}
                 disabled={formik.values.adURL === ''}
               />

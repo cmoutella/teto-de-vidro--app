@@ -64,6 +64,19 @@ export function StagePill({ stage, targetId }: StagePillProps) {
       case 'scheduled':
         handleSchedule(newStage)
         break
+      case 'unavailable':
+        updateStage(newStage, { isActive: false })
+        break
+      case 'visited':
+        updateStage(newStage)
+        // handleVisited(newStage)
+        break
+      case 'quit':
+        updateStage(newStage, { isActive: false })
+        break
+      case 'denied':
+        updateStage(newStage, { isActive: false })
+        break
       default:
         updateStage(newStage)
         break
@@ -81,19 +94,33 @@ export function StagePill({ stage, targetId }: StagePillProps) {
     )
   }
 
+  // TODO: feature comentários
+  // function handleVisited(newStage: PropertyHuntingStage) {
+  //   modal.open(
+  //     'small',
+  //     <ScheduledVisitForm
+  //       onSuccess={modal.close}
+  //       onFail={modal.close}
+  //       submit={async (data: Partial<TargetPropertyInterface>) => await updateStage(newStage, data)}
+  //     />
+  //   )
+  // }
+
   async function updateStage(
     newStage: PropertyHuntingStage,
     otherData?: Partial<TargetPropertyInterface>
   ) {
     try {
       console.log('targetId', targetId)
-      console.log(newStage, otherData)
+      console.log('submit', newStage, otherData)
 
       const res = await editTargetProperty(targetId, { huntingStage: newStage, ...otherData })
 
       if (!res) {
         throw new Error()
       }
+
+      console.log('success EditTargetProperty', res)
 
       setSelectedStage(newStage as PropertyHuntingStage)
     } catch (err) {

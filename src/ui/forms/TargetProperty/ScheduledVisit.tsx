@@ -26,7 +26,7 @@ const ScheduledVisitForm = ({ onSuccess, onFail, submit }: ScheduledVisitFormPro
     date: Yup.string()
       .required('Campo obrigatório')
       .max(10, 'Ops, tem algo errado nessa data')
-      .min(10, 'Insira a data no formato indicado')
+      .min(8, 'Insira a data no formato indicado')
       .test({
         name: 'Formato de data inválido',
         test: (dateString) => {
@@ -128,13 +128,24 @@ const ScheduledVisitForm = ({ onSuccess, onFail, submit }: ScheduledVisitFormPro
   async function handleSubmit(values: { date: string; time: string }) {
     if (!formik.isValid || !user) return
 
-    const dateTime = new Date()
+    const { date, time } = values
 
-    const _data = {
-      visitAt: dateTime
+    const [day, month, year] = date.split('/')
+    const [hour, minutes] = time.split(':')
+    const dateTime = new Date(
+      Number(year),
+      Number(month) - 1,
+      Number(day),
+      Number(hour),
+      Number(minutes)
+    )
+    const dateString = dateTime.toISOString()
+
+    const data = {
+      visitDate: dateString
     }
 
-    const res = await submit({})
+    const res = await submit(data)
 
     if (!res) {
       onFail()
