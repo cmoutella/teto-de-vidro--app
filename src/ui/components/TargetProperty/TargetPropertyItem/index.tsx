@@ -3,8 +3,10 @@ import { useMemo, useState } from 'react'
 import cx from 'classnames'
 
 import { useHuntContext } from '@/providers/HuntProvider'
+import { useUIContext } from '@/providers/UIProvider'
 import type { InterfaceHunt } from '@/types/app'
 import type { TargetPropertyInterface } from '@/types/targetProperty'
+import EditTargetPropertyForm from '@/ui/forms/TargetProperty/EditTargetProperty'
 import { lastUpdateMessage } from '@/utils/string/lastUpdateMessage'
 
 import Button from '../../base/Button'
@@ -14,17 +16,36 @@ import { StagePill } from './StagePill'
 interface TargetPropertyItemProps {
   target: TargetPropertyInterface
   hunt: InterfaceHunt
-  openEditModal: (_t: TargetPropertyInterface) => void
 }
 
-export default function TargetPropertyItem({
-  target,
-  hunt,
-  openEditModal
-}: TargetPropertyItemProps) {
+export default function TargetPropertyItem({ target, hunt }: TargetPropertyItemProps) {
   const [isOpen, setIsOpen] = useState<boolean>(false)
 
+  const { modal } = useUIContext()
+  const { fetchProperties } = useHuntContext()
+
   const { removeTargetProperty } = useHuntContext()
+
+  function openEditModal() {
+    function handleFail() {
+      // TODO: EditHunt handle fail
+      console.log('fail EditHunt')
+    }
+
+    function handleSuccess() {
+      modal.close
+      fetchProperties()
+    }
+
+    modal.open(
+      'large',
+      <EditTargetPropertyForm
+        currentData={target as TargetPropertyInterface}
+        onSuccess={handleSuccess}
+        onFail={handleFail}
+      />
+    )
+  }
 
   const totalPricing = useMemo(() => {
     return target.price + (target.condoPricing ?? 0) + target.iptu
@@ -83,7 +104,7 @@ export default function TargetPropertyItem({
                 className={cx(
                   'border border-brand-primary-500 text-brand-primary-600 hover:border-brand-primary-600 hover:bg-brand-primary-600 hover:text-white'
                 )}
-                onClick={() => openEditModal(target)}
+                onClick={() => openEditModal()}
               />
               <Button
                 label={<Icon icon="trash" size="xs" />}
@@ -126,7 +147,7 @@ export default function TargetPropertyItem({
                 <div className="col-span-2 flex flex-col items-cente">
                   <p className="text-sm font-semibold whitespace-nowrap mb-1">ETAPA</p>
                   <div>
-                    <StagePill stage={target.huntingStage} />
+                    <StagePill stage={target.huntingStage} targetId={target.id} />
                   </div>
                 </div>
               </div>

@@ -17,9 +17,9 @@ export const deleteTargetProperty: EditHuntRequest = async (id) => {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({ id })
-    }).then((res) => res.json())
+    })
 
-    if (res.error) {
+    if (!res || res.error) {
       throw Error('Não foi possível criar agora, tente novamente mais tarde')
     }
 

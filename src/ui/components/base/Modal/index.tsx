@@ -4,7 +4,7 @@ import cx from 'classnames'
 
 import Button from '../Button'
 
-type ModalSize = 'small' | 'medium' | 'large'
+export type ModalSize = 'small' | 'medium' | 'large'
 
 export interface ModalProps {
   children: ReactNode
@@ -23,9 +23,9 @@ function ModalWrapper({ children }: { children: ReactNode }) {
 
 export default function Modal({ children, isOpen, size = 'small', setClose }: ModalProps) {
   const sizeClasses: { [_key in ModalSize]: string } = {
-    small: 'md:min-w-80 md:w-80',
+    small: 'md:min-w-[300px] md:w-[400px]',
     medium: 'md:min-w-128 md:w-128',
-    large: 'md:min-w-9/12 md:w-9/12'
+    large: 'md:min-w-10/12 md:w-9/12'
   }
 
   return (
@@ -33,7 +33,7 @@ export default function Modal({ children, isOpen, size = 'small', setClose }: Mo
       <ModalWrapper>
         <div
           className={cx(
-            `min-w-10/12 max-h-full overflow-y-scroll flex flex-col justify-start items-center mt-16 relative bg-white rounded-lg p-4`,
+            `max-h-full overflow-x-scroll flex flex-col justify-start items-center mt-16 relative bg-white rounded-lg p-4`,
             sizeClasses[size]
           )}
         >

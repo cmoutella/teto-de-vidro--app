@@ -68,7 +68,7 @@ const SelectRaw = ({
           afterSymbolPosition[themeSize]
         )}
       >
-        <Icon icon="chevron-down" mode="mini" />
+        <Icon icon="chevron-down" mode="mini" className={cx(className, 'bg-transparent')} />
       </span>
     </div>
   )

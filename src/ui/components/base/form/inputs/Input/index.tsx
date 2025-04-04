@@ -14,6 +14,7 @@ interface InputProps extends InputHeadlessProps {
   themeSize?: FormSizes
   iconButton?: ReactNode
   fieldSymbol?: string | ReactNode
+  error?: string
 }
 
 const Input = ({
@@ -23,10 +24,17 @@ const Input = ({
   themeSize = 'md',
   iconButton,
   fieldSymbol,
+  error,
   ...otherProps
 }: InputProps) => {
   return (
-    <FieldWrapper label={label} description={description} theme={theme} themeSize={themeSize}>
+    <FieldWrapper
+      label={label}
+      description={description}
+      theme={theme}
+      themeSize={themeSize}
+      errorMessage={error}
+    >
       {fieldSymbol && (
         <span
           className={cx(
