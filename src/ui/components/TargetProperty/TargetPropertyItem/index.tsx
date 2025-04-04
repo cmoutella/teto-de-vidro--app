@@ -104,7 +104,7 @@ export default function TargetPropertyItem({ target, hunt }: TargetPropertyItemP
                 className={cx(
                   'border border-brand-primary-500 text-brand-primary-600 hover:border-brand-primary-600 hover:bg-brand-primary-600 hover:text-white'
                 )}
-                onClick={() => openEditModal(target)}
+                onClick={() => openEditModal()}
               />
               <Button
                 label={<Icon icon="trash" size="xs" />}

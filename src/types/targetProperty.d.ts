@@ -24,7 +24,7 @@ interface TargetPropertyInterface {
   iptu: number
   priority: number
   huntingStage: PropertyHuntingStage
-  isActive: true
+  isActive: boolean
   visitDate: string
   realtor: string
   realtorContact: string
