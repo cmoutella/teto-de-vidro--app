@@ -40,7 +40,7 @@ function CollapsableBox({ open, label, resume, children, toggleBox }: Collapsabl
         </span>
         {open ? <Icon icon="chevron-up" /> : <Icon icon="chevron-down" />}
       </DisclosureButton>
-      <DisclosurePanel className="w-full border border-brand-gray-300 p-4 rounded-b-lg">
+      <DisclosurePanel className="w-full border border-brand-gray-300 p-4 pb-6 rounded-b-lg">
         {children}
       </DisclosurePanel>
     </Disclosure>

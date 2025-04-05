@@ -174,7 +174,7 @@ const ScheduledVisitForm = ({ onSuccess, onFail, submit }: ScheduledVisitFormPro
   }
 
   return (
-    <div className="w-full flex justify-center flex-col items-center p-6 pb-4 gap-3">
+    <div className="w-full flex justify-center flex-col items-center p-2 pb-4 gap-3">
       <form onSubmit={formik.handleSubmit} className="w-full grid md:grid-cols-12 gap-x-4 gap-y-5">
         <span className="col-span-12">
           <Input
