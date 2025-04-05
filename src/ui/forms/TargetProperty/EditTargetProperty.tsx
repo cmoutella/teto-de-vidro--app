@@ -8,12 +8,15 @@ import CollapsableBox from '@ui/CollapsableBox'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
 
+import { useHuntContext } from '@/providers/HuntProvider'
 import type { CreateTargetPropertyRequestProps } from '@/requests/targetProperty/create'
 import { editTargetProperty } from '@/requests/targetProperty/edit'
 import type { AddressKeys } from '@/services/cep'
 import { CEPService } from '@/services/cep'
 import type { TargetPropertyInterface } from '@/types/targetProperty'
 import SubmitButton from '@/ui/components/base/form/buttons/SubmitButton'
+import { CEPField } from '@/ui/components/base/form/fields/cep/CEPField'
+import { MoneyField } from '@/ui/components/base/form/fields/money/MoneyField'
 import Input from '@/ui/components/base/form/inputs/Input'
 
 interface CreateTargetPropertyFormProps {
@@ -66,13 +69,15 @@ const EditTargetPropertyForm = ({
       parkingSpots: currentData.parking ?? 0,
       iptu: currentData.iptu ?? 0,
       condoPricing: currentData.condoPricing ?? 0,
-      price: currentData.price ?? 0
+      sellPrice: currentData.sellPrice ?? 0,
+      rentPrice: currentData.rentPrice ?? 0
     },
     validationSchema,
     onSubmit: handleSubmit
   })
 
   const { user } = useSessionContext()
+  const { hunt } = useHuntContext()
 
   async function handleSubmit(values: CreateTargetPropertyRequestProps) {
     if (!formik.isValid || !user) return
@@ -115,6 +120,20 @@ const EditTargetPropertyForm = ({
     return `${baseAddress}${locationAddress}`
   }, [formik])
 
+  const pricing = useMemo(() => {
+    if ((!formik.values.rentPrice && !formik.values.sellPrice) || !hunt)
+      return 'Insira os valores para este imóvel'
+
+    const rent = `Aluguel: ${formik.values.rentPrice} | Total: ${formik.values.rentPrice + formik.values.condoPricing + formik.values.iptu}`
+    const sell = `Venda: ${formik.values.sellPrice} | Total: ${formik.values.sellPrice + formik.values.condoPricing + formik.values.iptu}`
+
+    if (hunt.type === 'buy') {
+      return sell
+    } else {
+      return rent
+    }
+  }, [formik])
+
   return (
     <div className="w-full">
       <form onSubmit={formik.handleSubmit} className="w-full flex flex-col gap-6">
@@ -146,14 +165,11 @@ const EditTargetPropertyForm = ({
               <div className="w-full grid md:grid-cols-12 gap-x-4 gap-y-5 mt-2">
                 <FormSectionLabel>Endereço principal</FormSectionLabel>
                 <span className="col-span-4">
-                  <Input
-                    label="CEP"
-                    name="postalCode"
-                    themeSize={formThemeSize}
+                  <CEPField
+                    size={formThemeSize}
                     theme={themePallete}
-                    placeholder="00000-000"
                     value={formik.values.postalCode}
-                    onChange={formik.handleChange}
+                    onChange={(value: string) => formik.setFieldValue('postalCode', value)}
                     onBlur={completeFieldsByCEP}
                   />
                 </span>
@@ -295,48 +311,58 @@ const EditTargetPropertyForm = ({
           <div className="w-full">
             <CollapsableBox
               label="Custos"
+              resume={pricing}
               open={priceBoxOpen}
               toggleBox={() => setPriceBoxOpen(!priceBoxOpen)}
             >
               <div className="w-full grid md:grid-cols-12 gap-x-4 gap-y-5 mt-2">
                 <FormSectionLabel>Custos Mensais</FormSectionLabel>
-                <span className="col-span-4 flex flex-row items-end gap-4">
-                  <Input
-                    label="Aluguel"
-                    name="price"
-                    type="number"
-                    themeSize={formThemeSize}
+                <span className="col-span-3 flex flex-row items-end gap-4">
+                  <MoneyField
+                    label="Preço de Aluguel"
+                    name="rentPrice"
+                    size={formThemeSize}
                     theme={themePallete}
                     placeholder={`Aluguel`}
-                    value={formik.values.price}
-                    onChange={formik.handleChange}
-                    fieldSymbol="R$"
+                    value={formik.values.rentPrice}
+                    onChange={(value: number) => formik.setFieldValue('rentPrice', value)}
+                    currencySymbol="R$"
                   />
                 </span>
-                <span className="col-span-4 flex flex-row items-end gap-4">
-                  <Input
+                <span className="col-span-3 flex flex-row items-end gap-4">
+                  <MoneyField
+                    label="Preço de Venda"
+                    name="sellPrice"
+                    size={formThemeSize}
+                    theme={themePallete}
+                    placeholder={`Preço de venda`}
+                    value={formik.values.sellPrice}
+                    onChange={(value: number) => formik.setFieldValue('sellPrice', value)}
+                    currencySymbol="R$"
+                  />
+                </span>
+                <span className="col-span-3 flex flex-row items-end gap-4">
+                  <MoneyField
                     label="Condomínio"
                     name="condoPricing"
-                    type="number"
-                    themeSize={formThemeSize}
+                    size={formThemeSize}
                     theme={themePallete}
                     placeholder={`Valor do condomínio`}
                     value={formik.values.condoPricing}
-                    onChange={formik.handleChange}
-                    fieldSymbol="R$"
+                    onChange={(value: number) => formik.setFieldValue('condoPricing', value)}
+                    currencySymbol="R$"
                   />
                 </span>
-                <span className="col-span-4 flex flex-row items-end gap-4">
-                  <Input
+                <span className="col-span-3 flex flex-row items-end gap-4">
+                  <MoneyField
                     label="IPTU"
                     name="iptu"
-                    type="number"
-                    themeSize={formThemeSize}
+                    size={formThemeSize}
                     theme={themePallete}
                     placeholder={`Valor do IPTU por mês`}
                     value={formik.values.iptu}
-                    onChange={formik.handleChange}
-                    fieldSymbol="R$"
+                    onChange={(value: number) => formik.setFieldValue('iptu', value)}
+                    currencySymbol="R$"
                   />
                 </span>
               </div>

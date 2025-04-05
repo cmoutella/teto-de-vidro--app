@@ -16,6 +16,7 @@ interface InputProps extends InputHeadlessProps {
   themeSize?: FormSizes
   hasBeforeSymbol?: boolean
   hasAfterSymbol?: boolean
+  requiredError?: boolean
 }
 
 const InputRaw = ({
@@ -23,6 +24,7 @@ const InputRaw = ({
   themeSize = 'md',
   hasBeforeSymbol,
   hasAfterSymbol,
+  requiredError,
   ...otherProps
 }: InputProps) => {
   return (
@@ -44,6 +46,11 @@ const InputRaw = ({
             {
               'pr-10': hasAfterSymbol,
               'pr-2.5': !hasAfterSymbol
+            },
+            {
+              'border-brand-primary-500': focus,
+              'border-red-500': requiredError,
+              'border-brand-primary-400': hover
             }
           )}
         />
