@@ -10,6 +10,7 @@ import { useFormik } from 'formik'
 import * as Yup from 'yup'
 
 import type { TargetPropertyInterface } from '@/types/targetProperty'
+import { formatStringDate, formatTime } from '@/utils/string/formatDate'
 
 interface ScheduledVisitFormProps {
   onSuccess: (_h: Partial<TargetPropertyInterface>) => void
@@ -160,6 +161,18 @@ const ScheduledVisitForm = ({ onSuccess, onFail, submit }: ScheduledVisitFormPro
     await formik.validateField(e.target.name)
   }
 
+  const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const stringDate = formatStringDate(e.target.value)
+
+    formik.setFieldValue(e.target.name, stringDate)
+  }
+
+  const handleTimeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const stringDate = formatTime(e.target.value)
+
+    formik.setFieldValue(e.target.name, stringDate)
+  }
+
   return (
     <div className="w-full flex justify-center flex-col items-center p-6 pb-4 gap-3">
       <form onSubmit={formik.handleSubmit} className="w-full grid md:grid-cols-12 gap-x-4 gap-y-5">
@@ -171,7 +184,7 @@ const ScheduledVisitForm = ({ onSuccess, onFail, submit }: ScheduledVisitFormPro
             theme={themePallete}
             value={formik.values.date}
             placeholder="01/01/2025"
-            onChange={formik.handleChange}
+            onChange={handleDateChange}
             onBlur={handleBlur}
             description="Insira a data no formato DD/MM/AAAA"
             error={formik.errors.date}
@@ -185,7 +198,7 @@ const ScheduledVisitForm = ({ onSuccess, onFail, submit }: ScheduledVisitFormPro
             theme={themePallete}
             value={formik.values.time}
             placeholder="13:00"
-            onChange={formik.handleChange}
+            onChange={handleTimeChange}
             onBlur={handleBlur}
             description="Insira a hora no formato HH:MM"
             error={formik.errors.time}

@@ -15,6 +15,7 @@ interface InputProps extends InputHeadlessProps {
   iconButton?: ReactNode
   fieldSymbol?: string | ReactNode
   error?: string
+  requiredError?: boolean
 }
 
 const Input = ({
@@ -25,6 +26,7 @@ const Input = ({
   iconButton,
   fieldSymbol,
   error,
+  requiredError,
   ...otherProps
 }: InputProps) => {
   return (
@@ -51,6 +53,7 @@ const Input = ({
         themeSize={themeSize}
         hasBeforeSymbol={!!fieldSymbol}
         hasAfterSymbol={!!iconButton}
+        requiredError={!!error}
         {...otherProps}
       />
       {iconButton && (
