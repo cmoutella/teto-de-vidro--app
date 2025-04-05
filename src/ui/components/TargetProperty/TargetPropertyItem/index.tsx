@@ -52,11 +52,15 @@ export default function TargetPropertyItem({ target, hunt }: TargetPropertyItemP
   }
 
   const totalPricing = useMemo(() => {
-    return target.price + (target.condoPricing ?? 0) + target.iptu
-  }, [target])
+    if (hunt.type === 'rent' || hunt.type === 'either') {
+      return target.rentPrice + (target.condoPricing ?? 0) + target.iptu
+    } else {
+      return undefined
+    }
+  }, [target, hunt])
 
-  const budgetDeviant = useMemo(() => {
-    if (!hunt.maxBudget && !hunt.minBudget) return 0
+  const rentBudgetDeviant = useMemo(() => {
+    if (!hunt.maxBudget || hunt.type === 'buy' || !totalPricing) return 0
 
     if (totalPricing > hunt.maxBudget) {
       return (totalPricing / hunt.maxBudget - 1) * 100
@@ -65,8 +69,19 @@ export default function TargetPropertyItem({ target, hunt }: TargetPropertyItemP
     if (totalPricing < hunt.maxBudget) {
       return -((1 - totalPricing / hunt.maxBudget) * 100)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [hunt, totalPricing])
 
-    return 0
+  const purchaseBudgetDeviant = useMemo(() => {
+    if (!hunt.maxBudget || hunt.type === 'rent') return 0
+
+    if (target.sellPrice > hunt.maxBudget) {
+      return (target.sellPrice / hunt.maxBudget - 1) * 100
+    }
+
+    if (target.sellPrice < hunt.maxBudget) {
+      return -((1 - target.sellPrice / hunt.maxBudget) * 100)
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [hunt])
 
@@ -120,42 +135,50 @@ export default function TargetPropertyItem({ target, hunt }: TargetPropertyItemP
             </div>
           </div>
           <div className="w-full">
-            {(hunt.type === 'rent' || hunt.type === 'either') && (
-              <div className="grid grid-cols-12 gap-2">
-                <div className="col-span-1 flex flex-col items-center">
-                  <p className="text-sm font-semibold whitespace-nowrap">VALOR</p>
-                  <p>R$ {target.price}</p>
-                </div>
-                <div className="col-span-1 flex flex-col items-center">
-                  <p className="text-sm font-semibold whitespace-nowrap">CONDOMÍNIO</p>
-                  <p>
-                    R${' '}
-                    {!target.condoPricing || target.condoPricing === 0 ? '?' : target.condoPricing}
-                  </p>
-                </div>
-                <div className="col-span-1 flex flex-col items-center">
-                  <p className="text-sm font-semibold whitespace-nowrap">IPTU</p>
-                  <p>R$ {target.iptu === 0 ? '?' : target.iptu}</p>
-                </div>
-                <div className="col-span-1 flex flex-col items-cente">
-                  <p className="text-sm font-semibold whitespace-nowrap">TOTAL</p>
-                  <div className="flex items-center whitespace-nowrap relative">
-                    <p className="text-lg whitespace-nowrap font-semibold">R$ {totalPricing}</p>
-                    {budgetDeviant !== 0 && <BudgetDiff diff={budgetDeviant} />}
+            <div className="grid grid-cols-12 gap-2">
+              {hunt.type === 'rent' ||
+                (hunt.type === 'either' && (
+                  <div className="col-span-1 flex flex-col items-center">
+                    <p className="text-sm font-semibold whitespace-nowrap">ALUGUEL</p>
+                    <p>R$ {target.rentPrice}</p>
                   </div>
-                </div>
-                <div className="col-span-1 flex flex-col items-center">
-                  <p className="text-sm font-semibold whitespace-nowrap">TAMANHO</p>
-                  <p>{target.size === 0 ? '?' : `${target.size}m2`}</p>
-                </div>
-                <div className="col-span-2 flex flex-col items-cente">
-                  <p className="text-sm font-semibold whitespace-nowrap mb-1">ETAPA</p>
-                  <div>
-                    <StagePill stage={target.huntingStage} targetId={target.id} />
+                ))}
+              {hunt.type === 'buy' ||
+                (hunt.type === 'either' && (
+                  <div className="col-span-1 flex flex-col items-center">
+                    <p className="text-sm font-semibold whitespace-nowrap">VENDA</p>
+                    <p>R$ {target.sellPrice}</p>
+                    {purchaseBudgetDeviant !== 0 && <BudgetDiff diff={purchaseBudgetDeviant} />}
                   </div>
+                ))}
+              <div className="col-span-1 flex flex-col items-center">
+                <p className="text-sm font-semibold whitespace-nowrap">CONDOMÍNIO</p>
+                <p>
+                  R$ {!target.condoPricing || target.condoPricing === 0 ? '?' : target.condoPricing}
+                </p>
+              </div>
+              <div className="col-span-1 flex flex-col items-center">
+                <p className="text-sm font-semibold whitespace-nowrap">IPTU</p>
+                <p>R$ {target.iptu === 0 ? '?' : target.iptu}</p>
+              </div>
+              <div className="col-span-1 flex flex-col items-cente">
+                <p className="text-sm font-semibold whitespace-nowrap">TOTAL</p>
+                <div className="flex items-center whitespace-nowrap relative">
+                  <p className="text-lg whitespace-nowrap font-semibold">R$ {totalPricing}</p>
+                  {purchaseBudgetDeviant !== 0 && <BudgetDiff diff={rentBudgetDeviant} />}
                 </div>
               </div>
-            )}
+              <div className="col-span-1 flex flex-col items-center">
+                <p className="text-sm font-semibold whitespace-nowrap">TAMANHO</p>
+                <p>{target.size === 0 ? '?' : `${target.size}m2`}</p>
+              </div>
+              <div className="col-span-2 flex flex-col items-cente">
+                <p className="text-sm font-semibold whitespace-nowrap mb-1">ETAPA</p>
+                <div>
+                  <StagePill stage={target.huntingStage} targetId={target.id} />
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
