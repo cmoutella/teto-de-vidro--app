@@ -29,7 +29,6 @@ export const editTargetProperty: EditTargetRequest = async (id, bodyData) => {
 
     return data
   } catch (_err) {
-    // TODO: toast
     return undefined
   }
 }

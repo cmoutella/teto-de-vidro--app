@@ -1,4 +1,6 @@
+'use client'
 import { useState } from 'react'
+import { toast } from 'react-hot-toast'
 
 import cx from 'classnames'
 
@@ -67,8 +69,11 @@ export function StagePill({ stage, targetId }: StagePillProps) {
       case 'unavailable':
         updateStage(newStage, { isActive: false })
         break
+      case 'disappeared':
+        updateStage(newStage, { isActive: false })
+        break
       case 'visited':
-        updateStage(newStage)
+        updateStage(newStage, { isActive: true })
         // handleVisited(newStage)
         break
       case 'quit':
@@ -78,7 +83,7 @@ export function StagePill({ stage, targetId }: StagePillProps) {
         updateStage(newStage, { isActive: false })
         break
       default:
-        updateStage(newStage)
+        updateStage(newStage, { isActive: true })
         break
     }
   }
@@ -111,20 +116,16 @@ export function StagePill({ stage, targetId }: StagePillProps) {
     otherData?: Partial<TargetPropertyInterface>
   ) {
     try {
-      console.log('targetId', targetId)
-      console.log('submit', newStage, otherData)
-
       const res = await editTargetProperty(targetId, { huntingStage: newStage, ...otherData })
 
       if (!res) {
         throw new Error()
       }
 
-      console.log('success EditTargetProperty', res)
-
+      toast.success('Etapa atualizada com sucesso!')
       setSelectedStage(newStage as PropertyHuntingStage)
     } catch (err) {
-      // TODO: handle fail
+      toast.error('Erro ao atualizar etapa!')
     }
   }
 

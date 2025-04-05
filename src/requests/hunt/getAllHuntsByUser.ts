@@ -28,7 +28,6 @@ export const getAllHuntsByUser: GetAllHuntsByUserRequest = async (userId, page, 
 
     return data
   } catch (_err) {
-    // TODO: toast
     return undefined
   }
 }

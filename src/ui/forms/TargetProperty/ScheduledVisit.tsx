@@ -142,7 +142,8 @@ const ScheduledVisitForm = ({ onSuccess, onFail, submit }: ScheduledVisitFormPro
     const dateString = dateTime.toISOString()
 
     const data = {
-      visitDate: dateString
+      visitDate: dateString,
+      isActive: true
     }
 
     const res = await submit(data)

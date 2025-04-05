@@ -1,5 +1,6 @@
 'use client'
 import { createContext, useContext, useEffect, useState } from 'react'
+import { toast } from 'react-hot-toast'
 
 import { getAllTargetPropertiesfromHunt } from '@/requests/hunt/getAllTargetProperties'
 import { getHuntById } from '@/requests/hunt/getById'
@@ -71,9 +72,13 @@ export const HuntProvider = ({
       const updatedHunt = await getHuntById(hunt.id)
 
       if (updatedHunt) {
+        toast.success('Hunt atualizada com sucesso!')
         setHunt(updatedHunt)
+      } else {
+        toast.error('Não foi possível atualizar a hunt')
       }
     } else {
+      toast.success('Hunt atualizada com sucesso!')
       setHunt(updated)
     }
   }
@@ -81,8 +86,10 @@ export const HuntProvider = ({
   async function getProperties() {
     const data = await getAllTargetPropertiesfromHunt((hunt as InterfaceHunt).id, page, perPage)
 
-    if (!data || data.length <= 0) {
-      // TODO: tooltip de feedback
+    if (!data) {
+      toast.error('Não foi possível trazer o alvos da busca')
+    }
+    if (!data || data?.length <= 0) {
       setTotalPages(0)
     }
 
@@ -93,9 +100,10 @@ export const HuntProvider = ({
     const res = await deleteTargetProperty(id)
 
     if (res) {
+      toast.success('Alvo removido com sucesso!')
       await getProperties()
     } else {
-      // handle delete fail
+      toast.error('Não foi possível remover o alvo')
     }
   }
 

@@ -1,5 +1,7 @@
 'use client'
 
+import { toast } from 'react-hot-toast'
+
 import Button from '@ui/base/Button'
 import TargetPropertyList from '@ui/TargetProperty/TargetPropertyList'
 
@@ -19,18 +21,15 @@ const HuntView = () => {
   const { modal } = useUIContext()
 
   function handleCreateTargetProperty() {
-    function onSuccess() {
-      update()
-    }
-
     function handleSuccess() {
-      onSuccess()
+      update()
       modal.close()
+      toast.success('Imóvel criado com sucesso!')
     }
 
     function handleFail() {
-      // TODO: CreateTargetProperty handle fail
-      console.log('fail')
+      modal.close()
+      toast.error('Não foi possível criar o imóvel')
     }
 
     modal.open(
@@ -45,17 +44,13 @@ const HuntView = () => {
 
   function handleEditHunt() {
     function handleFail() {
-      // TODO: EditHunt handle fail
-      console.log('fail EditHunt')
-    }
-
-    function onSuccess(updatedHunt: InterfaceHunt) {
-      update(updatedHunt)
+      modal.close()
+      toast.error('Não foi possível editar a hunt')
     }
 
     function handleSuccess(updatedHunt: InterfaceHunt) {
-      onSuccess(updatedHunt)
-      modal.close
+      update(updatedHunt)
+      modal.close()
     }
 
     modal.open(

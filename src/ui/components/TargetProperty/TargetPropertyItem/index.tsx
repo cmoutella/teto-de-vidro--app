@@ -1,4 +1,6 @@
+'use client'
 import { useMemo, useState } from 'react'
+import { toast } from 'react-hot-toast'
 
 import cx from 'classnames'
 
@@ -28,12 +30,14 @@ export default function TargetPropertyItem({ target, hunt }: TargetPropertyItemP
 
   function openEditModal() {
     function handleFail() {
-      // TODO: EditHunt handle fail
-      console.log('fail EditHunt')
+      modal.close()
+      toast.error('Não foi possível editar o imóvel')
     }
 
     function handleSuccess() {
-      modal.close
+      modal.close()
+      toast.success('Informações atualizadas com sucesso!')
+
       fetchProperties()
     }
 
