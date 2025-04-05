@@ -1,8 +1,7 @@
 'use client'
 import type { ReactNode } from 'react'
 import { createContext, useContext, useState } from 'react'
-import { ToastContainer } from 'react-toastify'
-import 'react-toastify/dist/ReactToastify.min.css'
+import { Toaster } from 'react-hot-toast'
 
 import { Loading } from '@/ui/components/base/Loading'
 import type { ModalProps, ModalSize } from '@/ui/components/base/Modal'
@@ -80,12 +79,7 @@ export const UIProvider = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <UIContext.Provider value={value}>
-      <ToastContainer
-        containerId="notification-column"
-        autoClose={5000}
-        newestOnTop={true}
-        limit={5}
-      />
+      <Toaster position="top-right" toastOptions={{ duration: 5000, removeDelay: 500 }} />
       <Loading />
       {children}
       <Modal isOpen={!!modal?.isOpen} setClose={endModal} size={modal?.size}>
