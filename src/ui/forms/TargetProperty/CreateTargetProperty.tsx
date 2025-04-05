@@ -1,6 +1,6 @@
 'use client'
 import type { ReactNode } from 'react'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 
 import { useSessionContext } from '@providers/AuthProvider'
 import type { FormSizes, FormTheme } from '@ui/base/shared/formTheme'
@@ -9,6 +9,7 @@ import cx from 'classnames'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
 
+import { useHuntContext } from '@/providers/HuntProvider'
 import { scraper } from '@/requests/scraper/get'
 import type { CreateTargetPropertyRequestProps } from '@/requests/targetProperty/create'
 import { createTargetProperty } from '@/requests/targetProperty/create'
@@ -16,7 +17,10 @@ import type { AddressKeys } from '@/services/cep'
 import { CEPService } from '@/services/cep'
 import Button from '@/ui/components/base/Button'
 import SubmitButton from '@/ui/components/base/form/buttons/SubmitButton'
+import { CEPField } from '@/ui/components/base/form/fields/cep/CEPField'
+import { MoneyField } from '@/ui/components/base/form/fields/money/MoneyField'
 import Input from '@/ui/components/base/form/inputs/Input'
+import { formatMoneyValue } from '@/utils/number/formatMoney'
 
 interface CreateTargetPropertyFormProps {
   onSuccess: (_id: string) => void
@@ -29,12 +33,18 @@ const themePallete: FormTheme = 'light'
 
 const CreateTargetPropertyForm = ({ onSuccess, onFail, huntId }: CreateTargetPropertyFormProps) => {
   const [addressBoxOpen, setAddressBoxOpen] = useState<boolean>(false)
+  const [priceBoxOpen, setPriceBoxOpen] = useState<boolean>(false)
 
   const validationSchema = Yup.object({
-    adURL: Yup.string(),
+    nickname: Yup.string().required('Campo obrigatório'),
+    adURL: Yup.string().test('Insira um link válido', (value) => {
+      if (!value) return true
+      const regex = /^https?:\/\/[^\s/$.?#].[^\s]*$/i
+      return regex.test(value)
+    }),
     postalCode: Yup.string()
       .matches(/^\d{5}-\d{3}$/, 'O CEP deve estar no formato 12345-678')
-      .min(9, 'O CEP deve conter 8 dígitos')
+      .min(9, 'O CEP deve conter 8 números')
       .optional(),
     street: Yup.string().required('Campo obrigatório'),
     neighborhood: Yup.string().required('Campo obrigatório'),
@@ -44,7 +54,9 @@ const CreateTargetPropertyForm = ({ onSuccess, onFail, huntId }: CreateTargetPro
       .min(2, 'Mínimo 2 letras')
       .max(2, 'Máximo 2 letras'),
     lotNumber: Yup.string(),
-    price: Yup.number().required(),
+    sellPrice: Yup.number(),
+    rentPrice: Yup.number(),
+    contoPricing: Yup.number(),
     iptu: Yup.number()
   })
 
@@ -66,13 +78,19 @@ const CreateTargetPropertyForm = ({ onSuccess, onFail, huntId }: CreateTargetPro
       bathrooms: 1,
       parkingSpots: 0,
       iptu: 0,
-      price: 0
+      sellPrice: 0,
+      rentPrice: 0,
+      condoPricing: 0
     },
     validationSchema,
+    isInitialValid: false,
+    validateOnBlur: true,
+    validateOnChange: false,
     onSubmit: handleSubmit
   })
 
   const { user } = useSessionContext()
+  const { hunt } = useHuntContext()
 
   async function handleSubmit(values: CreateTargetPropertyRequestProps) {
     if (!formik.isValid || !user) return
@@ -99,12 +117,23 @@ const CreateTargetPropertyForm = ({ onSuccess, onFail, huntId }: CreateTargetPro
 
     const res = await scraper({ url: ad })
 
+    if (!res) {
+      formik.setFieldError('adURL', 'Não foi possível buscar os dados do anúncio.')
+    }
+
     for (const entry in res) {
       formik.setFieldValue(entry, res[entry])
     }
 
-    if (res?.rentPrice || res?.condoPrice) {
-      formik.setFieldValue('price', res?.rentPrice ?? res?.condoPrice)
+    if (res?.rentPrice) {
+      formik.setFieldValue('rentPrice', formatMoneyValue(res.rentPrice.toString()))
+    }
+    if (res?.sellPrice) {
+      formik.setFieldValue('sellPrice', formatMoneyValue(res.sellPrice.toString()))
+    }
+
+    if (res?.condoPrice) {
+      formik.setFieldValue('condoPricing', formatMoneyValue(res.condoPrice.toString()))
     }
   }
 
@@ -124,6 +153,17 @@ const CreateTargetPropertyForm = ({ onSuccess, onFail, huntId }: CreateTargetPro
     }
   }
 
+  const enableButton = useMemo(() => {
+    console.log('required', formik.values.street !== '' && formik.values.nickname !== '')
+    console.log('isValid', formik.isValid)
+    console.log('isSubmitting', formik.isSubmitting)
+    return (
+      (formik.values.street !== '' && formik.values.nickname !== '') ||
+      formik.isValid ||
+      formik.isSubmitting
+    )
+  }, [formik])
+
   const address = useMemo(() => {
     if (!formik.values.street) return 'Complete as informações de endereço'
 
@@ -131,6 +171,25 @@ const CreateTargetPropertyForm = ({ onSuccess, onFail, huntId }: CreateTargetPro
     const baseAddress = `${formik.values.street ?? '?'}${formik.values.lotNumber && `, ${formik.values.lotNumber}`}${complementAddress}`
     const locationAddress = ` - ${formik.values.city ?? '?'},  ${formik.values.uf ?? '?'}`
     return `${baseAddress}${locationAddress}`
+  }, [formik])
+
+  const pricing = useMemo(() => {
+    if (!formik.values.price || !hunt) return 'Insira os valores para este imóvel'
+
+    const rent = `Aluguel: ${formik.values.price} | Total: ${formik.values.price + formik.values.condoPricing + formik.values.iptu}`
+    const sell = `Venda: ${formik.values.price} | Total: ${formik.values.price + formik.values.condoPricing + formik.values.iptu}`
+
+    if (hunt.type === 'buy') {
+      return sell
+    } else {
+      return rent
+    }
+  }, [formik])
+
+  useEffect(() => {
+    console.log('isValid', formik.isValid)
+    console.log('errors')
+    console.log(formik.errors)
   }, [formik])
 
   return (
@@ -148,7 +207,8 @@ const CreateTargetPropertyForm = ({ onSuccess, onFail, huntId }: CreateTargetPro
                 name="adURL"
                 themeSize={formThemeSize}
                 theme={themePallete}
-                placeholder={`Cole aqui o link do anúncio`}
+                error={formik.errors.adURL}
+                placeholder={`http://www...`}
                 value={formik.values.adURL}
                 onChange={formik.handleChange}
               />
@@ -159,7 +219,7 @@ const CreateTargetPropertyForm = ({ onSuccess, onFail, huntId }: CreateTargetPro
                 className={cx(
                   'bg-brand-primary-400 hover:bg-brand-primary-800 text-brand-primary-900 hover:text-white min-w-20 disabled:bg-slate-300 disabled:text-slate-500 translate-y-2'
                 )}
-                disabled={formik.values.adURL === ''}
+                disabled={formik.values.adURL === '' || !!formik.errors.adURL}
               />
             </span>
           </div>
@@ -187,15 +247,13 @@ const CreateTargetPropertyForm = ({ onSuccess, onFail, huntId }: CreateTargetPro
               <div className="w-full grid md:grid-cols-12 gap-x-4 gap-y-5 mt-2">
                 <FormSectionLabel>Endereço principal</FormSectionLabel>
                 <span className="col-span-4">
-                  <Input
-                    label="CEP"
-                    name="postalCode"
-                    themeSize={formThemeSize}
+                  <CEPField
+                    size={formThemeSize}
                     theme={themePallete}
-                    placeholder="00000-000"
                     value={formik.values.postalCode}
-                    onChange={formik.handleChange}
+                    onChange={(value: string) => formik.setFieldValue('postalCode', value)}
                     onBlur={completeFieldsByCEP}
+                    error={formik.errors.postalCode}
                   />
                 </span>
                 <span className="col-span-6">
@@ -206,6 +264,7 @@ const CreateTargetPropertyForm = ({ onSuccess, onFail, huntId }: CreateTargetPro
                     theme={themePallete}
                     value={formik.values.street}
                     onChange={formik.handleChange}
+                    error={formik.errors.street}
                   />
                 </span>
                 <span className="col-span-2">
@@ -237,16 +296,18 @@ const CreateTargetPropertyForm = ({ onSuccess, onFail, huntId }: CreateTargetPro
                     theme={themePallete}
                     value={formik.values.city}
                     onChange={formik.handleChange}
+                    error={formik.errors.city}
                   />
                 </span>
                 <span className="col-span-3">
                   <Input
-                    label="Estado"
+                    label="UF"
                     name="uf"
                     themeSize={formThemeSize}
                     theme={themePallete}
                     value={formik.values.uf}
                     onChange={formik.handleChange}
+                    error={formik.errors.uf}
                   />
                 </span>
                 <span className="col-span-3">
@@ -257,6 +318,7 @@ const CreateTargetPropertyForm = ({ onSuccess, onFail, huntId }: CreateTargetPro
                     theme={themePallete}
                     value={formik.values.country}
                     onChange={formik.handleChange}
+                    error={formik.errors.country}
                   />
                 </span>
               </div>
@@ -333,36 +395,68 @@ const CreateTargetPropertyForm = ({ onSuccess, onFail, huntId }: CreateTargetPro
               </div>
             </CollapsableBox>
           </div>
+          <div className="w-full">
+            <CollapsableBox
+              label="Custos"
+              resume={pricing}
+              open={priceBoxOpen}
+              toggleBox={() => setPriceBoxOpen(!priceBoxOpen)}
+            >
+              <div className="w-full grid md:grid-cols-12 gap-x-4 gap-y-5 mt-2">
+                <FormSectionLabel>Custos Mensais</FormSectionLabel>
+                <span className="col-span-3 flex flex-row items-end gap-4">
+                  <MoneyField
+                    label="Preço de Aluguel"
+                    name="rentPrice"
+                    size={formThemeSize}
+                    theme={themePallete}
+                    placeholder={`Aluguel`}
+                    value={formik.values.rentPrice}
+                    onChange={(value: number) => formik.setFieldValue('rentPrice', value)}
+                    currencySymbol="R$"
+                  />
+                </span>
+                <span className="col-span-3 flex flex-row items-end gap-4">
+                  <MoneyField
+                    label="Preço de Venda"
+                    name="sellPrice"
+                    size={formThemeSize}
+                    theme={themePallete}
+                    placeholder={`Preço de venda`}
+                    value={formik.values.sellPrice}
+                    onChange={(value: number) => formik.setFieldValue('sellPrice', value)}
+                    currencySymbol="R$"
+                  />
+                </span>
+                <span className="col-span-3 flex flex-row items-end gap-4">
+                  <MoneyField
+                    label="Condomínio"
+                    name="condoPricing"
+                    size={formThemeSize}
+                    theme={themePallete}
+                    placeholder={`Valor do condomínio`}
+                    value={formik.values.condoPricing}
+                    onChange={(value: number) => formik.setFieldValue('condoPricing', value)}
+                    currencySymbol="R$"
+                  />
+                </span>
+                <span className="col-span-3 flex flex-row items-end gap-4">
+                  <MoneyField
+                    label="IPTU"
+                    name="iptu"
+                    size={formThemeSize}
+                    theme={themePallete}
+                    placeholder={`Valor do IPTU por mês`}
+                    value={formik.values.iptu}
+                    onChange={(value: number) => formik.setFieldValue('iptu', value)}
+                    currencySymbol="R$"
+                  />
+                </span>
+              </div>
+            </CollapsableBox>
+          </div>
         </section>
-        <div className="grid md:grid-cols-12 gap-x-4 gap-y-5">
-          <span className="col-span-4 flex flex-row items-end gap-4">
-            <Input
-              label="Valor"
-              name="price"
-              type="number"
-              themeSize={formThemeSize}
-              theme={themePallete}
-              placeholder={`Apelido do imóvel`}
-              value={formik.values.price}
-              onChange={formik.handleChange}
-              fieldSymbol="R$"
-            />
-          </span>
-          <span className="col-span-4 flex flex-row items-end gap-4">
-            <Input
-              label="IPTU"
-              name="iptu"
-              type="number"
-              themeSize={formThemeSize}
-              theme={themePallete}
-              placeholder={`Apelido do imóvel`}
-              value={formik.values.iptu}
-              onChange={formik.handleChange}
-              fieldSymbol="R$"
-            />
-          </span>
-        </div>
-        <SubmitButton isDisabled={!formik.isValid || formik.isSubmitting} label="Criar" />
+        <SubmitButton isDisabled={!enableButton} label="Criar" />
       </form>
     </div>
   )
