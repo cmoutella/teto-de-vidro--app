@@ -9,18 +9,18 @@ type EditHuntRequest = (
 ) => Promise<InterfaceHunt | undefined>
 
 export const editHunt: EditHuntRequest = async (id, bodyData) => {
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL
+  const baseUrl = 'http://localhost:3000'
 
   if (!baseUrl) return undefined
 
   try {
-    const res = await fetch(`${baseUrl}/hunt/${id}`, {
+    const res = await fetch(`${baseUrl}/api/hunt/update`, {
       method: 'PUT',
       mode: 'cors',
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify(bodyData)
+      body: JSON.stringify({ id, data: bodyData })
     }).then((res) => res.json())
 
     if (res.error) {
@@ -31,7 +31,6 @@ export const editHunt: EditHuntRequest = async (id, bodyData) => {
 
     return data
   } catch (_err) {
-    // TODO: toast
     return undefined
   }
 }

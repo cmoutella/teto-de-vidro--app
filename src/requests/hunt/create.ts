@@ -6,12 +6,12 @@ export type CreateHuntRequestProps = Omit<InterfaceHunt, 'id' | 'targets' | 'isA
 type CreateHuntRequest = (_bodyData: CreateHuntRequestProps) => Promise<InterfaceHunt | undefined>
 
 export const createHunt: CreateHuntRequest = async (bodyData) => {
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL
+  const baseUrl = 'http://localhost:3000'
 
   if (!baseUrl) return undefined
 
   try {
-    const res = await fetch(`${baseUrl}/hunt`, {
+    const res = await fetch(`${baseUrl}/api/hunt/create`, {
       method: 'POST',
       mode: 'cors',
       headers: {
@@ -28,7 +28,6 @@ export const createHunt: CreateHuntRequest = async (bodyData) => {
 
     return data
   } catch (_err) {
-    // TODO: toast
     return undefined
   }
 }

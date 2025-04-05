@@ -1,15 +1,23 @@
-export type FormSizes = 'md' | 'lg'
+export type FormSizes = 'sm' | 'md' | 'lg'
 export type FormTheme = 'light' | 'dark' | 'nude'
 export type InputFieldParts = 'wrapper' | 'input' | 'label' | 'helpText'
 
 export const iSizes: { [_key in FormSizes]: string } = {
+  sm: 'p-0',
   md: 'px-2 rounded-lg h-10',
   lg: 'px-2 rounded-lg h-12'
 }
 
 export const symbolPadding: { [_key in FormSizes]: string } = {
+  sm: 'p-0.5',
   md: 'px-2 py-2',
   lg: 'px-2 py-4'
+}
+
+export const afterSymbolPosition: { [_key in FormSizes]: string } = {
+  sm: 'right-0.5 -translate-y-[2px]',
+  md: 'right-2 -translate-y-[3px]',
+  lg: 'right-2 -translate-y-[3px]'
 }
 
 export const formTheme: {
@@ -28,8 +36,8 @@ export const formTheme: {
     helpText: 'text-xs text-white'
   },
   nude: {
-    wrapper: 'border-none bg-white bg-opacity-80',
-    input: 'text-brand-gray-700 text-sm',
+    wrapper: 'border-none',
+    input: 'text-sm',
     label: 'text-sm font-bold text-brand-gray-700 placeholder:text-brand-gray-400',
     helpText: 'text-xs text-brand-gray-700'
   }

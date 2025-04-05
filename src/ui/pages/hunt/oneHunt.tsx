@@ -1,41 +1,66 @@
 'use client'
 
-import { useState } from 'react'
+import { toast } from 'react-hot-toast'
 
 import Button from '@ui/base/Button'
 import TargetPropertyList from '@ui/TargetProperty/TargetPropertyList'
 
 import { HuntProvider, useHuntContext } from '@/providers/HuntProvider'
+import { useUIContext } from '@/providers/UIProvider'
 import type { InterfaceHunt } from '@/types/app'
-import type { TargetPropertyInterface } from '@/types/targetProperty'
-
-import CreateTargetPropertyModal from './components/CreateTargetPropertyModal'
-import { EditHuntModal } from './components/EditHuntModal'
-import { EditTargetPropertyModal } from './components/EditTargetPropertyModal'
+import EditHuntForm from '@/ui/forms/Hunt/EditHunt'
+import CreateTargetPropertyForm from '@/ui/forms/TargetProperty/CreateTargetProperty'
 
 interface HuntViewProps {
   hunt: InterfaceHunt
 }
 
 const HuntView = () => {
-  const { hunt, properties, page, totalPages } = useHuntContext()
+  const { hunt, properties, page, totalPages, update } = useHuntContext()
 
-  // Modal
-  const [isTargetPropertyCreateModalOpen, setIsTargetPropertyCreateModalOpen] =
-    useState<boolean>(false)
-  const [isEditHuntModalOpen, setIsEditHuntModalOpen] = useState<boolean>(false)
-  const [isEditTargetPropertyModalOpen, setIsEditTargetPropertyModalOpen] = useState<boolean>(false)
-  const [editTargetProperty, setEditTargetProperty] = useState<TargetPropertyInterface | undefined>(
-    undefined
-  )
+  const { modal } = useUIContext()
 
-  function openEditTargetModal(target: TargetPropertyInterface) {
-    setIsEditTargetPropertyModalOpen(true)
-    setEditTargetProperty(target)
+  function handleCreateTargetProperty() {
+    function handleSuccess() {
+      update()
+      modal.close()
+      toast.success('Imóvel criado com sucesso!')
+    }
+
+    function handleFail() {
+      modal.close()
+      toast.error('Não foi possível criar o imóvel')
+    }
+
+    modal.open(
+      'large',
+      <CreateTargetPropertyForm
+        onSuccess={handleSuccess}
+        onFail={handleFail}
+        huntId={hunt?.id as never}
+      />
+    )
   }
-  function closeEditTargetModal() {
-    setIsEditTargetPropertyModalOpen(false)
-    setEditTargetProperty(undefined)
+
+  function handleEditHunt() {
+    function handleFail() {
+      modal.close()
+      toast.error('Não foi possível editar a hunt')
+    }
+
+    function handleSuccess(updatedHunt: InterfaceHunt) {
+      update(updatedHunt)
+      modal.close()
+    }
+
+    modal.open(
+      'large',
+      <EditHuntForm
+        currentData={hunt as InterfaceHunt}
+        onSuccess={handleSuccess}
+        onFail={handleFail}
+      />
+    )
   }
 
   return (
@@ -62,48 +87,20 @@ const HuntView = () => {
                     'border border-brand-primary-500 hover:bg-brand-primary-500 text-brand-primary-500 hover:text-white'
                   }
                   size="large"
-                  onClick={() => {
-                    setIsEditHuntModalOpen(true)
-                  }}
+                  onClick={handleEditHunt}
                 />
                 <Button
                   label="Adicionar imóvel"
                   className={'bg-brand-primary-500 hover:bg-brand-primary-600 text-white'}
                   size="large"
-                  onClick={() => {
-                    setIsTargetPropertyCreateModalOpen(true)
-                  }}
+                  onClick={handleCreateTargetProperty}
                 />
               </div>
             </div>
           </div>
         </div>
-        <TargetPropertyList
-          list={properties}
-          page={page}
-          totalPages={totalPages}
-          perPage={8}
-          openEditModal={openEditTargetModal}
-        />
+        <TargetPropertyList list={properties} page={page} totalPages={totalPages} perPage={8} />
       </div>
-      <CreateTargetPropertyModal
-        huntId={(hunt as InterfaceHunt).id}
-        isOpen={isTargetPropertyCreateModalOpen}
-        setClose={() => {
-          setIsTargetPropertyCreateModalOpen(false)
-        }}
-      />
-      <EditHuntModal
-        isOpen={isEditHuntModalOpen}
-        setClose={() => {
-          setIsEditHuntModalOpen(false)
-        }}
-      />
-      <EditTargetPropertyModal
-        isOpen={isEditTargetPropertyModalOpen}
-        setClose={closeEditTargetModal}
-        target={editTargetProperty}
-      />
     </div>
   )
 }

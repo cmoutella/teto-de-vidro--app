@@ -14,7 +14,7 @@ module.exports = {
     'merge'
   ],
   questions: ['type', 'scope', 'subject'],
-  scopes: ['component', 'ui', 'template', 'page', 'service', 'config', ],
+  scopes: ['component', 'ui', 'template', 'page', 'providers',  'service', 'request', 'config', 'app' ],
   types: {
     wip: {
       // description: 'Work in progress.',

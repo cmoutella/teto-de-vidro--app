@@ -8,17 +8,16 @@ type GetAllHuntsByUserRequest = (
 ) => Promise<InterfaceHunt[] | undefined>
 
 export const getAllHuntsByUser: GetAllHuntsByUserRequest = async (userId, page, perPage) => {
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL
-
-  if (!baseUrl) return undefined
+  const baseUrl = 'http://localhost:3000'
 
   try {
-    const res = await fetch(`${baseUrl}/hunt/search/${userId}?page=${page}&limit=${perPage}`, {
-      method: 'GET',
+    const res = await fetch(`${baseUrl}/api/hunt/get/by-user`, {
+      method: 'POST',
       mode: 'cors',
       headers: {
         'Content-Type': 'application/json'
-      }
+      },
+      body: JSON.stringify({ userId, page, perPage })
     }).then((res) => res.json())
 
     if (res.error) {
@@ -29,7 +28,6 @@ export const getAllHuntsByUser: GetAllHuntsByUserRequest = async (userId, page, 
 
     return data
   } catch (_err) {
-    // TODO: toast
     return undefined
   }
 }

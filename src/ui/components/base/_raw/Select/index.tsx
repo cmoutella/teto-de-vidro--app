@@ -6,7 +6,13 @@ import cx from 'classnames'
 
 import Icon from '../../Icon'
 import type { FormSizes, FormTheme } from '../../shared/formTheme'
-import { baseInputStyle, formTheme, iSizes, symbolPadding } from '../../shared/formTheme'
+import {
+  afterSymbolPosition,
+  baseInputStyle,
+  formTheme,
+  iSizes,
+  symbolPadding
+} from '../../shared/formTheme'
 
 export interface Option {
   label: string
@@ -26,6 +32,7 @@ const SelectRaw = ({
   selected,
   theme = 'light',
   themeSize = 'md',
+  className,
   ...otherProps
 }: DropdownSelectProps) => {
   return (
@@ -34,13 +41,14 @@ const SelectRaw = ({
         {({ focus, hover }) => (
           <select
             className={cx(
-              'border px-2.5 bg-white appearance-none',
+              'border px-2.5 appearance-none',
               formTheme[theme].wrapper,
               formTheme[theme].input,
               baseInputStyle,
               iSizes[themeSize],
               focus && 'bg-brand-primary-100',
-              hover && 'shadow'
+              hover && 'shadow',
+              className
             )}
           >
             {options.map((opt) => {
@@ -55,11 +63,12 @@ const SelectRaw = ({
       </SelectHeadless>
       <span
         className={cx(
-          'absolute right-2 top-0 -translate-y-[3px] font-sm',
-          symbolPadding[themeSize]
+          'absolute top-0 font-sm',
+          symbolPadding[themeSize],
+          afterSymbolPosition[themeSize]
         )}
       >
-        <Icon icon="chevron-down" mode="mini" />
+        <Icon icon="chevron-down" mode="mini" className={cx(className, 'bg-transparent')} />
       </span>
     </div>
   )

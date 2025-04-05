@@ -4,17 +4,18 @@ import type { InterfaceHunt } from '@/types/app'
 type GetHuntByIdRequest = (_huntId: string) => Promise<InterfaceHunt | undefined>
 
 export const getHuntById: GetHuntByIdRequest = async (huntId) => {
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL
+  const baseUrl = 'http://localhost:3000'
 
   if (!baseUrl) return undefined
 
   try {
-    const res = await fetch(`${baseUrl}/hunt/${huntId}`, {
-      method: 'GET',
+    const res = await fetch(`${baseUrl}/api/hunt/get`, {
+      method: 'POST',
       mode: 'cors',
       headers: {
         'Content-Type': 'application/json'
-      }
+      },
+      body: JSON.stringify({ id: huntId })
     }).then((res) => res.json())
 
     if (res.error) {
@@ -25,7 +26,6 @@ export const getHuntById: GetHuntByIdRequest = async (huntId) => {
 
     return data
   } catch (_err) {
-    // TODO: toast
     return undefined
   }
 }

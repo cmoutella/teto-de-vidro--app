@@ -38,11 +38,7 @@ export async function handleUserResponse(loginAuth?: UserAuth) {
     throw new Error('Não foi possivel confirmar suas credenciais')
   }
 
-  console.log('chegou aqui né?')
-
   await store.setToken(auth)
-
-  console.log('mas e aqui, chegou?')
 
   return auth.user
 }

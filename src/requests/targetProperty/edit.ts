@@ -1,26 +1,24 @@
 import type { SuccessResponse } from '@/types/apiPatterns'
 import type { TargetPropertyInterface } from '@/types/targetProperty'
 
-export type EditHuntRequestProps = Omit<TargetPropertyInterface, 'id' | 'targets'>
+export type EditTargetRequestProps = Partial<Omit<TargetPropertyInterface, 'id' | 'targets'>>
 
-type EditHuntRequest = (
+type EditTargetRequest = (
   _id: string,
-  _bodyData: EditHuntRequestProps
+  _bodyData: EditTargetRequestProps
 ) => Promise<TargetPropertyInterface | undefined>
 
-export const editTargetProperty: EditHuntRequest = async (id, bodyData) => {
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL
-
-  if (!baseUrl) return undefined
+export const editTargetProperty: EditTargetRequest = async (id, bodyData) => {
+  const baseUrl = 'http://localhost:3000'
 
   try {
-    const res = await fetch(`${baseUrl}/target-property/${id}`, {
+    const res = await fetch(`${baseUrl}/api/target-property/update`, {
       method: 'PUT',
       mode: 'cors',
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify(bodyData)
+      body: JSON.stringify({ id, data: bodyData })
     }).then((res) => res.json())
 
     if (res.error) {
@@ -31,7 +29,6 @@ export const editTargetProperty: EditHuntRequest = async (id, bodyData) => {
 
     return data
   } catch (_err) {
-    // TODO: toast
     return undefined
   }
 }

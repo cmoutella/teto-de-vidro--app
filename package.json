@@ -2,6 +2,7 @@
   "name": "teto-de-vidro--app",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -19,9 +20,10 @@
     "date-fns": "^3.6.0",
     "globals": "^16.0.0",
     "next": "14.2.7",
+    "puppeteer": "^24.4.0",
     "react": "^18",
     "react-dom": "^18",
-    "react-toastify": "^10.0.5"
+    "react-hot-toast": "^2.5.2"
   },
   "devDependencies": {
     "@commitlint/cli": "^19.7.1",

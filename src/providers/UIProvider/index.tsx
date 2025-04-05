@@ -1,9 +1,11 @@
 'use client'
+import type { ReactNode } from 'react'
 import { createContext, useContext, useState } from 'react'
-import 'react-toastify/dist/ReactToastify.min.css'
-import { ToastContainer } from 'react-toastify'
+import { Toaster } from 'react-hot-toast'
 
 import { Loading } from '@/ui/components/base/Loading'
+import type { ModalProps, ModalSize } from '@/ui/components/base/Modal'
+import Modal from '@/ui/components/base/Modal'
 
 type InterfaceAction = () => void
 
@@ -13,6 +15,14 @@ interface UIContext {
     off: InterfaceAction
     state: boolean
   }
+  modal: {
+    open: (_s: ModalSize, _c: ReactNode) => void
+    close: () => void
+  }
+}
+
+interface UIModal extends Pick<ModalProps, 'isOpen' | 'size'> {
+  content: ReactNode
 }
 
 const DEFAULT_VALUES = {
@@ -20,7 +30,8 @@ const DEFAULT_VALUES = {
     on: () => {},
     off: () => {},
     state: false
-  }
+  },
+  modal: { open: () => {}, close: () => {} }
 }
 
 const UIContext = createContext<UIContext>(DEFAULT_VALUES)
@@ -37,6 +48,8 @@ export const useUIContext = () => {
 
 export const UIProvider = ({ children }: { children: React.ReactNode }) => {
   const [loadingScreen, setLoadingScreen] = useState<boolean>(DEFAULT_VALUES.loading.state)
+  const [modal, setModal] = useState<UIModal | null>(null)
+
   const showLoadingScreen = () => {
     setLoadingScreen(true)
   }
@@ -44,24 +57,34 @@ export const UIProvider = ({ children }: { children: React.ReactNode }) => {
     setLoadingScreen(false)
   }
 
+  const initModal = (size: ModalSize, content: ReactNode) => {
+    setModal({ content, isOpen: true, size })
+  }
+
+  const endModal = () => {
+    setModal(null)
+  }
+
   const value = {
     loading: {
       on: showLoadingScreen,
       off: hideLoadingScreen,
       state: loadingScreen
+    },
+    modal: {
+      open: initModal,
+      close: endModal
     }
   }
 
   return (
     <UIContext.Provider value={value}>
-      <ToastContainer
-        containerId="notification-column"
-        autoClose={5000}
-        newestOnTop={true}
-        limit={5}
-      />
+      <Toaster position="top-right" toastOptions={{ duration: 5000, removeDelay: 500 }} />
       <Loading />
       {children}
+      <Modal isOpen={!!modal?.isOpen} setClose={endModal} size={modal?.size}>
+        {modal?.content}
+      </Modal>
     </UIContext.Provider>
   )
 }
