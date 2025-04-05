@@ -20,7 +20,7 @@ import SubmitButton from '@/ui/components/base/form/buttons/SubmitButton'
 import { CEPField } from '@/ui/components/base/form/fields/cep/CEPField'
 import { MoneyField } from '@/ui/components/base/form/fields/money/MoneyField'
 import Input from '@/ui/components/base/form/inputs/Input'
-import { formatMoneyValue } from '@/utils/number/formatMoney'
+import { formatMoneyValue } from '@/utils/string/formatMoney'
 
 interface CreateTargetPropertyFormProps {
   onSuccess: (_id: string) => void

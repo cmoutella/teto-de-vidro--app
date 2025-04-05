@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react'
 
-import { formatMoneyValue } from '@/utils/number/formatMoney'
+import { formatMoneyValue } from '@/utils/string/formatMoney'
 
 import type { FormSizes, FormTheme } from '../../../shared/formTheme'
 import Input from '../../inputs/Input'
