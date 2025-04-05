@@ -1,6 +1,6 @@
 'use client'
 import type { ReactNode } from 'react'
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 
 import { useSessionContext } from '@providers/AuthProvider'
 import type { FormSizes, FormTheme } from '@ui/base/shared/formTheme'
@@ -154,9 +154,6 @@ const CreateTargetPropertyForm = ({ onSuccess, onFail, huntId }: CreateTargetPro
   }
 
   const enableButton = useMemo(() => {
-    console.log('required', formik.values.street !== '' && formik.values.nickname !== '')
-    console.log('isValid', formik.isValid)
-    console.log('isSubmitting', formik.isSubmitting)
     return (
       (formik.values.street !== '' && formik.values.nickname !== '') ||
       formik.isValid ||
@@ -174,22 +171,17 @@ const CreateTargetPropertyForm = ({ onSuccess, onFail, huntId }: CreateTargetPro
   }, [formik])
 
   const pricing = useMemo(() => {
-    if (!formik.values.price || !hunt) return 'Insira os valores para este imóvel'
+    if ((!formik.values.rentPrice && !formik.values.sellPrice) || !hunt)
+      return 'Insira os valores para este imóvel'
 
-    const rent = `Aluguel: ${formik.values.price} | Total: ${formik.values.price + formik.values.condoPricing + formik.values.iptu}`
-    const sell = `Venda: ${formik.values.price} | Total: ${formik.values.price + formik.values.condoPricing + formik.values.iptu}`
+    const rent = `Aluguel: ${formik.values.rentPrice} | Total: ${formik.values.rentPrice + formik.values.condoPricing + formik.values.iptu}`
+    const sell = `Venda: ${formik.values.sellPrice} | Total: ${formik.values.sellPrice + formik.values.condoPricing + formik.values.iptu}`
 
     if (hunt.type === 'buy') {
       return sell
     } else {
       return rent
     }
-  }, [formik])
-
-  useEffect(() => {
-    console.log('isValid', formik.isValid)
-    console.log('errors')
-    console.log(formik.errors)
   }, [formik])
 
   return (
