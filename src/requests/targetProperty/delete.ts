@@ -25,7 +25,6 @@ export const deleteTargetProperty: EditHuntRequest = async (id) => {
 
     return res.status === 200
   } catch (_err) {
-    // TODO: toast
     return undefined
   }
 }

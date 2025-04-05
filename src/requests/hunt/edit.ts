@@ -31,7 +31,6 @@ export const editHunt: EditHuntRequest = async (id, bodyData) => {
 
     return data
   } catch (_err) {
-    // TODO: toast
     return undefined
   }
 }

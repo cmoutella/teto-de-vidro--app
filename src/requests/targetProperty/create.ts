@@ -28,7 +28,6 @@ export const createTargetProperty: CreateTargetPropertyRequest = async (bodyData
 
     return data
   } catch (_err) {
-    // TODO: toast
     return undefined
   }
 }

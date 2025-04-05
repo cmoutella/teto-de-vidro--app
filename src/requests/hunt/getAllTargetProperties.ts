@@ -34,7 +34,6 @@ export const getAllTargetPropertiesfromHunt: GetAllTargetPropertiesfromHuntReque
 
     return data
   } catch (_err) {
-    // TODO: toast
     return undefined
   }
 }

@@ -26,7 +26,6 @@ export const getHuntById: GetHuntByIdRequest = async (huntId) => {
 
     return data
   } catch (_err) {
-    // TODO: toast
     return undefined
   }
 }
