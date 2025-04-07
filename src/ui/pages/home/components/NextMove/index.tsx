@@ -1,12 +1,12 @@
 'use client'
 import { useEffect, useState } from 'react'
 
-import { getAllTargetPropertiesfromHunt } from '@requests/hunt/getAllTargetProperties'
 import DashboardCard from '@ui/DashboardCard'
 import cx from 'classnames'
 import { useRouter } from 'next/navigation'
 
-import type { InterfaceHunt } from '@/types/app'
+import { getAllTargetPropertiesfromHunt } from '@/requests/targetProperty/getAllTargetProperties'
+import type { CONTRACT_TYPE, InterfaceHunt } from '@/types/app'
 import type { TargetPropertyInterface } from '@/types/targetProperty'
 import Button from '@/ui/components/base/Button'
 import { Loading } from '@/ui/components/base/Loading'
@@ -20,15 +20,20 @@ interface NextMoveDashboardProps {
 const NextMoveDashboard = ({ hunts }: NextMoveDashboardProps) => {
   const [properties, setProperties] = useState<TargetPropertyInterface[]>([])
   const [loading, setLoading] = useState<boolean>(false)
+  const [currentHunt, setCurrentHunt] = useState<InterfaceHunt | null>(null)
 
   const router = useRouter()
 
   useEffect(() => {
-    if (hunts && hunts.length >= 1) {
+    if (!currentHunt && hunts.length >= 1) {
+      setCurrentHunt(hunts[0])
+    }
+
+    if (currentHunt) {
       fetchPropertiesData()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [currentHunt])
 
   // Não tem hunts
   if (!hunts || hunts.length <= 0) {
@@ -61,12 +66,17 @@ const NextMoveDashboard = ({ hunts }: NextMoveDashboardProps) => {
   }
 
   async function fetchPropertiesData() {
-    if (!hunts || hunts.length <= 0) return
+    if (!currentHunt) return
     setLoading(true)
 
-    const data = await getAllTargetPropertiesfromHunt(hunts[0].id, 1, 6)
+    const data = await getAllTargetPropertiesfromHunt(currentHunt.id, 1, 6)
 
-    setProperties(data as TargetPropertyInterface[])
+    if (!data) {
+      setLoading(false)
+      return
+    }
+
+    setProperties(data.list as TargetPropertyInterface[])
     setLoading(false)
   }
 
@@ -81,7 +91,7 @@ const NextMoveDashboard = ({ hunts }: NextMoveDashboardProps) => {
         {!loading &&
           properties.map((property) => (
             <div key={property.id} className="w-full">
-              <Property target={property} />
+              <Property target={property} huntType={(currentHunt as InterfaceHunt).type} />
             </div>
           ))}
       </div>
@@ -97,26 +107,43 @@ const NextMoveDashboard = ({ hunts }: NextMoveDashboardProps) => {
   )
 }
 
-function Property({ target }: { target: TargetPropertyInterface }) {
+function Property({
+  target,
+  huntType
+}: {
+  target: TargetPropertyInterface
+  huntType: CONTRACT_TYPE
+}) {
   return (
     <div
       className={cx(
-        'w-full grid grid-cols-12',
+        'w-full grid grid-cols-12 gap-4 sm:gap-2',
         'border border-brand-primary-300 bg-brand-primary-100 rounded-lg px-3 py-2.5 text-brand-primary-800'
       )}
     >
-      <span className="col-span-4 flex items-center">
+      <span className="col-span-12 md:col-span-4 flex items-center">
         <h3 className="font-medium leading-none">{target.nickname}</h3>
       </span>
-      <span className="col-span-2 flex items-center">
-        <p className="leading-none text-sm">Total: R$ {target.price}</p>
-      </span>
-      <span className="col-span-4 flex items-center">
-        <p className="leading-none text-sm">
+      {huntType !== 'buy' && (
+        <span className="col-span-12 md:col-span-2 flex items-center">
+          <p className="leading-none text-sm">
+            <b>Total:</b> R$ {target.rentPrice}
+          </p>
+        </span>
+      )}
+      {huntType !== 'rent' && (
+        <span className="col-span-12 md:col-span-2 flex items-center">
+          <p className="leading-none text-sm">
+            <b>Total:</b> R$ {target.rentPrice}
+          </p>
+        </span>
+      )}
+      <span className="col-span-12 md:col-span-4 flex items-center">
+        <p className="leading-none text-xs md:text-sm">
           {target.neighborhood}/{target.city}
         </p>
       </span>
-      <span className="col-span-2 flex items-center justify-end">
+      <span className="col-span-12 flex items-center justify-end">
         <p className="text-xs text-right">
           Última atualização {lastUpdateMessage(target.updatedAt)}
         </p>

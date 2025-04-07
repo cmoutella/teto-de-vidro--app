@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 
-import type { SuccessResponse } from '@/types/apiPatterns'
+import type { PaginatedData, SuccessResponse } from '@/types/apiPatterns'
 import type { InterfaceHunt } from '@/types/app'
 
 export async function POST(req: Request) {
@@ -33,7 +33,7 @@ export async function POST(req: Request) {
       throw Error('Não foi possivel buscar as hunts do usuário')
     }
 
-    const { data } = res as SuccessResponse<InterfaceHunt>
+    const { data } = res as SuccessResponse<PaginatedData<InterfaceHunt>>
 
     return NextResponse.json(
       { message: 'Serviço chamado com sucesso', data: data },

@@ -12,9 +12,9 @@ const PrivateBasePage = ({
   user: Omit<InterfaceUser, 'password'> | null
 }) => {
   return (
-    <div className="w-full min-h-full">
+    <div className="w-full">
       <PrivateNavbar user={user} />
-      <div className="w-full">{children}</div>
+      <div className="w-full overflow-x-hidden">{children}</div>
     </div>
   )
 }

@@ -1,5 +1,5 @@
 'use client'
-import { useMemo, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { toast } from 'react-hot-toast'
 
 import cx from 'classnames'
@@ -85,39 +85,38 @@ export default function TargetPropertyItem({ target, hunt }: TargetPropertyItemP
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [hunt])
 
+  const CollapseIcon = useCallback(() => {
+    const style = cx(
+      'translate-y-0.5 sm:translate-y-1.5 cursor-pointer text-brand-primary-500 opacity-80 hover:opacity-100 hover:font-semibold'
+    )
+
+    return isOpen ? (
+      <Icon icon="minus-circle" mode="solid" className={style} onClick={() => setIsOpen(!isOpen)} />
+    ) : (
+      <Icon icon="plus-circle" mode="solid" className={style} onClick={() => setIsOpen(!isOpen)} />
+    )
+  }, [isOpen])
+
   return (
     <div className={cx('w-full rounded-md relative')}>
       {/* HEADER */}
       <div
         className={cx(
-          'w-full px-4 py-5 bg-brand-primary-200 border border-brand-primary-200 text-brand-primary-900 flex flex-row gap-3',
+          'w-full p-3 pb-4 sm:px-4 sm:py-5 bg-brand-primary-200 border border--brand-primary-200 text-brand-primary-900 flex flex-row gap-3',
           {
             'rounded-md': !isOpen,
             'rounded-t-md': isOpen
           }
         )}
       >
-        <Button
-          label={isOpen ? '-' : '+'}
-          size="xsmall"
-          className={cx(
-            '!h-7 !w-7 !min-w-7 px-4',
-            'flex justify-center items-center font-semibold text-base',
-            {
-              'bg-brand-primary-600 border border-brand-primary-600 text-white hover:bg-brand-primary-700 hover:border-white hover:font-semibold':
-                isOpen,
-              'bg-brand-primary-400 border border-brand-primary-500 text-brand-primary-800 hover:bg-brand-primary-500 hover:border-white hover:text-white hover:font-semibold':
-                !isOpen
-            }
-          )}
-          onClick={() => setIsOpen(!isOpen)}
-        />
+        <CollapseIcon />
         <div className="w-full">
-          <div className="w-full flex flex-row justify-between items-end mb-3">
+          <div className="w-full flex flex-row justify-between items-end mb-4 sm:mb-3">
             <div className="flex items-center flex-row justify-start gap-2">
-              <h3 className="font-semibold text-2xl">{target.nickname}</h3>
+              <h3 className="font-semibold text-lg sm:text-2xl">{target.nickname}</h3>
             </div>
-            <div className="text-xs flex flex-row gap-0.5">
+            {/* TODO: colocar as ações no responsivo */}
+            <div className="text-xs hidden sm:flex flex-row gap-0.5">
               <Button
                 label="Editar"
                 className={cx(
@@ -135,45 +134,43 @@ export default function TargetPropertyItem({ target, hunt }: TargetPropertyItemP
             </div>
           </div>
           <div className="w-full">
-            <div className="grid grid-cols-12 gap-2">
-              {hunt.type === 'rent' ||
-                (hunt.type === 'either' && (
-                  <div className="col-span-1 flex flex-col items-center">
-                    <p className="text-sm font-semibold whitespace-nowrap">ALUGUEL</p>
-                    <p>R$ {target.rentPrice}</p>
-                  </div>
-                ))}
-              {hunt.type === 'buy' ||
-                (hunt.type === 'either' && (
-                  <div className="col-span-1 flex flex-col items-center">
-                    <p className="text-sm font-semibold whitespace-nowrap">VENDA</p>
-                    <p>R$ {target.sellPrice}</p>
-                    {purchaseBudgetDeviant !== 0 && <BudgetDiff diff={purchaseBudgetDeviant} />}
-                  </div>
-                ))}
-              <div className="col-span-1 flex flex-col items-center">
-                <p className="text-sm font-semibold whitespace-nowrap">CONDOMÍNIO</p>
+            <div className="grid grid-cols-12 gap-4 sm:gap-2 sm: gap-x-4">
+              {(hunt.type === 'rent' || hunt.type === 'either') && (
+                <div className="col-span-6 sm:col-span-1 flex flex-col items-start">
+                  <p className="text-xs sm:text-sm font-semibold whitespace-nowrap">ALUGUEL</p>
+                  <p>R$ {target.rentPrice}</p>
+                </div>
+              )}
+              {(hunt.type === 'buy' || hunt.type === 'either') && (
+                <div className="col-span-6 sm:col-span-1 flex flex-col items-start">
+                  <p className="text-xs sm:text-sm font-semibold whitespace-nowrap">VENDA</p>
+                  <p>R$ {target.sellPrice}</p>
+                  {!!purchaseBudgetDeviant && <BudgetDiff diff={purchaseBudgetDeviant} />}
+                </div>
+              )}
+              <div className="col-span-6 sm:col-span-2 flex flex-col items-start">
+                <p className="text-xs sm:text-sm font-semibold whitespace-nowrap">CONDOMÍNIO</p>
                 <p>
                   R$ {!target.condoPricing || target.condoPricing === 0 ? '?' : target.condoPricing}
                 </p>
               </div>
-              <div className="col-span-1 flex flex-col items-center">
-                <p className="text-sm font-semibold whitespace-nowrap">IPTU</p>
+              <div className="col-span-6 sm:col-span-1 flex flex-col items-start">
+                <p className="text-xs sm:text-sm font-semibold whitespace-nowrap">IPTU</p>
                 <p>R$ {target.iptu === 0 ? '?' : target.iptu}</p>
               </div>
-              <div className="col-span-1 flex flex-col items-cente">
-                <p className="text-sm font-semibold whitespace-nowrap">TOTAL</p>
+              <div className="col-span-6 sm:col-span-1 flex flex-col items-start">
+                <p className="text-xs sm:text-sm font-semibold whitespace-nowrap">TOTAL</p>
                 <div className="flex items-center whitespace-nowrap relative">
                   <p className="text-lg whitespace-nowrap font-semibold">R$ {totalPricing}</p>
-                  {purchaseBudgetDeviant !== 0 && <BudgetDiff diff={rentBudgetDeviant} />}
+                  {!!rentBudgetDeviant && <BudgetDiff diff={rentBudgetDeviant} />}
                 </div>
               </div>
-              <div className="col-span-1 flex flex-col items-center">
-                <p className="text-sm font-semibold whitespace-nowrap">TAMANHO</p>
+              <div className="col-span-6 sm:col-span-1 flex-col items-start hidden md:flex">
+                <p className="text-xs sm:text-sm font-semibold whitespace-nowrap">TAMANHO</p>
                 <p>{target.size === 0 ? '?' : `${target.size}m2`}</p>
               </div>
-              <div className="col-span-2 flex flex-col items-cente">
-                <p className="text-sm font-semibold whitespace-nowrap mb-1">ETAPA</p>
+              <div className="col-span-6 sm:col-span-2 flex flex-col items-start">
+                <p className="text-xs sm:text-sm font-semibold whitespace-nowrap mb-1">ETAPA</p>
                 <div>
                   <StagePill stage={target.huntingStage} targetId={target.id} />
                 </div>
@@ -186,47 +183,53 @@ export default function TargetPropertyItem({ target, hunt }: TargetPropertyItemP
       {isOpen && (
         <div
           className={
-            'grid grid-cols-12 rounded-b-md border border-b-brand-primary-400 border-x-brand-primary-400 text-brand-primary-800 px-4 pt-3 pb-6'
+            'sm:grid sm:grid-cols-12 rounded-b-md border-b border-x border-b-brand-primary-400 border-x-brand-primary-400 text-brand-primary-800 p-3 sm:px-4 sm:pt-3 pb-6'
           }
         >
-          <div className="col-span-5 flex flex-col gap-5">
+          <div className="sm:col-span-5 flex flex-col gap-5">
             <div className="w-full">
               <div className="w-full mb-4 p-0.5 border-b-[2px] border-b-brand-primary-700">
-                <p className="text-xl font-medium">Imóvel</p>
+                <p className="sm:text-xl font-medium">Imóvel</p>
               </div>
-              <div className="w-full flex flex-wrap gap-x-6 gap-y-2">
+              <div className="w-full flex flex-wrap gap-x-6 gap-y-4 sm:gap-y-2">
                 <div className="col-span-1 flex flex-col items-start">
-                  <p className="text-sm font-semibold whitespace-nowrap text-brand-primary-900 mb-2">
+                  <p className="text-xs sm:text-sm font-semibold whitespace-nowrap text-brand-primary-900 mb-1 sm:mb-2">
                     ENDEREÇO
                   </p>
-                  <p>
+                  <p className="text-sm">
                     {target.street}
                     {target.lotNumber && `, ${target.lotNumber}`}
                   </p>
                 </div>
                 <div className="col-span-1 flex flex-col items-start">
-                  <p className="text-sm font-semibold whitespace-nowrap text-brand-primary-900 mb-2">
+                  <p className="text-xs sm:text-sm font-semibold whitespace-nowrap text-brand-primary-900 mb-1 sm:mb-2">
                     COMPLEMENTO
                   </p>
-                  <p>{target.number ?? '?'}</p>
+                  <p className="text-sm">{target.number ?? '?'}</p>
                 </div>
                 <div className="col-span-1 flex flex-col items-start">
-                  <p className="text-sm font-semibold whitespace-nowrap text-brand-primary-900 mb-2">
+                  <p className="text-xs sm:text-sm font-semibold whitespace-nowrap text-brand-primary-900 mb-1 sm:mb-2">
                     BAIRRO
                   </p>
-                  <p>{target.neighborhood ?? '?'}</p>
+                  <p className="text-sm">{target.neighborhood ?? '?'}</p>
                 </div>
                 <div className="col-span-1 flex flex-col items-start">
-                  <p className="text-sm font-semibold whitespace-nowrap text-brand-primary-900 mb-2">
+                  <p className="text-xs sm:text-sm font-semibold whitespace-nowrap text-brand-primary-900 mb-1 sm:mb-2">
                     CIDADE
                   </p>
-                  <p>{target.city ?? '?'}</p>
+                  <p className="text-sm">{target.city ?? '?'}</p>
+                </div>
+                <div className="col-span-1 flex flex-col items-start">
+                  <p className="text-xs sm:text-sm font-semibold whitespace-nowrap text-brand-primary-900 mb-1 sm:mb-2">
+                    UF
+                  </p>
+                  <p className="text-sm">{target.uf ?? '?'}</p>
                 </div>
               </div>
             </div>
             <div className="w-full">
               <div className="w-full mb-4 p-0.5 border-b-[2px] border-b-brand-primary-700">
-                <p className="text-xl font-medium">Contato</p>
+                <p className="sm:text-xl font-medium">Contato</p>
               </div>
               {!target.realtor && (
                 <div className="w-full">
@@ -239,26 +242,26 @@ export default function TargetPropertyItem({ target, hunt }: TargetPropertyItemP
               {!!target.realtor && (
                 <div className="w-full flex flex-wrap gap-x-6 gap-y-2">
                   <div className="col-span-1 flex flex-col items-start">
-                    <p className="text-sm font-medium whitespace-nowrap text-brand-primary-900 mb-2">
+                    <p className="text-xs sm:text-sm font-medium whitespace-nowrap text-brand-primary-900 mb-1 sm:mb-2">
                       IMOBILIÁRIA
                     </p>
-                    <p>{target.realtor}</p>
+                    <p className="text-sm">{target.realtor}</p>
                   </div>
                   <div className="col-span-1 flex flex-col items-start">
-                    <p className="text-sm font-medium whitespace-nowrap text-brand-primary-900 mb-2">
+                    <p className="text-xs sm:text-sm font-medium whitespace-nowrap text-brand-primary-900 mb-1 sm:mb-2">
                       TELEFONE
                     </p>
-                    <p>{target.realtorContact ?? '?'}</p>
+                    <p className="text-sm">{target.realtorContact ?? '?'}</p>
                   </div>
                 </div>
               )}
             </div>
           </div>
-          <div className="col-span-7"></div>
+          <div className="sm:col-span-7"></div>
         </div>
       )}
       {isOpen && (
-        <span className="text-sm absolute right-4 bottom-2 text-brand-primary-800">
+        <span className="text-xs sm:text-sm absolute right-4 bottom-2 text-brand-primary-800">
           Última atualização {lastUpdateMessage(target.updatedAt)}
         </span>
       )}

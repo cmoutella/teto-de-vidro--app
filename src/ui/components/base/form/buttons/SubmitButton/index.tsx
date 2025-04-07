@@ -10,7 +10,7 @@ function SubmitButton({ isDisabled, label }: SubmitButtonProps) {
   return (
     <Button
       label={label}
-      className={cx('min-w-36 w-1/6  text-white', {
+      className={cx('sm:min-w-36 sm:w-1/6  text-white', {
         'hover:bg-brand-primary-800 bg-brand-primary-700': !isDisabled,
         'bg-brand-gray-500 disabled:bg-brand-gray-500': isDisabled
       })}

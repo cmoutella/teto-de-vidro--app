@@ -2,9 +2,9 @@
 import { createContext, useContext, useEffect, useState } from 'react'
 import { toast } from 'react-hot-toast'
 
-import { getAllTargetPropertiesfromHunt } from '@/requests/hunt/getAllTargetProperties'
 import { getHuntById } from '@/requests/hunt/getById'
 import { deleteTargetProperty } from '@/requests/targetProperty/delete'
+import { getAllTargetPropertiesfromHunt } from '@/requests/targetProperty/getAllTargetProperties'
 import type { InterfaceHunt } from '@/types/app'
 import type { TargetPropertyInterface } from '@/types/targetProperty'
 import { DEFAULT_HUNT_LIST_PER_PAGE } from '@/ui/pages/hunt/consts/perPage'
@@ -72,13 +72,11 @@ export const HuntProvider = ({
       const updatedHunt = await getHuntById(hunt.id)
 
       if (updatedHunt) {
-        toast.success('Hunt atualizada com sucesso!')
         setHunt(updatedHunt)
       } else {
         toast.error('Não foi possível atualizar a hunt')
       }
     } else {
-      toast.success('Hunt atualizada com sucesso!')
       setHunt(updated)
     }
   }
@@ -89,11 +87,12 @@ export const HuntProvider = ({
     if (!data) {
       toast.error('Não foi possível trazer o alvos da busca')
     }
-    if (!data || data?.length <= 0) {
+    if (!data || data?.list.length <= 0) {
       setTotalPages(0)
+    } else {
+      setProperties(data.list as TargetPropertyInterface[])
+      setTotalPages(data.totalPages)
     }
-
-    setProperties(data as TargetPropertyInterface[])
   }
 
   async function removeTargetProperty(id: string) {

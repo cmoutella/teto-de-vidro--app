@@ -1,13 +1,13 @@
-import type { SuccessResponse } from '@/types/apiPatterns'
+import type { PaginatedData, SuccessResponse } from '@/types/apiPatterns'
 import type { TargetPropertyInterface } from '@/types/targetProperty'
 
-type GetAllTargetPropertiesfromHuntRequest = (
+type GetAllTargetPropertiesFromHuntRequest = (
   _huntId: string,
   _page: number,
   _perPage: number
-) => Promise<TargetPropertyInterface[] | undefined>
+) => Promise<PaginatedData<TargetPropertyInterface> | undefined>
 
-export const getAllTargetPropertiesfromHunt: GetAllTargetPropertiesfromHuntRequest = async (
+export const getAllTargetPropertiesfromHunt: GetAllTargetPropertiesFromHuntRequest = async (
   huntId,
   page,
   perPage
@@ -30,7 +30,7 @@ export const getAllTargetPropertiesfromHunt: GetAllTargetPropertiesfromHuntReque
       throw Error('Não foi possível encontrar a informação solicitada')
     }
 
-    const { data } = res as SuccessResponse<TargetPropertyInterface[]>
+    const { data } = res as SuccessResponse<PaginatedData<TargetPropertyInterface>>
 
     return data
   } catch (_err) {

@@ -83,9 +83,12 @@ const EditHuntForm = ({ onSuccess, onFail, currentData }: EditHuntFormProps) => 
   }
 
   return (
-    <div className="w-full flex justify-center flex-col items-center px-14 py-10 gap-3">
-      <form onSubmit={formik.handleSubmit} className="w-full grid md:grid-cols-12 gap-x-4 gap-y-5">
-        <span className="col-span-8">
+    <div className="w-full flex justify-center flex-col items-center p-4 sm:px-14 sm:py-10 gap-3">
+      <form
+        onSubmit={formik.handleSubmit}
+        className="w-full flex flex-col sm:grid md:grid-cols-12 gap-x-4 gap-y-4 sm:gap-y-5"
+      >
+        <span className="sm:col-span-8">
           <Input
             label="Dê um título para esta mudança"
             description="Um nome para te ajudar a localizá-la depois"
@@ -97,7 +100,7 @@ const EditHuntForm = ({ onSuccess, onFail, currentData }: EditHuntFormProps) => 
             onChange={formik.handleChange}
           />
         </span>
-        <span className="col-span-4">
+        <span className="sm:col-span-4">
           <DropdownSelect
             label="Tipo de busca"
             description="Apenas para aluguel? Compra?"
@@ -113,7 +116,7 @@ const EditHuntForm = ({ onSuccess, onFail, currentData }: EditHuntFormProps) => 
             onChange={formik.handleChange}
           />
         </span>
-        <span className="col-span-4">
+        <span className="sm:col-span-4">
           <InputPartialDate
             date={formik.values.movingExpected}
             label="Data da mudança?"
@@ -122,7 +125,7 @@ const EditHuntForm = ({ onSuccess, onFail, currentData }: EditHuntFormProps) => 
             onChange={(d: string) => formik.setFieldValue('movingExpected', d)}
           />
         </span>
-        <span className="col-span-4">
+        <span className="sm:col-span-4">
           <Input
             label="Quantos moradores?"
             name="livingPeople"
@@ -133,7 +136,7 @@ const EditHuntForm = ({ onSuccess, onFail, currentData }: EditHuntFormProps) => 
             onChange={formik.handleChange}
           />
         </span>
-        <span className="col-span-4">
+        <span className="sm:col-span-4">
           <Input
             label="Quantos pets?"
             name="livingPets"
@@ -145,10 +148,10 @@ const EditHuntForm = ({ onSuccess, onFail, currentData }: EditHuntFormProps) => 
           />
         </span>
         <div className="row col-span-12">
-          <div className="grid grid-cols-12 gap-x-4  gap-y-5">
-            <span className="col-span-4"></span>
-            <span className="col-span-4"></span>
-            <div className="col-span-4 col-start-9 col-end-13">
+          <div className="sm:grid sm:grid-cols-12 gap-x-4  gap-y-5">
+            <span className="sm:col-span-4"></span>
+            <span className="sm:col-span-4"></span>
+            <div className="sm:col-span-4 cm:col-start-9 sm:col-end-13">
               <div className="flex flex-row gap-x-4 justify-end">
                 <div className="grid grid-cols-2 w-full gap-x-4">
                   <span className="col-span-1">
@@ -181,7 +184,7 @@ const EditHuntForm = ({ onSuccess, onFail, currentData }: EditHuntFormProps) => 
           </div>
         </div>
 
-        <div className="flex flex-col gap-2 col-span-12 justify-center items-center pt-5">
+        <div className="flex flex-col gap-2 col-span-12 justify-center items-center pt-3 sm:pt-5">
           <SubmitButton
             isDisabled={!formik.isValid || formik.isSubmitting}
             label="Salvar alterações"

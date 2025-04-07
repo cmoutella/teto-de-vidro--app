@@ -182,7 +182,7 @@ const CreateTargetPropertyForm = ({ onSuccess, onFail, huntId }: CreateTargetPro
     } else {
       return rent
     }
-  }, [formik])
+  }, [formik, hunt])
 
   return (
     <div className="w-full">
@@ -236,9 +236,9 @@ const CreateTargetPropertyForm = ({ onSuccess, onFail, huntId }: CreateTargetPro
               open={addressBoxOpen}
               toggleBox={() => setAddressBoxOpen(!addressBoxOpen)}
             >
-              <div className="w-full grid md:grid-cols-12 gap-x-4 gap-y-5 mt-2">
+              <div className="w-full grid grid-cols-12 gap-x-4 gap-y-5 mt-2">
                 <FormSectionLabel>Endereço principal</FormSectionLabel>
-                <span className="col-span-4">
+                <span className="col-span-12 md:col-span-4">
                   <CEPField
                     size={formThemeSize}
                     theme={themePallete}
@@ -248,7 +248,7 @@ const CreateTargetPropertyForm = ({ onSuccess, onFail, huntId }: CreateTargetPro
                     error={formik.errors.postalCode}
                   />
                 </span>
-                <span className="col-span-6">
+                <span className="col-span-12 md:col-span-6">
                   <Input
                     label="Rua / Estrada / Logradouro"
                     name="street"
@@ -259,7 +259,7 @@ const CreateTargetPropertyForm = ({ onSuccess, onFail, huntId }: CreateTargetPro
                     error={formik.errors.street}
                   />
                 </span>
-                <span className="col-span-2">
+                <span className="col-span-4 md:col-span-2">
                   <Input
                     label="Número"
                     name="lotNumber"
@@ -270,7 +270,7 @@ const CreateTargetPropertyForm = ({ onSuccess, onFail, huntId }: CreateTargetPro
                     onChange={formik.handleChange}
                   />
                 </span>
-                <span className="col-span-3">
+                <span className="col-span-8 md:col-span-3">
                   <Input
                     label="Bairro"
                     name="neighborhood"
@@ -280,7 +280,7 @@ const CreateTargetPropertyForm = ({ onSuccess, onFail, huntId }: CreateTargetPro
                     onChange={formik.handleChange}
                   />
                 </span>
-                <span className="col-span-3">
+                <span className="col-span-12 md:col-span-3">
                   <Input
                     label="Cidade"
                     name="city"
@@ -291,7 +291,7 @@ const CreateTargetPropertyForm = ({ onSuccess, onFail, huntId }: CreateTargetPro
                     error={formik.errors.city}
                   />
                 </span>
-                <span className="col-span-3">
+                <span className="col-span-6 md:col-span-3">
                   <Input
                     label="UF"
                     name="uf"
@@ -302,7 +302,7 @@ const CreateTargetPropertyForm = ({ onSuccess, onFail, huntId }: CreateTargetPro
                     error={formik.errors.uf}
                   />
                 </span>
-                <span className="col-span-3">
+                <span className="col-span-6 md:col-span-3">
                   <Input
                     label="País"
                     name="country"
@@ -314,9 +314,9 @@ const CreateTargetPropertyForm = ({ onSuccess, onFail, huntId }: CreateTargetPro
                   />
                 </span>
               </div>
-              <div className="w-full grid md:grid-cols-12 gap-x-4 gap-y-5 mt-6">
+              <div className="w-full grid grid-cols-12 gap-x-4 gap-y-5 mt-6">
                 <FormSectionLabel>Imóvel</FormSectionLabel>
-                <span className="col-span-4">
+                <span className="col-span-6 md:col-span-4">
                   <Input
                     label="Identificação"
                     description="Apartamento, casa"
@@ -328,7 +328,7 @@ const CreateTargetPropertyForm = ({ onSuccess, onFail, huntId }: CreateTargetPro
                     onChange={formik.handleChange}
                   />
                 </span>
-                <span className="col-span-4">
+                <span className="col-span-6 md:col-span-4">
                   <Input
                     label="Bloco"
                     description="Se não houver, deixar 0"
@@ -339,7 +339,7 @@ const CreateTargetPropertyForm = ({ onSuccess, onFail, huntId }: CreateTargetPro
                     onChange={formik.handleChange}
                   />
                 </span>
-                <span className="col-span-4">
+                <span className="col-span-6 md:col-span-4">
                   <Input
                     label="Tamanho"
                     description="Em metros quadrados"
@@ -351,7 +351,7 @@ const CreateTargetPropertyForm = ({ onSuccess, onFail, huntId }: CreateTargetPro
                     onChange={formik.handleChange}
                   />
                 </span>
-                <span className="col-span-3">
+                <span className="col-span-6 md:col-span-3">
                   <Input
                     label="Quartos"
                     name="rooms"
@@ -362,7 +362,7 @@ const CreateTargetPropertyForm = ({ onSuccess, onFail, huntId }: CreateTargetPro
                     onChange={formik.handleChange}
                   />
                 </span>
-                <span className="col-span-3">
+                <span className="col-span-6 md:col-span-3">
                   <Input
                     label="Banheiros"
                     name="bathrooms"
@@ -373,7 +373,7 @@ const CreateTargetPropertyForm = ({ onSuccess, onFail, huntId }: CreateTargetPro
                     onChange={formik.handleChange}
                   />
                 </span>
-                <span className="col-span-3">
+                <span className="col-span-6 md:col-span-3">
                   <Input
                     label="Vagas de Garagem"
                     name="parkingSpots"
@@ -394,9 +394,9 @@ const CreateTargetPropertyForm = ({ onSuccess, onFail, huntId }: CreateTargetPro
               open={priceBoxOpen}
               toggleBox={() => setPriceBoxOpen(!priceBoxOpen)}
             >
-              <div className="w-full grid md:grid-cols-12 gap-x-4 gap-y-5 mt-2">
+              <div className="w-full grid grid-cols-12 gap-x-4 gap-y-5 mt-2">
                 <FormSectionLabel>Custos Mensais</FormSectionLabel>
-                <span className="col-span-3 flex flex-row items-end gap-4">
+                <span className="col-span-6 md:col-span-3">
                   <MoneyField
                     label="Preço de Aluguel"
                     name="rentPrice"
@@ -408,7 +408,7 @@ const CreateTargetPropertyForm = ({ onSuccess, onFail, huntId }: CreateTargetPro
                     currencySymbol="R$"
                   />
                 </span>
-                <span className="col-span-3 flex flex-row items-end gap-4">
+                <span className="col-span-6 md:col-span-3">
                   <MoneyField
                     label="Preço de Venda"
                     name="sellPrice"
@@ -420,7 +420,7 @@ const CreateTargetPropertyForm = ({ onSuccess, onFail, huntId }: CreateTargetPro
                     currencySymbol="R$"
                   />
                 </span>
-                <span className="col-span-3 flex flex-row items-end gap-4">
+                <span className="col-span-6 md:col-span-3">
                   <MoneyField
                     label="Condomínio"
                     name="condoPricing"
@@ -432,7 +432,7 @@ const CreateTargetPropertyForm = ({ onSuccess, onFail, huntId }: CreateTargetPro
                     currencySymbol="R$"
                   />
                 </span>
-                <span className="col-span-3 flex flex-row items-end gap-4">
+                <span className="col-span-6 md:col-span-3">
                   <MoneyField
                     label="IPTU"
                     name="iptu"
