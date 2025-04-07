@@ -72,13 +72,11 @@ export const HuntProvider = ({
       const updatedHunt = await getHuntById(hunt.id)
 
       if (updatedHunt) {
-        toast.success('Hunt atualizada com sucesso!')
         setHunt(updatedHunt)
       } else {
         toast.error('Não foi possível atualizar a hunt')
       }
     } else {
-      toast.success('Hunt atualizada com sucesso!')
       setHunt(updated)
     }
   }
