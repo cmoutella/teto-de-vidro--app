@@ -1,11 +1,11 @@
 'use client'
 import { useEffect, useState } from 'react'
 
-import { getAllTargetPropertiesfromHunt } from '@requests/hunt/getAllTargetProperties'
 import DashboardCard from '@ui/DashboardCard'
 import cx from 'classnames'
 import { useRouter } from 'next/navigation'
 
+import { getAllTargetPropertiesfromHunt } from '@/requests/targetProperty/getAllTargetProperties'
 import type { CONTRACT_TYPE, InterfaceHunt } from '@/types/app'
 import type { TargetPropertyInterface } from '@/types/targetProperty'
 import Button from '@/ui/components/base/Button'
@@ -71,7 +71,12 @@ const NextMoveDashboard = ({ hunts }: NextMoveDashboardProps) => {
 
     const data = await getAllTargetPropertiesfromHunt(currentHunt.id, 1, 6)
 
-    setProperties(data as TargetPropertyInterface[])
+    if (!data) {
+      setLoading(false)
+      return
+    }
+
+    setProperties(data.list as TargetPropertyInterface[])
     setLoading(false)
   }
 

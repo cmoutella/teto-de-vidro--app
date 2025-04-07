@@ -28,5 +28,5 @@ export default async function Home() {
 
   const response = await getAllHuntsByUser(data.user.id, 1, 1)
 
-  return <PrivateHomeView user={data.user} hunts={response ?? []} />
+  return <PrivateHomeView user={data.user} hunts={response?.list ?? []} />
 }

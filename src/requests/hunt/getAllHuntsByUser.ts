@@ -1,11 +1,11 @@
-import type { SuccessResponse } from '@/types/apiPatterns'
+import type { PaginatedData, SuccessResponse } from '@/types/apiPatterns'
 import type { InterfaceHunt } from '@/types/app'
 
 type GetAllHuntsByUserRequest = (
   _userId: string,
   _page: number,
   _perPage: number
-) => Promise<InterfaceHunt[] | undefined>
+) => Promise<PaginatedData<InterfaceHunt> | undefined>
 
 export const getAllHuntsByUser: GetAllHuntsByUserRequest = async (userId, page, perPage) => {
   const baseUrl = 'http://localhost:3000'
@@ -24,7 +24,7 @@ export const getAllHuntsByUser: GetAllHuntsByUserRequest = async (userId, page, 
       throw Error('Não foi possível encontrar a informação solicitada')
     }
 
-    const { data } = res as SuccessResponse<InterfaceHunt[]>
+    const { data } = res as SuccessResponse<PaginatedData<InterfaceHunt>>
 
     return data
   } catch (_err) {

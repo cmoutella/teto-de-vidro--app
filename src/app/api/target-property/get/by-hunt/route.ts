@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server'
 
-import type { SuccessResponse } from '@/types/apiPatterns'
-import type { InterfaceHunt } from '@/types/app'
+import type { PaginatedData, SuccessResponse } from '@/types/apiPatterns'
+import type { TargetPropertyInterface } from '@/types/targetProperty'
 
 export async function POST(req: Request) {
   const body = await req.json()
@@ -33,7 +33,7 @@ export async function POST(req: Request) {
       throw Error('Não foi possivel buscar os targets dessa hunt agora')
     }
 
-    const { data } = res as SuccessResponse<InterfaceHunt>
+    const { data } = res as SuccessResponse<PaginatedData<TargetPropertyInterface>>
 
     return NextResponse.json(
       { message: 'Serviço chamado com sucesso', data: data },
