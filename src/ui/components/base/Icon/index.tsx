@@ -3,6 +3,8 @@ import type { ReactNode } from 'react'
 import cx from 'classnames'
 
 import ChevronDownMicro from '@/assets/icons/micro/chevron-down.svg'
+import ChevronLeftMicro from '@/assets/icons/micro/chevron-left.svg'
+import ChevronRightMicro from '@/assets/icons/micro/chevron-right.svg'
 import ChevronUpMicro from '@/assets/icons/micro/chevron-up.svg'
 import EyeSlashMicro from '@/assets/icons/micro/eye-slash.svg'
 import EyeMicro from '@/assets/icons/micro/eye.svg'
@@ -12,6 +14,8 @@ import PlusCircleMicro from '@/assets/icons/micro/plus-circle.svg'
 import PlusMicro from '@/assets/icons/micro/plus.svg'
 import TrashMicro from '@/assets/icons/micro/trash.svg'
 import ChevronDownMini from '@/assets/icons/mini/chevron-down.svg'
+import ChevronLeftMini from '@/assets/icons/mini/chevron-left.svg'
+import ChevronRightMini from '@/assets/icons/mini/chevron-right.svg'
 import ChevronUpMini from '@/assets/icons/mini/chevron-up.svg'
 import EyeSlashMini from '@/assets/icons/mini/eye-slash.svg'
 import EyeMini from '@/assets/icons/mini/eye.svg'
@@ -21,6 +25,8 @@ import PlusCircleMini from '@/assets/icons/mini/plus-circle.svg'
 import PlusMini from '@/assets/icons/mini/plus.svg'
 import TrashMini from '@/assets/icons/mini/trash.svg'
 import ChevronDownOutline from '@/assets/icons/outline/chevron-down.svg'
+import ChevronLeftOutline from '@/assets/icons/outline/chevron-left.svg'
+import ChevronRightOutline from '@/assets/icons/outline/chevron-right.svg'
 import ChevronUpOutline from '@/assets/icons/outline/chevron-up.svg'
 import EyeSlashOutline from '@/assets/icons/outline/eye-slash.svg'
 import EyeOutline from '@/assets/icons/outline/eye.svg'
@@ -30,6 +36,8 @@ import PlusCircleOutline from '@/assets/icons/outline/plus-circle.svg'
 import PlusOutline from '@/assets/icons/outline/plus.svg'
 import TrashOutline from '@/assets/icons/outline/trash.svg'
 import ChevronDownSolid from '@/assets/icons/solid/chevron-down.svg'
+import ChevronLeftSolid from '@/assets/icons/solid/chevron-left.svg'
+import ChevronRightSolid from '@/assets/icons/solid/chevron-right.svg'
 import ChevronUpSolid from '@/assets/icons/solid/chevron-up.svg'
 import EyeSlashSolid from '@/assets/icons/solid/eye-slash.svg'
 import EyeSolid from '@/assets/icons/solid/eye.svg'
@@ -44,6 +52,8 @@ type IconMode = 'solid' | 'outline' | 'mini' | 'micro'
 type AvailableIcon =
   | 'chevron-down'
   | 'chevron-up'
+  | 'chevron-left'
+  | 'chevron-right'
   | 'eye'
   | 'eye-slash'
   | 'minus'
@@ -75,6 +85,8 @@ const Icon = ({ icon, className, mode = 'outline', size = 'sm', onClick }: IconP
     'plus-circle': PlusCircleSolid,
     'chevron-up': ChevronUpSolid,
     'chevron-down': ChevronDownSolid,
+    'chevron-left': ChevronLeftSolid,
+    'chevron-right': ChevronRightSolid,
     eye: EyeSolid,
     'eye-slash': EyeSlashSolid,
     trash: TrashSolid
@@ -90,6 +102,8 @@ const Icon = ({ icon, className, mode = 'outline', size = 'sm', onClick }: IconP
     'plus-circle': PlusCircleOutline,
     'chevron-up': ChevronUpOutline,
     'chevron-down': ChevronDownOutline,
+    'chevron-left': ChevronLeftOutline,
+    'chevron-right': ChevronRightOutline,
     eye: EyeOutline,
     'eye-slash': EyeSlashOutline,
     trash: TrashOutline
@@ -105,6 +119,8 @@ const Icon = ({ icon, className, mode = 'outline', size = 'sm', onClick }: IconP
     'plus-circle': PlusCircleMini,
     'chevron-up': ChevronUpMini,
     'chevron-down': ChevronDownMini,
+    'chevron-left': ChevronLeftMini,
+    'chevron-right': ChevronRightMini,
     eye: EyeMini,
     'eye-slash': EyeSlashMini,
     trash: TrashMini
@@ -120,6 +136,8 @@ const Icon = ({ icon, className, mode = 'outline', size = 'sm', onClick }: IconP
     'plus-circle': PlusCircleMicro,
     'chevron-up': ChevronUpMicro,
     'chevron-down': ChevronDownMicro,
+    'chevron-left': ChevronLeftMicro,
+    'chevron-right': ChevronRightMicro,
     eye: EyeMicro,
     'eye-slash': EyeSlashMicro,
     trash: TrashMicro

@@ -9,14 +9,24 @@ import type { InterfaceHunt } from '@/types/app'
 import type { TargetPropertyInterface } from '@/types/targetProperty'
 import { DEFAULT_HUNT_LIST_PER_PAGE } from '@/ui/pages/hunt/consts/perPage'
 
+type PageConfig = {
+  current: number
+  total: number
+  perPage: number
+  setPage: (_p: number) => void
+  setPerPage: (_p: number) => void
+  nextPage: () => void
+  prevPage: () => void
+  firstPage: () => void
+  lastPage: () => void
+  isFirstPage: boolean
+  isLastPage: boolean
+}
+
 interface HuntContext {
   update: (_h?: InterfaceHunt) => void
   hunt?: InterfaceHunt
-  page: number
-  setPage: (_p: number) => void
-  perPage: number
-  setPerPage: (_p: number) => void
-  totalPages: number
+  page: PageConfig
   properties: TargetPropertyInterface[]
   fetchProperties: () => void
   removeTargetProperty: (_t: string) => void
@@ -24,11 +34,19 @@ interface HuntContext {
 
 const DEFAULT_VALUES = {
   update: () => {},
-  page: 1,
-  setPage: (_p: number) => {},
-  perPage: DEFAULT_HUNT_LIST_PER_PAGE,
-  setPerPage: (_p: number) => {},
-  totalPages: 1,
+  page: {
+    current: 1,
+    total: 1,
+    isFirstPage: true,
+    isLastPage: false,
+    perPage: DEFAULT_HUNT_LIST_PER_PAGE,
+    setPage: (_p: number) => {},
+    setPerPage: (_p: number) => {},
+    nextPage: () => {},
+    prevPage: () => {},
+    firstPage: () => {},
+    lastPage: () => {}
+  },
   properties: [],
   fetchProperties: () => {},
   removeTargetProperty: (_t: string) => {}
@@ -65,7 +83,7 @@ export const HuntProvider = ({
       getProperties()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [hunt])
+  }, [hunt, page])
 
   async function updateHuntView(updated?: InterfaceHunt) {
     if (!updated) {
@@ -106,14 +124,29 @@ export const HuntProvider = ({
     }
   }
 
-  const value = {
+  function handleNextPage() {
+    setPage(page + 1)
+  }
+  function handlePrevPage() {
+    setPage(page + 1)
+  }
+
+  const value: HuntContext = {
     update: updateHuntView,
     hunt: hunt,
-    page,
-    setPage,
-    perPage,
-    setPerPage,
-    totalPages,
+    page: {
+      current: page,
+      total: totalPages,
+      perPage: perPage,
+      setPage: setPage,
+      setPerPage: setPerPage,
+      nextPage: handleNextPage,
+      prevPage: handlePrevPage,
+      firstPage: () => setPage(1),
+      lastPage: () => setPage(totalPages),
+      isFirstPage: page === 1,
+      isLastPage: page === totalPages
+    },
     properties,
     fetchProperties: getProperties,
     removeTargetProperty
