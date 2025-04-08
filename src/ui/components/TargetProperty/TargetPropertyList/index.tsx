@@ -1,37 +1,36 @@
 import { useHuntContext } from '@/providers/HuntProvider'
 import type { InterfaceHunt } from '@/types/app'
-import type { TargetPropertyInterface } from '@/types/targetProperty'
 
+import { Pagination } from '../../Pagination'
 import TargetPropertyItem from '../TargetPropertyItem'
 
-interface TargetPropertyListProps {
-  list: TargetPropertyInterface[]
-  page: number
-  totalPages: number
-  perPage: number
-}
+function TargetPropertyList() {
+  const { hunt, properties, page } = useHuntContext()
 
-function TargetPropertyList({
-  list,
-  page: _page,
-  totalPages: _totalPages,
-  perPage: _perPage
-}: TargetPropertyListProps) {
-  const { hunt } = useHuntContext()
-
-  if (list.length <= 0) {
+  if (properties.length <= 0) {
     return <>Ainda não tem nenhum imóvel</>
   }
 
   return (
     <div className="container flex flex-col gap-2">
-      {list.map((tp) => {
+      {properties.map((tp) => {
         return (
           <div key={tp.id} className="w-full">
             <TargetPropertyItem target={tp} hunt={hunt as InterfaceHunt} />
           </div>
         )
       })}
+      <div className="w-full mt-6">
+        <Pagination
+          currentPage={page.current}
+          maxPage={page.total}
+          toPage={page.setPage}
+          nextPage={page.nextPage}
+          prevPage={page.prevPage}
+          isFirstPage={page.isFirstPage}
+          isLastPage={page.isLastPage}
+        />
+      </div>
     </div>
   )
 }

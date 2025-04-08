@@ -16,7 +16,7 @@ interface HuntViewProps {
 }
 
 const HuntView = () => {
-  const { hunt, properties, page, totalPages, update } = useHuntContext()
+  const { hunt, update } = useHuntContext()
 
   const { modal } = useUIContext()
 
@@ -75,10 +75,9 @@ const HuntView = () => {
                     # {(hunt as InterfaceHunt).title}
                   </h3>
                 </div>
-                {(hunt as InterfaceHunt).invitedUsers &&
-                  (hunt as InterfaceHunt).invitedUsers?.length >= 1 && (
-                    <div>Com Fulana e fulana</div>
-                  )}
+                {hunt && hunt.invitedUsers && hunt.invitedUsers?.length >= 1 && (
+                  <div>Com Fulana e fulana</div>
+                )}
               </div>
               <div className="flex flex-row items-center justify-end gap-2">
                 <Button
@@ -99,7 +98,7 @@ const HuntView = () => {
             </div>
           </div>
         </div>
-        <TargetPropertyList list={properties} page={page} totalPages={totalPages} perPage={8} />
+        <TargetPropertyList />
       </div>
     </div>
   )
