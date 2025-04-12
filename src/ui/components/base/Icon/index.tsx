@@ -13,6 +13,7 @@ import MinusMicro from '@/assets/icons/micro/minus.svg'
 import PlusCircleMicro from '@/assets/icons/micro/plus-circle.svg'
 import PlusMicro from '@/assets/icons/micro/plus.svg'
 import TrashMicro from '@/assets/icons/micro/trash.svg'
+import XMicro from '@/assets/icons/micro/x.svg'
 import ChevronDownMini from '@/assets/icons/mini/chevron-down.svg'
 import ChevronLeftMini from '@/assets/icons/mini/chevron-left.svg'
 import ChevronRightMini from '@/assets/icons/mini/chevron-right.svg'
@@ -24,6 +25,7 @@ import MinusMini from '@/assets/icons/mini/minus.svg'
 import PlusCircleMini from '@/assets/icons/mini/plus-circle.svg'
 import PlusMini from '@/assets/icons/mini/plus.svg'
 import TrashMini from '@/assets/icons/mini/trash.svg'
+import XMini from '@/assets/icons/mini/x.svg'
 import ChevronDownOutline from '@/assets/icons/outline/chevron-down.svg'
 import ChevronLeftOutline from '@/assets/icons/outline/chevron-left.svg'
 import ChevronRightOutline from '@/assets/icons/outline/chevron-right.svg'
@@ -35,6 +37,7 @@ import MinusOutline from '@/assets/icons/outline/minus.svg'
 import PlusCircleOutline from '@/assets/icons/outline/plus-circle.svg'
 import PlusOutline from '@/assets/icons/outline/plus.svg'
 import TrashOutline from '@/assets/icons/outline/trash.svg'
+import XOutline from '@/assets/icons/outline/x.svg'
 import ChevronDownSolid from '@/assets/icons/solid/chevron-down.svg'
 import ChevronLeftSolid from '@/assets/icons/solid/chevron-left.svg'
 import ChevronRightSolid from '@/assets/icons/solid/chevron-right.svg'
@@ -46,6 +49,7 @@ import MinusSolid from '@/assets/icons/solid/minus.svg'
 import PlusCircleSolid from '@/assets/icons/solid/plus-circle.svg'
 import PlusSolid from '@/assets/icons/solid/plus.svg'
 import TrashSolid from '@/assets/icons/solid/trash.svg'
+import XSolid from '@/assets/icons/solid/x.svg'
 
 type IconMode = 'solid' | 'outline' | 'mini' | 'micro'
 
@@ -61,6 +65,7 @@ type AvailableIcon =
   | 'plus'
   | 'plus-circle'
   | 'trash'
+  | 'x'
 
 type ModeIconCollection = { [_key in AvailableIcon]: ReactNode }
 
@@ -89,7 +94,8 @@ const Icon = ({ icon, className, mode = 'outline', size = 'sm', onClick }: IconP
     'chevron-right': ChevronRightSolid,
     eye: EyeSolid,
     'eye-slash': EyeSlashSolid,
-    trash: TrashSolid
+    trash: TrashSolid,
+    x: XSolid
   }
 
   /**
@@ -106,7 +112,8 @@ const Icon = ({ icon, className, mode = 'outline', size = 'sm', onClick }: IconP
     'chevron-right': ChevronRightOutline,
     eye: EyeOutline,
     'eye-slash': EyeSlashOutline,
-    trash: TrashOutline
+    trash: TrashOutline,
+    x: XOutline
   }
 
   /**
@@ -123,7 +130,8 @@ const Icon = ({ icon, className, mode = 'outline', size = 'sm', onClick }: IconP
     'chevron-right': ChevronRightMini,
     eye: EyeMini,
     'eye-slash': EyeSlashMini,
-    trash: TrashMini
+    trash: TrashMini,
+    x: XMini
   }
 
   /**
@@ -140,7 +148,8 @@ const Icon = ({ icon, className, mode = 'outline', size = 'sm', onClick }: IconP
     'chevron-right': ChevronRightMicro,
     eye: EyeMicro,
     'eye-slash': EyeSlashMicro,
-    trash: TrashMicro
+    trash: TrashMicro,
+    x: XMicro
   }
 
   const icons: { [_key in IconMode]: ModeIconCollection } = {

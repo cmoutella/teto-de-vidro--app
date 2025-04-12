@@ -3,6 +3,7 @@ import type { ReactNode } from 'react'
 import cx from 'classnames'
 
 import Button from '../Button'
+import Icon from '../Icon'
 
 export type ModalSize = 'small' | 'medium' | 'large'
 
@@ -15,7 +16,7 @@ export interface ModalProps {
 
 function ModalWrapper({ children }: { children: ReactNode }) {
   return (
-    <div className="w-full h-full absolute z-20 top-0 left-0 flex flex-col items-center py-16 px-4 md:px-0 bg-brand-gray-1000 bg-opacity-70">
+    <div className="w-full h-full max-h-screen absolute z-20 top-0 left-0 flex flex-col items-center py-16 px-4 md:px-0 bg-brand-gray-1000 bg-opacity-70">
       {children}
     </div>
   )
@@ -33,18 +34,18 @@ export default function Modal({ children, isOpen, size = 'small', setClose }: Mo
       <ModalWrapper>
         <div
           className={cx(
-            `!max-w-11/12 max-h-full overflow-x-scroll flex flex-col justify-start items-center mt-16 bg-white rounded-lg p-4 box-border`,
+            `!max-w-11/12 max-h-[75vh] flex flex-col justify-start items-center mt-8 md:mt-16 bg-white rounded-lg box-border relative`,
             sizeClasses[size]
           )}
         >
           <Button
-            label="X"
+            label={<Icon icon="x" />}
             onClick={setClose}
             className={cx(
-              'fixed right-4 top-4 z-25 rounded-full bg-white !h-7 !w-7 !min-w-7 flex justify-center items-center'
+              'absolute self-end top-2 right-2 md:top-3 md:right-3 !z-9999 rounded-full bg-white !h-7 !w-7 !min-w-7 flex justify-center items-center'
             )}
           />
-          <div className="container">{children}</div>
+          <div className="container overflow-y-scroll p-4 -z-1 max-h-full">{children}</div>
         </div>
       </ModalWrapper>
     )
