@@ -51,12 +51,12 @@ export async function webScraper(url: string) {
     /**
      * CONDOMÍNIO
      */
-    const condoPrice = await page.$eval(
+    const condoPricing = await page.$eval(
       '#condo-fee-price',
       (elements) => elements.textContent?.trim() || ''
     )
-    if (condoPrice) {
-      adData['condoPrice'] = removeBrl(condoPrice)
+    if (condoPricing) {
+      adData['condoPricing'] = removeBrl(condoPricing)
     }
 
     /**

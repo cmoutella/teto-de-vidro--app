@@ -132,8 +132,8 @@ const CreateTargetPropertyForm = ({ onSuccess, onFail, huntId }: CreateTargetPro
       formik.setFieldValue('sellPrice', formatMoneyValue(res.sellPrice.toString()))
     }
 
-    if (res?.condoPrice) {
-      formik.setFieldValue('condoPricing', formatMoneyValue(res.condoPrice.toString()))
+    if (res?.condoPricing) {
+      formik.setFieldValue('condoPricing', formatMoneyValue(res.condoPricing.toString()))
     }
   }
 

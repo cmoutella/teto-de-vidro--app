@@ -1,6 +1,6 @@
 export interface AdScrapedData extends Record<string, string | string[] | number | undefined> {
   rentPrice?: number
-  condoPrice?: number
+  condoPricing?: number
   iptu?: number
   size?: number
   rooms?: number

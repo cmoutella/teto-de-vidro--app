@@ -2,7 +2,7 @@ import type { AdScrapedData } from '../shared/type'
 
 interface ZapImoveisScrapedData extends Record<string, string | string[] | number | undefined> {
   rentPrice?: number
-  condoPrice?: number
+  condoPricing?: number
   iptu?: number
   floorSize?: number
   numberOfRooms?: number
