@@ -3,6 +3,7 @@ import type { ReactNode } from 'react'
 import cx from 'classnames'
 
 import Button from '../Button'
+import Icon from '../Icon'
 
 export type ModalSize = 'small' | 'medium' | 'large'
 
@@ -33,18 +34,18 @@ export default function Modal({ children, isOpen, size = 'small', setClose }: Mo
       <ModalWrapper>
         <div
           className={cx(
-            `!max-w-11/12 max-h-full overflow-x-scroll flex flex-col justify-start items-center mt-16 bg-white rounded-lg p-4 box-border`,
+            `!max-w-11/12 max-h-full flex flex-col justify-start items-center mt-16 bg-white rounded-lg box-border relative`,
             sizeClasses[size]
           )}
         >
           <Button
-            label="X"
+            label={<Icon icon="x" />}
             onClick={setClose}
             className={cx(
-              'fixed right-4 top-4 z-25 rounded-full bg-white !h-7 !w-7 !min-w-7 flex justify-center items-center'
+              'absolute self-end top-2 right-2 md:top-3 md:right-3 !z-9999 rounded-full bg-white !h-7 !w-7 !min-w-7 flex justify-center items-center'
             )}
           />
-          <div className="container">{children}</div>
+          <div className="container overflow-y-scroll p-4 -z-1">{children}</div>
         </div>
       </ModalWrapper>
     )
