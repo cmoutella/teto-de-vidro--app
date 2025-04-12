@@ -1,9 +1,11 @@
+import type { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
 
+import { appCokies } from '@/config/cookies'
 import type { SuccessResponse } from '@/types/apiPatterns'
 import type { InterfaceHunt } from '@/types/app'
 
-export async function PUT(req: Request) {
+export async function PUT(req: NextRequest) {
   const body = await req.json()
 
   if (!body.id || !body.data) {
@@ -17,12 +19,15 @@ export async function PUT(req: Request) {
 
   if (!baseUrl) return undefined
 
+  const cookieToken = req.cookies.get(appCokies.auth)?.value
+
   try {
     const res = await fetch(`${baseUrl}/hunt/${body.id}`, {
       method: 'PUT',
       mode: 'cors',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        ...(cookieToken ? { Authorization: `Bearer ${JSON.parse(cookieToken).token}` } : {})
       },
       body: JSON.stringify(body.data)
     }).then((res) => res.json())

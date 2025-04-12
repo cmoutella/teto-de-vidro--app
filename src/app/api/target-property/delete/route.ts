@@ -1,6 +1,9 @@
+import type { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
 
-export async function POST(req: Request) {
+import { appCokies } from '@/config/cookies'
+
+export async function POST(req: NextRequest) {
   const body = await req.json()
 
   if (!body.id) {
@@ -14,12 +17,15 @@ export async function POST(req: Request) {
 
   if (!baseUrl) return undefined
 
+  const cookieToken = req.cookies.get(appCokies.auth)?.value
+
   try {
     const res = await fetch(`${baseUrl}/target-property/${body.id}`, {
       method: 'DELETE',
       mode: 'cors',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        ...(cookieToken ? { Authorization: `Bearer ${JSON.parse(cookieToken).token}` } : {})
       },
       body: JSON.stringify(body)
     }).then((res) => res.json())

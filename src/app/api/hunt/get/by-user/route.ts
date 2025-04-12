@@ -1,9 +1,11 @@
+import type { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
 
+import { appCokies } from '@/config/cookies'
 import type { PaginatedData, SuccessResponse } from '@/types/apiPatterns'
 import type { InterfaceHunt } from '@/types/app'
 
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
   const body = await req.json()
 
   if (!body.userId) {
@@ -17,6 +19,8 @@ export async function POST(req: Request) {
 
   if (!baseUrl) return undefined
 
+  const cookieToken = req.cookies.get(appCokies.auth)?.value
+
   try {
     const res = await fetch(
       `${baseUrl}/hunt/search/${body.userId}?page=${body.page}&limit=${body.perPage}`,
@@ -24,7 +28,8 @@ export async function POST(req: Request) {
         method: 'GET',
         mode: 'cors',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          ...(cookieToken ? { Authorization: `Bearer ${JSON.parse(cookieToken).token}` } : {})
         }
       }
     ).then((res) => res.json())
