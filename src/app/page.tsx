@@ -26,7 +26,11 @@ export default async function Home() {
     return <PublicHomeView />
   }
 
-  const response = await getAllHuntsByUser(data.user.id, 1, 1)
+  const token = JSON.parse(authCookie.value).token
+
+  const response = await getAllHuntsByUser(data.user.id, 1, 1, {
+    token
+  })
 
   return <PrivateHomeView user={data.user} hunts={response?.list ?? []} />
 }
