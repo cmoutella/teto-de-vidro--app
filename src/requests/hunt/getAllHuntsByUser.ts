@@ -4,10 +4,16 @@ import type { InterfaceHunt } from '@/types/app'
 type GetAllHuntsByUserRequest = (
   _userId: string,
   _page: number,
-  _perPage: number
+  _perPage: number,
+  _options?: { token?: string }
 ) => Promise<PaginatedData<InterfaceHunt> | undefined>
 
-export const getAllHuntsByUser: GetAllHuntsByUserRequest = async (userId, page, perPage) => {
+export const getAllHuntsByUser: GetAllHuntsByUserRequest = async (
+  userId,
+  page,
+  perPage,
+  options
+) => {
   const baseUrl = 'http://localhost:3000'
 
   try {
@@ -15,7 +21,8 @@ export const getAllHuntsByUser: GetAllHuntsByUserRequest = async (userId, page, 
       method: 'POST',
       mode: 'cors',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        ...(options?.token ? { Authorization: `Bearer ${options.token}` } : {})
       },
       body: JSON.stringify({ userId, page, perPage })
     }).then((res) => res.json())
