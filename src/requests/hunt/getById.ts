@@ -1,19 +1,24 @@
 import type { SuccessResponse } from '@/types/apiPatterns'
 import type { InterfaceHunt } from '@/types/app'
 
-type GetHuntByIdRequest = (_huntId: string) => Promise<InterfaceHunt | undefined>
+type GetHuntByIdRequest = (
+  _huntId: string,
+  _options?: { token?: string }
+) => Promise<InterfaceHunt | undefined>
 
-export const getHuntById: GetHuntByIdRequest = async (huntId) => {
+export const getHuntById: GetHuntByIdRequest = async (huntId, options) => {
   const baseUrl = 'http://localhost:3000'
 
   if (!baseUrl) return undefined
 
   try {
+    console.log('trying')
     const res = await fetch(`${baseUrl}/api/hunt/get`, {
       method: 'POST',
       mode: 'cors',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        ...(options?.token ? { Authorization: `Bearer ${options.token}` } : {})
       },
       body: JSON.stringify({ id: huntId })
     }).then((res) => res.json())

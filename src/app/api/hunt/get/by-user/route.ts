@@ -6,8 +6,6 @@ import type { InterfaceHunt } from '@/types/app'
 export async function POST(req: Request) {
   const body = await req.json()
 
-  const authorization = req.headers.get('authorization')
-
   if (!body.userId) {
     return NextResponse.json(
       { error: 'Dados insuficiêntes para buscar pelas hunts' },
@@ -18,6 +16,8 @@ export async function POST(req: Request) {
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL
 
   if (!baseUrl) return undefined
+
+  const authorization = req.headers.get('authorization')
 
   try {
     const res = await fetch(
@@ -53,9 +53,8 @@ export async function POST(req: Request) {
       { status: 200 }
     )
   } catch (err) {
-    console.log('vinhemo pro err')
     if (err instanceof Error) {
-      return NextResponse.json({ error: err.message }, { status: 400 })
+      return NextResponse.json({ error: err.message })
     } else {
       return NextResponse.json({ error: `Erro desconhecido: ${err}` }, { status: 500 })
     }

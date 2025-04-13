@@ -17,26 +17,43 @@ export async function POST(req: Request) {
 
   if (!baseUrl) return undefined
 
+  const authorization = req.headers.get('authorization')
+
   try {
     const res = await fetch(`${baseUrl}/hunt/${body.id}`, {
       method: 'GET',
       mode: 'cors',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        ...(authorization ? { Authorization: authorization } : {})
       }
-    }).then((res) => res.json())
+    })
 
-    if (res.error) {
-      throw Error('Não foi possivel criar agora')
+    if (res.status === 401) {
+      throw new Error('Erro de autorização')
+    } else if (res.status >= 500) {
+      throw new Error('Erro interno no servidor')
+    } else if (res.status >= 400) {
+      throw new Error('Não foi possível criar agora')
     }
 
-    const { data } = res as SuccessResponse<InterfaceHunt>
+    const response = await res.json()
+
+    if (response.error) {
+      throw new Error('Não foi possivel criar agora')
+    }
+
+    const { data } = response as SuccessResponse<InterfaceHunt>
 
     return NextResponse.json(
       { message: 'Serviço chamado com sucesso', data: data },
       { status: 200 }
     )
   } catch (err) {
-    return NextResponse.json({ error: 'Erro interno do servidor', details: err }, { status: 500 })
+    if (err instanceof Error) {
+      return NextResponse.json({ error: err.message })
+    } else {
+      return NextResponse.json({ error: `Erro desconhecido: ${err}` }, { status: 500 })
+    }
   }
 }
