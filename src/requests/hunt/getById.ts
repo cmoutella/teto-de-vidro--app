@@ -12,7 +12,6 @@ export const getHuntById: GetHuntByIdRequest = async (huntId, options) => {
   if (!baseUrl) return undefined
 
   try {
-    console.log('trying')
     const res = await fetch(`${baseUrl}/api/hunt/get`, {
       method: 'POST',
       mode: 'cors',

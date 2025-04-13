@@ -5,6 +5,11 @@ import { appCokies } from '@/config/cookies'
 import type { SuccessResponse } from '@/types/apiPatterns'
 import type { InterfaceHunt } from '@/types/app'
 
+/**
+ * CREATE HUNT
+ * @returns hunt
+ */
+
 export async function POST(req: NextRequest) {
   const body = await req.json()
 
@@ -12,7 +17,11 @@ export async function POST(req: NextRequest) {
 
   if (!baseUrl) return undefined
 
-  const cookieToken = req.headers.get('authorization') ?? req.cookies.get(appCokies.auth)?.value
+  const authCookie = req.cookies.get(appCokies.auth)?.value
+  const tokenFromCookie = authCookie ? JSON.parse(authCookie).token : undefined
+
+  const authorization =
+    req.headers.get('authorization') ?? (tokenFromCookie && `Bearer ${tokenFromCookie}`)
 
   try {
     const res = await fetch(`${baseUrl}/hunt`, {
@@ -20,7 +29,7 @@ export async function POST(req: NextRequest) {
       mode: 'cors',
       headers: {
         'Content-Type': 'application/json',
-        ...(cookieToken ? { Authorization: `Bearer ${JSON.parse(cookieToken).token}` } : {})
+        ...(authorization ? { Authorization: authorization } : {})
       },
       body: JSON.stringify(body)
     })
@@ -36,7 +45,7 @@ export async function POST(req: NextRequest) {
     const response = await res.json()
 
     if (response.error) {
-      throw Error('Não foi possivel criar agora')
+      throw new Error('Não foi possivel criar agora')
     }
 
     const { data } = response as SuccessResponse<InterfaceHunt>

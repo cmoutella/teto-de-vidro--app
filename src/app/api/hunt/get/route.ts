@@ -5,6 +5,11 @@ import { appCokies } from '@/config/cookies'
 import type { SuccessResponse } from '@/types/apiPatterns'
 import type { InterfaceHunt } from '@/types/app'
 
+/**
+ * GET HUNT BY ID
+ * @returns hunt
+ */
+
 export async function POST(req: NextRequest) {
   const body = await req.json()
 
@@ -19,7 +24,11 @@ export async function POST(req: NextRequest) {
 
   if (!baseUrl) return undefined
 
-  const authorization = req.cookies.get(appCokies.auth)?.value ?? req.headers.get('authorization')
+  const authCookie = req.cookies.get(appCokies.auth)?.value
+  const tokenFromCookie = authCookie ? JSON.parse(authCookie).token : undefined
+
+  const authorization =
+    req.headers.get('authorization') ?? (tokenFromCookie && `Bearer ${tokenFromCookie}`)
 
   try {
     const res = await fetch(`${baseUrl}/hunt/${body.id}`, {
