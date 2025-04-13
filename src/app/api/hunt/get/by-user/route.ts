@@ -6,6 +6,8 @@ import type { InterfaceHunt } from '@/types/app'
 export async function POST(req: Request) {
   const body = await req.json()
 
+  const authorization = req.headers.get('authorization')
+
   if (!body.userId) {
     return NextResponse.json(
       { error: 'Dados insuficiêntes para buscar pelas hunts' },
@@ -24,22 +26,38 @@ export async function POST(req: Request) {
         method: 'GET',
         mode: 'cors',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          ...(authorization ? { Authorization: authorization } : {})
         }
       }
-    ).then((res) => res.json())
+    )
 
-    if (res.error) {
-      throw Error('Não foi possivel buscar as hunts do usuário')
+    if (res.status === 401) {
+      throw new Error('Erro de autorização')
+    } else if (res.status >= 500) {
+      throw new Error('Erro interno no servidor')
+    } else if (res.status >= 400) {
+      throw new Error('Não foi possível criar agora')
     }
 
-    const { data } = res as SuccessResponse<PaginatedData<InterfaceHunt>>
+    const response = await res.json()
+
+    if (response.error) {
+      throw new Error('Não foi possivel buscar as hunts do usuário')
+    }
+
+    const { data } = response as SuccessResponse<PaginatedData<InterfaceHunt>>
 
     return NextResponse.json(
       { message: 'Serviço chamado com sucesso', data: data },
       { status: 200 }
     )
   } catch (err) {
-    return NextResponse.json({ error: 'Erro interno do servidor', details: err }, { status: 500 })
+    console.log('vinhemo pro err')
+    if (err instanceof Error) {
+      return NextResponse.json({ error: err.message }, { status: 400 })
+    } else {
+      return NextResponse.json({ error: `Erro desconhecido: ${err}` }, { status: 500 })
+    }
   }
 }
