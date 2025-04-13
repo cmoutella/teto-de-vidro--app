@@ -1,6 +1,9 @@
+import type { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
 
-export async function POST(req: Request) {
+import { appCokies } from '@/config/cookies'
+
+export async function POST(req: NextRequest) {
   const body = await req.json()
 
   if (!body.id) {
@@ -14,22 +17,43 @@ export async function POST(req: Request) {
 
   if (!baseUrl) return undefined
 
+  const authCookie = req.cookies.get(appCokies.auth)?.value
+  const tokenFromCookie = authCookie ? JSON.parse(authCookie).token : undefined
+
+  const authorization =
+    req.headers.get('authorization') ?? (tokenFromCookie && `Bearer ${tokenFromCookie}`)
+
   try {
     const res = await fetch(`${baseUrl}/target-property/${body.id}`, {
       method: 'DELETE',
       mode: 'cors',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        ...(authorization ? { Authorization: authorization } : {})
       },
       body: JSON.stringify(body)
-    }).then((res) => res.json())
+    })
 
-    if (res.error) {
-      throw Error('Não foi possivel deletar agora')
+    if (res.status === 401) {
+      throw new Error('Erro de autorização')
+    } else if (res.status >= 500) {
+      throw new Error('Erro interno no servidor')
+    } else if (res.status >= 400) {
+      throw new Error('Não foi possível criar agora')
+    }
+
+    const response = await res.json()
+
+    if (response.error) {
+      throw new Error('Não foi possivel deletar agora')
     }
 
     return NextResponse.json({ message: 'Target removido com sucesso' }, { status: 200 })
   } catch (err) {
-    return NextResponse.json({ error: 'Erro interno do servidor', details: err }, { status: 500 })
+    if (err instanceof Error) {
+      return NextResponse.json({ error: err.message })
+    } else {
+      return NextResponse.json({ error: `Erro desconhecido: ${err}` }, { status: 500 })
+    }
   }
 }
