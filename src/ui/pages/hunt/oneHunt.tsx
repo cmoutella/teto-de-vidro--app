@@ -27,8 +27,8 @@ const HuntView = () => {
       toast.success('Imóvel criado com sucesso!')
     }
 
-    function handleFail() {
-      toast.error('Não foi possível criar o imóvel')
+    function handleFail(feedback: string) {
+      toast.error(feedback)
     }
 
     modal.open(

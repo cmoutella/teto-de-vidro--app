@@ -41,7 +41,7 @@ interface TargetPropertyInterface {
 
   propertyId: string
   block: string
-  number: string
+  propertyNumber: string
   size: number
   rooms: number
   bathrooms: number

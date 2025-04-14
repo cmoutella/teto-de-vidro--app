@@ -3,12 +3,19 @@ import type { TargetPropertyInterface } from '@/types/targetProperty'
 
 export type CreateTargetPropertyRequestProps = Partial<TargetPropertyInterface>
 
-type CreateTargetPropertyRequest = (
-  _bodyData: CreateTargetPropertyRequestProps
-) => Promise<TargetPropertyInterface | undefined>
+type CreateTargetPropertyRequest = (_bodyData: CreateTargetPropertyRequestProps) => Promise<
+  | {
+      data: TargetPropertyInterface | undefined
+      code: 'SUCCESS' | 'ALREADY_EXISTS' | 'DUPLICITY_WARNING'
+      relative?: 'byLot' | 'byStreet'
+    }
+  | undefined
+>
 
 export const createTargetProperty: CreateTargetPropertyRequest = async (bodyData) => {
   const baseUrl = 'http://localhost:3000'
+
+  console.log('createTargetProperty')
 
   try {
     const res = await fetch(`${baseUrl}/api/target-property/create`, {
@@ -20,13 +27,23 @@ export const createTargetProperty: CreateTargetPropertyRequest = async (bodyData
       body: JSON.stringify(bodyData)
     }).then((res) => res.json())
 
-    if (res.error) {
+    if (res.error === 'ALREADY_EXISTS') {
+      return { data: undefined, code: res.error }
+    } else if (!!res.error && res.error.includes('DUPLICITY_WARNING')) {
+      const warning = res.error.split(':')
+
+      return { data: undefined, code: 'DUPLICITY_WARNING', relative: warning[1].trim() }
+    } else if (
+      !!res.error &&
+      res.error !== 'ALREADY_EXISTS' &&
+      !res.error.includes('DUPLICITY_WARNING')
+    ) {
       throw Error('Não foi possível criar agora, tente novamente mais tarde')
     }
 
     const { data } = res as SuccessResponse<TargetPropertyInterface>
 
-    return data
+    return { data: data, code: 'SUCCESS' }
   } catch (_err) {
     return undefined
   }
