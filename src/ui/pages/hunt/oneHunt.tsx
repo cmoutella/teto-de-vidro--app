@@ -37,6 +37,7 @@ const HuntView = () => {
         onSuccess={handleSuccess}
         onFail={handleFail}
         huntId={hunt?.id as never}
+        huntSettings={hunt as InterfaceHunt}
       />
     )
   }

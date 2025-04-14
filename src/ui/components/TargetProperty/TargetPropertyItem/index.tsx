@@ -47,6 +47,7 @@ export default function TargetPropertyItem({ target, hunt }: TargetPropertyItemP
         currentData={target as TargetPropertyInterface}
         onSuccess={handleSuccess}
         onFail={handleFail}
+        huntSettings={hunt}
       />
     )
   }

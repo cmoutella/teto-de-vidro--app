@@ -8,21 +8,22 @@ import CollapsableBox from '@ui/CollapsableBox'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
 
-import { useHuntContext } from '@/providers/HuntProvider'
 import type { CreateTargetPropertyRequestProps } from '@/requests/targetProperty/create'
 import { editTargetProperty } from '@/requests/targetProperty/edit'
 import type { AddressKeys } from '@/services/cep'
 import { CEPService } from '@/services/cep'
+import type { InterfaceHunt } from '@/types/app'
 import type { TargetPropertyInterface } from '@/types/targetProperty'
 import SubmitButton from '@/ui/components/base/form/buttons/SubmitButton'
 import { CEPField } from '@/ui/components/base/form/fields/cep/CEPField'
 import { MoneyField } from '@/ui/components/base/form/fields/money/MoneyField'
 import Input from '@/ui/components/base/form/inputs/Input'
 
-interface CreateTargetPropertyFormProps {
+interface EditTargetPropertyFormProps {
   onSuccess: (_id: string) => void
   onFail: () => void
   currentData: TargetPropertyInterface
+  huntSettings: InterfaceHunt
 }
 
 const formThemeSize: FormSizes = 'lg'
@@ -31,15 +32,18 @@ const themePallete: FormTheme = 'light'
 const EditTargetPropertyForm = ({
   onSuccess,
   onFail,
-  currentData
-}: CreateTargetPropertyFormProps) => {
+  currentData,
+  huntSettings
+}: EditTargetPropertyFormProps) => {
   const [addressBoxOpen, setAddressBoxOpen] = useState<boolean>(false)
   const [priceBoxOpen, setPriceBoxOpen] = useState<boolean>(true)
 
   const validationSchema = Yup.object({
+    nickname: Yup.string().required('Campo obrigatório'),
     postalCode: Yup.string()
       .matches(/^\d{5}-\d{3}$/, 'O CEP deve estar no formato 12345-678')
-      .min(9, 'O CEP deve conter 8 dígitos'),
+      .min(9, 'O CEP deve conter 8 números')
+      .optional(),
     street: Yup.string().required('Campo obrigatório'),
     neighborhood: Yup.string().required('Campo obrigatório'),
     city: Yup.string().required('Campo obrigatório'),
@@ -48,7 +52,10 @@ const EditTargetPropertyForm = ({
       .min(2, 'Mínimo 2 letras')
       .max(2, 'Máximo 2 letras'),
     lotNumber: Yup.string(),
-    price: Yup.number().required()
+    sellPrice: Yup.number(),
+    rentPrice: Yup.number(),
+    contoPricing: Yup.number(),
+    iptu: Yup.number()
   })
 
   const formik = useFormik({
@@ -77,7 +84,6 @@ const EditTargetPropertyForm = ({
   })
 
   const { user } = useSessionContext()
-  const { hunt } = useHuntContext()
 
   async function handleSubmit(values: CreateTargetPropertyRequestProps) {
     if (!formik.isValid || !user) return
@@ -100,6 +106,12 @@ const EditTargetPropertyForm = ({
   async function completeFieldsByCEP(e: React.FocusEvent<HTMLInputElement>) {
     const postalCode = e.target.value
 
+    if (!postalCode) return
+
+    await formik.validateField('postalCode')
+
+    if (formik.errors.postalCode) return
+
     const cep = CEPService()
 
     const data = await cep.get(postalCode.replace(/\D/g, ''))
@@ -121,25 +133,35 @@ const EditTargetPropertyForm = ({
   }, [formik])
 
   const pricing = useMemo(() => {
-    if ((!formik.values.rentPrice && !formik.values.sellPrice) || !hunt)
-      return 'Insira os valores para este imóvel'
+    const noPriceData = (!formik.values.rentPrice && !formik.values.sellPrice) || !huntSettings
+    if (noPriceData) return 'Insira os valores para este imóvel'
 
-    const rent = `Aluguel: ${formik.values.rentPrice} | Total: ${formik.values.rentPrice + formik.values.condoPricing + formik.values.iptu}`
-    const sell = `Venda: ${formik.values.sellPrice} | Total: ${formik.values.sellPrice + formik.values.condoPricing + formik.values.iptu}`
-
-    if (hunt.type === 'buy') {
-      return sell
+    if (huntSettings.type === 'buy') {
+      return `Venda: ${formik.values.sellPrice} | Total: ${formik.values.sellPrice + formik.values.condoPricing + formik.values.iptu}`
     } else {
-      return rent
+      return `Aluguel: ${formik.values.rentPrice} | Total: ${formik.values.rentPrice + formik.values.condoPricing + formik.values.iptu}`
     }
   }, [formik])
 
   const enableButton = useMemo(() => {
-    return (
+    const hasMinimalData =
       (formik.values.street !== '' && formik.values.nickname !== '') ||
       formik.isValid ||
       formik.isSubmitting
-    )
+
+    const dataHasChange: string[] = []
+
+    for (const targetInfo in formik.values) {
+      const formikValue = formik.values[targetInfo as never]
+      const currentValue = currentData[targetInfo as never]
+      if (formikValue !== currentValue) {
+        if (!((formikValue === 0 || formikValue === '') && !currentValue)) {
+          dataHasChange.push(targetInfo)
+        }
+      }
+    }
+
+    return hasMinimalData && dataHasChange.length >= 1
   }, [formik])
 
   return (
@@ -147,7 +169,7 @@ const EditTargetPropertyForm = ({
       <form onSubmit={formik.handleSubmit} className="w-full flex flex-col gap-6">
         <section className="w-full flex flex-col gap-4">
           <h3 className="text-xl text-brand-primary-700 pb-0.5 border-b-brand-gray-400 border-b-2 w-3/4 uppercase">
-            Incluir imóvel de interesse
+            Atualizar informações do imóvel
           </h3>
           <div className="grid md:grid-cols-12 gap-x-4 gap-y-5">
             <span className="col-span-12 flex flex-row items-end gap-4">
@@ -382,7 +404,9 @@ const EditTargetPropertyForm = ({
             </CollapsableBox>
           </div>
         </section>
-        <SubmitButton isDisabled={!enableButton} label="Criar" />
+        <div className="w-full flex justify-center md:justify-end items-center">
+          <SubmitButton isDisabled={!enableButton} label="Atualizar" />
+        </div>
       </form>
     </div>
   )
