@@ -8,6 +8,7 @@ import CollapsableBox from '@ui/CollapsableBox'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
 
+import { useUIContext } from '@/providers/UIProvider'
 import type { CreateTargetPropertyRequestProps } from '@/requests/targetProperty/create'
 import { editTargetProperty } from '@/requests/targetProperty/edit'
 import type { AddressKeys } from '@/services/cep'
@@ -21,7 +22,7 @@ import Input from '@/ui/components/base/form/inputs/Input'
 
 interface EditTargetPropertyFormProps {
   onSuccess: (_id: string) => void
-  onFail: () => void
+  onFail: (_f: string) => void
   currentData: TargetPropertyInterface
   huntSettings: InterfaceHunt
 }
@@ -69,7 +70,7 @@ const EditTargetPropertyForm = ({
       country: currentData.country ?? 'Brasil',
       block: currentData.block ?? '0',
       lotNumber: currentData.lotNumber ?? '',
-      propertyNumber: currentData.number ?? '',
+      propertyNumber: currentData.propertyNumber ?? '',
       size: currentData.size ?? 0,
       rooms: currentData.rooms ?? 1,
       bathrooms: currentData.bathrooms ?? 1,
@@ -84,6 +85,7 @@ const EditTargetPropertyForm = ({
   })
 
   const { user } = useSessionContext()
+  const { modal } = useUIContext()
 
   async function handleSubmit(values: CreateTargetPropertyRequestProps) {
     if (!formik.isValid || !user) return
@@ -95,12 +97,26 @@ const EditTargetPropertyForm = ({
 
     const res = await editTargetProperty(currentData.id, data)
 
-    if (!res) {
-      onFail()
+    if (res && res.code === 'ALREADY_EXISTS') {
+      onFail('Já tem um imóvel com esse endereço')
+      return
+    } else if (res && res.code === 'DUPLICITY_WARNING') {
+      onFail(
+        'Esse imóvel pode já estar cadastrado, complete o endereço para não incluir imóveis duplicados'
+      )
+      if (res.relative === 'byLot') {
+        formik.setFieldError('propertyNumber', 'Informe o complemento')
+      } else if (res.relative === 'byStreet') {
+        formik.setFieldError('lotNumber', 'Informe o número')
+      }
+      return
+    } else if (!res || !res.data) {
+      onFail('Não foi possível criar o imóvel, tente novamente mais tarde')
+      modal.close()
       return
     }
 
-    onSuccess(res?.id)
+    onSuccess(res.data.id)
   }
 
   async function completeFieldsByCEP(e: React.FocusEvent<HTMLInputElement>) {
@@ -224,6 +240,7 @@ const EditTargetPropertyForm = ({
                     placeholder={`123`}
                     value={formik.values.lotNumber}
                     onChange={formik.handleChange}
+                    error={formik.errors.lotNumber}
                   />
                 </span>
                 <span className="col-span-8 md:col-span-3">
@@ -271,7 +288,7 @@ const EditTargetPropertyForm = ({
                 </span>
               </div>
               <div className="w-full grid grid-cols-12 gap-x-4 gap-y-5 mt-6">
-                <FormSectionLabel>Imóvel</FormSectionLabel>
+                <FormSectionLabel>Complemento</FormSectionLabel>
                 <span className="col-span-6 md:col-span-4">
                   <Input
                     label="Identificação"
@@ -282,6 +299,7 @@ const EditTargetPropertyForm = ({
                     placeholder="301 A"
                     value={formik.values.propertyNumber}
                     onChange={formik.handleChange}
+                    error={formik.errors.propertyNumber}
                   />
                 </span>
                 <span className="col-span-6 md:col-span-4">
@@ -295,7 +313,10 @@ const EditTargetPropertyForm = ({
                     onChange={formik.handleChange}
                   />
                 </span>
-                <span className="col-span-6 md:col-span-4">
+              </div>
+              <div className="w-full grid grid-cols-12 gap-x-4 gap-y-5 mt-6">
+                <FormSectionLabel>Imóvel</FormSectionLabel>
+                <span className="col-span-6 md:col-span-3">
                   <Input
                     label="Tamanho"
                     description="Em metros quadrados"

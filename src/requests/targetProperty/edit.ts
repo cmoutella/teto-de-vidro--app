@@ -6,7 +6,14 @@ export type EditTargetRequestProps = Partial<Omit<TargetPropertyInterface, 'id' 
 type EditTargetRequest = (
   _id: string,
   _bodyData: EditTargetRequestProps
-) => Promise<TargetPropertyInterface | undefined>
+) => Promise<
+  | {
+      data: TargetPropertyInterface | undefined
+      code: 'SUCCESS' | 'ALREADY_EXISTS' | 'DUPLICITY_WARNING'
+      relative?: 'byLot' | 'byStreet'
+    }
+  | undefined
+>
 
 export const editTargetProperty: EditTargetRequest = async (id, bodyData) => {
   const baseUrl = 'http://localhost:3000'
@@ -21,13 +28,25 @@ export const editTargetProperty: EditTargetRequest = async (id, bodyData) => {
       body: JSON.stringify({ id, data: bodyData })
     }).then((res) => res.json())
 
-    if (res.error) {
+    console.log('edit', res)
+
+    if (res.error === 'ALREADY_EXISTS') {
+      return { data: undefined, code: res.error }
+    } else if (!!res.error && res.error.includes('DUPLICITY_WARNING')) {
+      const warning = res.error.split(':')
+
+      return { data: undefined, code: 'DUPLICITY_WARNING', relative: warning[1].trim() }
+    } else if (
+      !!res.error &&
+      res.error !== 'ALREADY_EXISTS' &&
+      !res.error.includes('DUPLICITY_WARNING')
+    ) {
       throw Error('Não foi possível criar agora, tente novamente mais tarde')
     }
 
     const { data } = res as SuccessResponse<TargetPropertyInterface>
 
-    return data
+    return { data: data, code: 'SUCCESS' }
   } catch (_err) {
     return undefined
   }
