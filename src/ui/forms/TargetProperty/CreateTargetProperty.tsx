@@ -9,12 +9,12 @@ import cx from 'classnames'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
 
-import { useHuntContext } from '@/providers/HuntProvider'
 import { scraper } from '@/requests/scraper/get'
 import type { CreateTargetPropertyRequestProps } from '@/requests/targetProperty/create'
 import { createTargetProperty } from '@/requests/targetProperty/create'
 import type { AddressKeys } from '@/services/cep'
 import { CEPService } from '@/services/cep'
+import type { InterfaceHunt } from '@/types/app'
 import Button from '@/ui/components/base/Button'
 import SubmitButton from '@/ui/components/base/form/buttons/SubmitButton'
 import { CEPField } from '@/ui/components/base/form/fields/cep/CEPField'
@@ -26,12 +26,18 @@ interface CreateTargetPropertyFormProps {
   onSuccess: (_id: string) => void
   onFail: () => void
   huntId: string
+  huntSettings: InterfaceHunt
 }
 
 const formThemeSize: FormSizes = 'lg'
 const themePallete: FormTheme = 'light'
 
-const CreateTargetPropertyForm = ({ onSuccess, onFail, huntId }: CreateTargetPropertyFormProps) => {
+const CreateTargetPropertyForm = ({
+  onSuccess,
+  onFail,
+  huntId,
+  huntSettings
+}: CreateTargetPropertyFormProps) => {
   const [addressBoxOpen, setAddressBoxOpen] = useState<boolean>(false)
   const [priceBoxOpen, setPriceBoxOpen] = useState<boolean>(false)
 
@@ -90,7 +96,6 @@ const CreateTargetPropertyForm = ({ onSuccess, onFail, huntId }: CreateTargetPro
   })
 
   const { user } = useSessionContext()
-  const { hunt } = useHuntContext()
 
   async function handleSubmit(values: CreateTargetPropertyRequestProps) {
     if (!formik.isValid || !user) return
@@ -171,18 +176,15 @@ const CreateTargetPropertyForm = ({ onSuccess, onFail, huntId }: CreateTargetPro
   }, [formik])
 
   const pricing = useMemo(() => {
-    if ((!formik.values.rentPrice && !formik.values.sellPrice) || !hunt)
+    if ((!formik.values.rentPrice && !formik.values.sellPrice) || !huntSettings)
       return 'Insira os valores para este imóvel'
 
-    const rent = `Aluguel: ${formik.values.rentPrice} | Total: ${formik.values.rentPrice + formik.values.condoPricing + formik.values.iptu}`
-    const sell = `Venda: ${formik.values.sellPrice} | Total: ${formik.values.sellPrice + formik.values.condoPricing + formik.values.iptu}`
-
-    if (hunt.type === 'buy') {
-      return sell
+    if (huntSettings.type === 'buy') {
+      return `Venda: ${formik.values.sellPrice} | Total: ${formik.values.sellPrice + formik.values.condoPricing + formik.values.iptu}`
     } else {
-      return rent
+      return `Aluguel: ${formik.values.rentPrice} | Total: ${formik.values.rentPrice + formik.values.condoPricing + formik.values.iptu}`
     }
-  }, [formik, hunt])
+  }, [formik, huntSettings])
 
   return (
     <div className="w-full">
