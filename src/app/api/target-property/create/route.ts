@@ -36,6 +36,10 @@ export async function POST(req: NextRequest) {
 
     if (res.status === 401) {
       throw new Error('Erro de autorização')
+    } else if (res.status === 409) {
+      const response = await res.json()
+
+      throw new Error(response.message)
     } else if (res.status >= 500) {
       throw new Error('Erro interno no servidor')
     } else if (res.status >= 400) {

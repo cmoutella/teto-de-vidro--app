@@ -9,6 +9,7 @@ import cx from 'classnames'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
 
+import { useUIContext } from '@/providers/UIProvider'
 import { scraper } from '@/requests/scraper/get'
 import type { CreateTargetPropertyRequestProps } from '@/requests/targetProperty/create'
 import { createTargetProperty } from '@/requests/targetProperty/create'
@@ -24,7 +25,7 @@ import { formatMoneyValue } from '@/utils/string/formatMoney'
 
 interface CreateTargetPropertyFormProps {
   onSuccess: (_id: string) => void
-  onFail: () => void
+  onFail: (_f: string) => void
   huntId: string
   huntSettings: InterfaceHunt
 }
@@ -96,6 +97,7 @@ const CreateTargetPropertyForm = ({
   })
 
   const { user } = useSessionContext()
+  const { modal } = useUIContext()
 
   async function handleSubmit(values: CreateTargetPropertyRequestProps) {
     if (!formik.isValid || !user) return
@@ -107,12 +109,26 @@ const CreateTargetPropertyForm = ({
 
     const res = await createTargetProperty(data)
 
-    if (!res) {
-      onFail()
+    if (res && res.code === 'SUCCESS' && res.data) {
+      onSuccess(res.data.id)
+    } else if (res && res.code === 'ALREADY_EXISTS') {
+      onFail('Você já está de olho nesse imóvel')
+      modal.close()
+      return
+    } else if (res && res.code === 'DUPLICITY_WARNING') {
+      onFail(
+        'Esse imóvel pode já estar cadastrado, complete o endereço para não incluir imóveis duplicados'
+      )
+      if (res.relative === 'byLot') {
+        formik.setFieldError('propertyNumber', 'Informe o complemento')
+      } else if (res.relative === 'byStreet') {
+        formik.setFieldError('lotNumber', 'Informe o número')
+      }
+      return
+    } else if (!res || !res.data) {
+      onFail('Não foi possível criar o imóvel')
       return
     }
-
-    onSuccess(res?.id)
   }
 
   async function fetchAdFillForm() {
@@ -270,6 +286,7 @@ const CreateTargetPropertyForm = ({
                     placeholder={`123`}
                     value={formik.values.lotNumber}
                     onChange={formik.handleChange}
+                    error={formik.errors.lotNumber}
                   />
                 </span>
                 <span className="col-span-8 md:col-span-3">
@@ -317,7 +334,7 @@ const CreateTargetPropertyForm = ({
                 </span>
               </div>
               <div className="w-full grid grid-cols-12 gap-x-4 gap-y-5 mt-6">
-                <FormSectionLabel>Imóvel</FormSectionLabel>
+                <FormSectionLabel>Complemento</FormSectionLabel>
                 <span className="col-span-6 md:col-span-4">
                   <Input
                     label="Identificação"
@@ -328,6 +345,7 @@ const CreateTargetPropertyForm = ({
                     placeholder="301 A"
                     value={formik.values.propertyNumber}
                     onChange={formik.handleChange}
+                    error={formik.errors.propertyNumber}
                   />
                 </span>
                 <span className="col-span-6 md:col-span-4">
@@ -341,7 +359,10 @@ const CreateTargetPropertyForm = ({
                     onChange={formik.handleChange}
                   />
                 </span>
-                <span className="col-span-6 md:col-span-4">
+              </div>
+              <div className="w-full grid grid-cols-12 gap-x-4 gap-y-5 mt-6">
+                <FormSectionLabel>Imóvel</FormSectionLabel>
+                <span className="col-span-6 md:col-span-3">
                   <Input
                     label="Tamanho"
                     description="Em metros quadrados"

@@ -29,9 +29,8 @@ export default function TargetPropertyItem({ target, hunt }: TargetPropertyItemP
   const { removeTargetProperty } = useHuntContext()
 
   function openEditModal() {
-    function handleFail() {
-      modal.close()
-      toast.error('Não foi possível editar o imóvel')
+    function handleFail(feedback: string) {
+      toast.error(feedback)
     }
 
     function handleSuccess() {
@@ -86,6 +85,15 @@ export default function TargetPropertyItem({ target, hunt }: TargetPropertyItemP
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [hunt])
 
+  const address = useMemo(() => {
+    const complementAddress = target.propertyNumber && `,  ${target.propertyNumber}`
+
+    const baseAddress = `${target.street ?? '?'}${target.lotNumber && `, ${target.lotNumber}`}${!!complementAddress && complementAddress}`
+
+    const locationAddress = ` - ${target.city ?? '?'},  ${target.uf ?? '?'}`
+    return `${baseAddress}${locationAddress}`
+  }, [target])
+
   const CollapseIcon = useCallback(() => {
     const style = cx(
       'translate-y-0.5 sm:translate-y-1.5 cursor-pointer text-brand-primary-500 opacity-80 hover:opacity-100 hover:font-semibold'
@@ -112,9 +120,10 @@ export default function TargetPropertyItem({ target, hunt }: TargetPropertyItemP
       >
         <CollapseIcon />
         <div className="w-full">
-          <div className="w-full flex flex-row justify-between items-end mb-4 sm:mb-3">
-            <div className="flex items-center flex-row justify-start gap-2">
+          <div className="w-full flex flex-row justify-between items-start mb-4 sm:mb-3">
+            <div className="flex items-start flex-col justify-start gap-0.5">
               <h3 className="font-semibold text-lg sm:text-2xl">{target.nickname}</h3>
+              <p>{address}</p>
             </div>
             {/* TODO: colocar as ações no responsivo */}
             <div className="text-xs hidden sm:flex flex-row gap-0.5">
