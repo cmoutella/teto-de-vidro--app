@@ -69,9 +69,9 @@ const EditTargetPropertyForm = ({
       city: currentData.city ?? '',
       uf: currentData.uf ?? '',
       country: currentData.country ?? 'Brasil',
-      noLotNumber: false,
+      noLotNumber: currentData.noLotNumber ?? false,
       lotNumber: currentData.lotNumber ?? '',
-      noComplement: false,
+      noComplement: currentData.noComplement ?? false,
       block: currentData.block ?? '0',
       propertyNumber: currentData.propertyNumber ?? '',
       size: currentData.size ?? 0,
@@ -245,16 +245,18 @@ const EditTargetPropertyForm = ({
                   />
                 </span>
                 <span className="col-span-4 md:col-span-2">
-                  <Input
-                    label="Número"
-                    name="lotNumber"
-                    themeSize={formThemeSize}
-                    theme={themePallete}
-                    placeholder={`123`}
-                    value={formik.values.lotNumber}
-                    onChange={formik.handleChange}
-                    error={formik.errors.lotNumber}
-                  />
+                  {!formik.values.noLotNumber && (
+                    <Input
+                      label="Número"
+                      name="lotNumber"
+                      themeSize={formThemeSize}
+                      theme={themePallete}
+                      placeholder={`123`}
+                      value={formik.values.lotNumber}
+                      onChange={formik.handleChange}
+                      error={formik.errors.lotNumber}
+                    />
+                  )}
                 </span>
                 <span className="col-span-8 md:col-span-3">
                   <Input
@@ -312,30 +314,34 @@ const EditTargetPropertyForm = ({
                     }}
                   />
                 </FormSectionLabel>
-                <span className="col-span-6 md:col-span-4">
-                  <Input
-                    label="Identificação"
-                    description="Apartamento, casa"
-                    name="propertyNumber"
-                    themeSize={formThemeSize}
-                    theme={themePallete}
-                    placeholder="301 A"
-                    value={formik.values.propertyNumber}
-                    onChange={formik.handleChange}
-                    error={formik.errors.propertyNumber}
-                  />
-                </span>
-                <span className="col-span-6 md:col-span-4">
-                  <Input
-                    label="Bloco"
-                    description="Se não houver, deixar 0"
-                    name="block"
-                    themeSize={formThemeSize}
-                    theme={themePallete}
-                    value={formik.values.block}
-                    onChange={formik.handleChange}
-                  />
-                </span>
+                {!formik.values.noComplement && (
+                  <span className="col-span-6 md:col-span-4">
+                    <Input
+                      label="Identificação"
+                      description="Apartamento, casa"
+                      name="propertyNumber"
+                      themeSize={formThemeSize}
+                      theme={themePallete}
+                      placeholder="301 A"
+                      value={formik.values.propertyNumber}
+                      onChange={formik.handleChange}
+                      error={formik.errors.propertyNumber}
+                    />
+                  </span>
+                )}
+                {!formik.values.noComplement && (
+                  <span className="col-span-6 md:col-span-4">
+                    <Input
+                      label="Bloco"
+                      description="Se não houver, deixar 0"
+                      name="block"
+                      themeSize={formThemeSize}
+                      theme={themePallete}
+                      value={formik.values.block}
+                      onChange={formik.handleChange}
+                    />
+                  </span>
+                )}
               </div>
               <div className="w-full grid grid-cols-12 gap-x-4 gap-y-5 mt-6">
                 <FormSectionLabel>Imóvel</FormSectionLabel>

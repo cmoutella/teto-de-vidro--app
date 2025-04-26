@@ -1,25 +1,17 @@
 import type { ReactNode } from 'react'
 
-import type { InputProps as InputHeadlessProps } from '@headlessui/react'
 import InputRaw from '@raw/Input'
 import FieldWrapper from '@raw/wrappers/Field'
-import type { FormSizes, FormTheme } from '@ui/base/shared/formTheme'
 import { afterSymbolPosition, formTheme, symbolPadding } from '@ui/base/shared/formTheme'
 import cx from 'classnames'
 
-export interface InputProps extends InputHeadlessProps {
-  label?: string
-  description?: string
-  theme?: FormTheme
-  themeSize?: FormSizes
-  iconButton?: ReactNode
-  fieldSymbol?: string | ReactNode
-  error?: string
-  requiredError?: boolean
-  siblingHeight?: boolean
+import type { InputProps } from '../Input'
+
+interface InputAndActionButtonProps extends InputProps {
+  button: ReactNode
 }
 
-const Input = ({
+const InputAndActionButton = ({
   label,
   description,
   theme = 'light',
@@ -28,8 +20,9 @@ const Input = ({
   siblingHeight,
   fieldSymbol,
   error,
+  button,
   ...otherProps
-}: InputProps) => {
+}: InputAndActionButtonProps) => {
   return (
     <FieldWrapper
       label={label}
@@ -38,6 +31,7 @@ const Input = ({
       themeSize={themeSize}
       errorMessage={error}
       siblingHeight={siblingHeight}
+      actionButton={button}
     >
       {fieldSymbol && (
         <span
@@ -73,4 +67,4 @@ const Input = ({
   )
 }
 
-export default Input
+export default InputAndActionButton

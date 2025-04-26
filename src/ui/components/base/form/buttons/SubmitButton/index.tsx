@@ -12,7 +12,7 @@ function SubmitButton({ isDisabled, label }: SubmitButtonProps) {
       label={label}
       className={cx('min-w-36 w-2/6 max-w-56 text-white', {
         'hover:bg-brand-primary-800 bg-brand-primary-700': !isDisabled,
-        'bg-brand-gray-500 disabled:bg-brand-gray-500': isDisabled
+        'bg-brand-gray-100 disabled:bg-brand-gray-100': isDisabled
       })}
       type="submit"
       size="xxlarge"

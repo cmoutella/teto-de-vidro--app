@@ -28,8 +28,6 @@ export const editTargetProperty: EditTargetRequest = async (id, bodyData) => {
       body: JSON.stringify({ id, data: bodyData })
     }).then((res) => res.json())
 
-    console.log('edit', res)
-
     if (res.error === 'ALREADY_EXISTS') {
       return { data: undefined, code: res.error }
     } else if (!!res.error && res.error.includes('DUPLICITY_WARNING')) {

@@ -15,8 +15,6 @@ type CreateTargetPropertyRequest = (_bodyData: CreateTargetPropertyRequestProps)
 export const createTargetProperty: CreateTargetPropertyRequest = async (bodyData) => {
   const baseUrl = 'http://localhost:3000'
 
-  console.log('createTargetProperty')
-
   try {
     const res = await fetch(`${baseUrl}/api/target-property/create`, {
       method: 'POST',

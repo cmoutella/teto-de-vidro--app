@@ -31,6 +31,7 @@ interface TargetPropertyInterface {
   realtorContact: string
 
   lotId: string
+  noLotNumber: boolean
   lotNumber: string
   postalCode: string
   neighborhood: string
@@ -40,6 +41,7 @@ interface TargetPropertyInterface {
   street: string
 
   propertyId: string
+  noComplement: boolean
   block: string
   propertyNumber: string
   size: number
