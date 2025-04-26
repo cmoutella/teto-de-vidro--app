@@ -189,7 +189,9 @@ const CreateTargetPropertyForm = ({
   const address = useMemo(() => {
     if (!formik.values.street) return 'Complete as informações de endereço'
 
-    const complementAddress = formik.values.propertyNumber && `,  ${formik.values.propertyNumber}`
+    const complementAddress =
+      formik.values.propertyNumber &&
+      `,  ${formik.values.block && formik.values.block !== '0' ? `Bl ${formik.values.block}` : ''}${formik.values.propertyNumber}`
     const baseAddress = `${formik.values.street ?? '?'}${formik.values.lotNumber && `, ${formik.values.lotNumber}`}${complementAddress}`
     const locationAddress = ` - ${formik.values.city ?? '?'},  ${formik.values.uf ?? '?'}`
     return `${baseAddress}${locationAddress}`
