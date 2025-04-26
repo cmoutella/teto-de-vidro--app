@@ -22,6 +22,7 @@ import { CEPField } from '@/ui/components/base/form/fields/cep/CEPField'
 import { MoneyField } from '@/ui/components/base/form/fields/money/MoneyField'
 import { FormSectionLabel } from '@/ui/components/base/form/FormSectionLabel'
 import Input from '@/ui/components/base/form/inputs/Input'
+import InputAndActionButton from '@/ui/components/base/form/inputs/InputAndActionButton'
 import { formatMoneyValue } from '@/utils/string/formatMoney'
 
 interface CreateTargetPropertyFormProps {
@@ -214,7 +215,7 @@ const CreateTargetPropertyForm = ({
           </h3>
           <div className="grid md:grid-cols-12 gap-x-4 gap-y-5">
             <span className="col-span-12 flex flex-row items-end gap-4">
-              <Input
+              <InputAndActionButton
                 label="Anúncio do imóvel"
                 description="Vamos auto preencher o resto do formulário com dados objetidos no anúncio"
                 name="adURL"
@@ -224,23 +225,27 @@ const CreateTargetPropertyForm = ({
                 placeholder={`http://www...`}
                 value={formik.values.adURL}
                 onChange={formik.handleChange}
-              />
-              <Button
-                label="Preencher"
-                size="xxlarge"
-                onClick={fetchAdFillForm}
-                className={cx(
-                  'bg-brand-primary-400 hover:bg-brand-primary-800 text-brand-primary-900 hover:text-white min-w-20 disabled:bg-slate-300 disabled:text-slate-500 translate-y-2'
-                )}
-                disabled={formik.values.adURL === '' || !!formik.errors.adURL}
+                button={
+                  <Button
+                    label="Preencher"
+                    size="xxlarge"
+                    onClick={fetchAdFillForm}
+                    className={cx(
+                      'bg-brand-primary-400 hover:bg-brand-primary-800',
+                      'text-brand-primary-900 hover:text-white min-w-20',
+                      'disabled:bg-slate-300 disabled:text-slate-500'
+                    )}
+                    disabled={formik.values.adURL === '' || !!formik.errors.adURL}
+                  />
+                }
               />
             </span>
           </div>
           <div className="grid md:grid-cols-12 gap-x-4 gap-y-5">
             <span className="col-span-12 flex flex-row items-end gap-4">
               <Input
-                label="Título"
-                description="Dê um nome para identificar esse imóvel"
+                label="Título*"
+                description="Dê um nome ou apelido para identificar esse imóvel"
                 name="nickname"
                 themeSize={formThemeSize}
                 theme={themePallete}
@@ -410,6 +415,7 @@ const CreateTargetPropertyForm = ({
                     type="number"
                     themeSize={formThemeSize}
                     theme={themePallete}
+                    siblingHeight={true}
                     value={formik.values.rooms}
                     onChange={formik.handleChange}
                   />
@@ -421,6 +427,7 @@ const CreateTargetPropertyForm = ({
                     type="number"
                     themeSize={formThemeSize}
                     theme={themePallete}
+                    siblingHeight={true}
                     value={formik.values.bathrooms}
                     onChange={formik.handleChange}
                   />
@@ -432,6 +439,7 @@ const CreateTargetPropertyForm = ({
                     type="number"
                     themeSize={formThemeSize}
                     theme={themePallete}
+                    siblingHeight={true}
                     value={formik.values.parkingSpots}
                     onChange={formik.handleChange}
                   />
