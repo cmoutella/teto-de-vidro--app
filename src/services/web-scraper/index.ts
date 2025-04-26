@@ -25,7 +25,7 @@ export async function webScraper(url: string) {
   await page.setViewport({ width: 1080, height: 1024 })
 
   async function scrapeZap() {
-    const adData: Record<string, string | string[] | number> = {}
+    const adData: Record<string, string | string[] | number | boolean> = {}
 
     /**
      * PREÇO DE
@@ -86,6 +86,8 @@ export async function webScraper(url: string) {
     amenities.forEach((item) => {
       if (item.label && item.value) {
         adData[item.label] = item.value
+      } else if (item.label) {
+        adData[item.label.toLowerCase()] = true
       }
     })
 

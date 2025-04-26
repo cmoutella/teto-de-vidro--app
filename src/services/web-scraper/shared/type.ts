@@ -1,4 +1,5 @@
-export interface AdScrapedData extends Record<string, string | string[] | number | undefined> {
+export interface AdScrapedData
+  extends Record<string, string | string[] | number | undefined | Record<string, boolean>> {
   rentPrice?: number
   condoPricing?: number
   iptu?: number
@@ -13,4 +14,5 @@ export interface AdScrapedData extends Record<string, string | string[] | number
   neighborhood?: string
   city?: string
   uf?: string
+  amenities?: Record<string, boolean>
 }
