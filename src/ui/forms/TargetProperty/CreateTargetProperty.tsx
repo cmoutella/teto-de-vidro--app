@@ -1,5 +1,4 @@
 'use client'
-import type { ReactNode } from 'react'
 import { useMemo, useState } from 'react'
 
 import { useSessionContext } from '@providers/AuthProvider'
@@ -18,8 +17,10 @@ import { CEPService } from '@/services/cep'
 import type { InterfaceHunt } from '@/types/app'
 import Button from '@/ui/components/base/Button'
 import SubmitButton from '@/ui/components/base/form/buttons/SubmitButton'
+import { Checkbox } from '@/ui/components/base/form/Checkbox'
 import { CEPField } from '@/ui/components/base/form/fields/cep/CEPField'
 import { MoneyField } from '@/ui/components/base/form/fields/money/MoneyField'
+import { FormSectionLabel } from '@/ui/components/base/form/FormSectionLabel'
 import Input from '@/ui/components/base/form/inputs/Input'
 import { formatMoneyValue } from '@/utils/string/formatMoney'
 
@@ -77,9 +78,11 @@ const CreateTargetPropertyForm = ({
       city: '',
       uf: '',
       country: 'Brasil',
-      block: '0',
+      noLotNumber: false,
       lotNumber: '',
+      noComplement: false,
       propertyNumber: '',
+      block: '0',
       size: 0,
       rooms: 1,
       bathrooms: 1,
@@ -255,7 +258,17 @@ const CreateTargetPropertyForm = ({
               toggleBox={() => setAddressBoxOpen(!addressBoxOpen)}
             >
               <div className="w-full grid grid-cols-12 gap-x-4 gap-y-5 mt-2">
-                <FormSectionLabel>Endereço principal</FormSectionLabel>
+                <FormSectionLabel>
+                  <p>Endereço principal</p>
+                  <Checkbox
+                    label="Sem número"
+                    checked={formik.values.noLotNumber}
+                    name="noLotNumber"
+                    onChange={(stateChanged) => {
+                      formik.setFieldValue('noLotNumber', stateChanged)
+                    }}
+                  />
+                </FormSectionLabel>
                 <span className="col-span-12 md:col-span-4">
                   <CEPField
                     size={formThemeSize}
@@ -278,16 +291,18 @@ const CreateTargetPropertyForm = ({
                   />
                 </span>
                 <span className="col-span-4 md:col-span-2">
-                  <Input
-                    label="Número"
-                    name="lotNumber"
-                    themeSize={formThemeSize}
-                    theme={themePallete}
-                    placeholder={`123`}
-                    value={formik.values.lotNumber}
-                    onChange={formik.handleChange}
-                    error={formik.errors.lotNumber}
-                  />
+                  {!formik.values.noLotNumber && (
+                    <Input
+                      label="Número"
+                      name="lotNumber"
+                      themeSize={formThemeSize}
+                      theme={themePallete}
+                      placeholder={`123`}
+                      value={formik.values.lotNumber}
+                      onChange={formik.handleChange}
+                      error={formik.errors.lotNumber}
+                    />
+                  )}
                 </span>
                 <span className="col-span-8 md:col-span-3">
                   <Input
@@ -334,31 +349,45 @@ const CreateTargetPropertyForm = ({
                 </span>
               </div>
               <div className="w-full grid grid-cols-12 gap-x-4 gap-y-5 mt-6">
-                <FormSectionLabel>Complemento</FormSectionLabel>
-                <span className="col-span-6 md:col-span-4">
-                  <Input
-                    label="Identificação"
-                    description="Apartamento, casa"
-                    name="propertyNumber"
-                    themeSize={formThemeSize}
-                    theme={themePallete}
-                    placeholder="301 A"
-                    value={formik.values.propertyNumber}
-                    onChange={formik.handleChange}
-                    error={formik.errors.propertyNumber}
+                <FormSectionLabel>
+                  <p>Complemento</p>
+                  <Checkbox
+                    label="Sem complemento"
+                    checked={formik.values.noComplement}
+                    name="noComplement"
+                    onChange={(stateChanged) => {
+                      formik.setFieldValue('noComplement', stateChanged)
+                    }}
                   />
-                </span>
-                <span className="col-span-6 md:col-span-4">
-                  <Input
-                    label="Bloco"
-                    description="Se não houver, deixar 0"
-                    name="block"
-                    themeSize={formThemeSize}
-                    theme={themePallete}
-                    value={formik.values.block}
-                    onChange={formik.handleChange}
-                  />
-                </span>
+                </FormSectionLabel>
+                {!formik.values.noComplement && (
+                  <span className="col-span-6 md:col-span-4">
+                    <Input
+                      label="Identificação"
+                      description="Apartamento, casa"
+                      name="propertyNumber"
+                      themeSize={formThemeSize}
+                      theme={themePallete}
+                      placeholder="301 A"
+                      value={formik.values.propertyNumber}
+                      onChange={formik.handleChange}
+                      error={formik.errors.propertyNumber}
+                    />
+                  </span>
+                )}
+                {!formik.values.noComplement && (
+                  <span className="col-span-6 md:col-span-4">
+                    <Input
+                      label="Bloco"
+                      description="Se não houver, deixar 0"
+                      name="block"
+                      themeSize={formThemeSize}
+                      theme={themePallete}
+                      value={formik.values.block}
+                      onChange={formik.handleChange}
+                    />
+                  </span>
+                )}
               </div>
               <div className="w-full grid grid-cols-12 gap-x-4 gap-y-5 mt-6">
                 <FormSectionLabel>Imóvel</FormSectionLabel>
@@ -474,14 +503,6 @@ const CreateTargetPropertyForm = ({
         <SubmitButton isDisabled={!enableButton} label="Criar" />
       </form>
     </div>
-  )
-}
-
-function FormSectionLabel({ children }: { children: ReactNode | string }) {
-  return (
-    <p className="col-span-12 mb-2 text-brand-primary-900 font-semibold uppercase border-b-brand-gray-400 border-b-2">
-      {children}
-    </p>
   )
 }
 

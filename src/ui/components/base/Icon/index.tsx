@@ -2,6 +2,7 @@ import type { ReactNode } from 'react'
 
 import cx from 'classnames'
 
+import CheckMicro from '@/assets/icons/micro/check.svg'
 import ChevronDownMicro from '@/assets/icons/micro/chevron-down.svg'
 import ChevronLeftMicro from '@/assets/icons/micro/chevron-left.svg'
 import ChevronRightMicro from '@/assets/icons/micro/chevron-right.svg'
@@ -14,6 +15,7 @@ import PlusCircleMicro from '@/assets/icons/micro/plus-circle.svg'
 import PlusMicro from '@/assets/icons/micro/plus.svg'
 import TrashMicro from '@/assets/icons/micro/trash.svg'
 import XMicro from '@/assets/icons/micro/x.svg'
+import CheckMini from '@/assets/icons/mini/check.svg'
 import ChevronDownMini from '@/assets/icons/mini/chevron-down.svg'
 import ChevronLeftMini from '@/assets/icons/mini/chevron-left.svg'
 import ChevronRightMini from '@/assets/icons/mini/chevron-right.svg'
@@ -26,6 +28,7 @@ import PlusCircleMini from '@/assets/icons/mini/plus-circle.svg'
 import PlusMini from '@/assets/icons/mini/plus.svg'
 import TrashMini from '@/assets/icons/mini/trash.svg'
 import XMini from '@/assets/icons/mini/x.svg'
+import CheckOutline from '@/assets/icons/outline/check.svg'
 import ChevronDownOutline from '@/assets/icons/outline/chevron-down.svg'
 import ChevronLeftOutline from '@/assets/icons/outline/chevron-left.svg'
 import ChevronRightOutline from '@/assets/icons/outline/chevron-right.svg'
@@ -38,6 +41,7 @@ import PlusCircleOutline from '@/assets/icons/outline/plus-circle.svg'
 import PlusOutline from '@/assets/icons/outline/plus.svg'
 import TrashOutline from '@/assets/icons/outline/trash.svg'
 import XOutline from '@/assets/icons/outline/x.svg'
+import CheckSolid from '@/assets/icons/solid/check.svg'
 import ChevronDownSolid from '@/assets/icons/solid/chevron-down.svg'
 import ChevronLeftSolid from '@/assets/icons/solid/chevron-left.svg'
 import ChevronRightSolid from '@/assets/icons/solid/chevron-right.svg'
@@ -54,6 +58,7 @@ import XSolid from '@/assets/icons/solid/x.svg'
 type IconMode = 'solid' | 'outline' | 'mini' | 'micro'
 
 type AvailableIcon =
+  | 'check'
   | 'chevron-down'
   | 'chevron-up'
   | 'chevron-left'
@@ -84,6 +89,7 @@ const Icon = ({ icon, className, mode = 'outline', size = 'sm', onClick }: IconP
    * SOLID ICONS
    */
   const solidIcons: ModeIconCollection = {
+    check: CheckSolid,
     minus: MinusSolid,
     'minus-circle': MinusCircleSolid,
     plus: PlusSolid,
@@ -102,6 +108,7 @@ const Icon = ({ icon, className, mode = 'outline', size = 'sm', onClick }: IconP
    * OUTLINE ICONS
    */
   const outlineIcons: ModeIconCollection = {
+    check: CheckOutline,
     minus: MinusOutline,
     'minus-circle': MinusCircleOutline,
     plus: PlusOutline,
@@ -120,6 +127,7 @@ const Icon = ({ icon, className, mode = 'outline', size = 'sm', onClick }: IconP
    * MINI ICONS
    */
   const miniIcons: ModeIconCollection = {
+    check: CheckMini,
     minus: MinusMini,
     'minus-circle': MinusCircleMini,
     plus: PlusMini,
@@ -138,6 +146,7 @@ const Icon = ({ icon, className, mode = 'outline', size = 'sm', onClick }: IconP
    * MICRO ICONS
    */
   const microIcons: ModeIconCollection = {
+    check: CheckMicro,
     minus: MinusMicro,
     'minus-circle': MinusCircleMicro,
     plus: PlusMicro,
