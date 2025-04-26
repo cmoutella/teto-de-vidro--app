@@ -1,5 +1,4 @@
 'use client'
-import type { ReactNode } from 'react'
 import { useMemo, useState } from 'react'
 
 import { useSessionContext } from '@providers/AuthProvider'
@@ -16,8 +15,10 @@ import { CEPService } from '@/services/cep'
 import type { InterfaceHunt } from '@/types/app'
 import type { TargetPropertyInterface } from '@/types/targetProperty'
 import SubmitButton from '@/ui/components/base/form/buttons/SubmitButton'
+import { Checkbox } from '@/ui/components/base/form/Checkbox'
 import { CEPField } from '@/ui/components/base/form/fields/cep/CEPField'
 import { MoneyField } from '@/ui/components/base/form/fields/money/MoneyField'
+import { FormSectionLabel } from '@/ui/components/base/form/FormSectionLabel'
 import Input from '@/ui/components/base/form/inputs/Input'
 
 interface EditTargetPropertyFormProps {
@@ -68,8 +69,10 @@ const EditTargetPropertyForm = ({
       city: currentData.city ?? '',
       uf: currentData.uf ?? '',
       country: currentData.country ?? 'Brasil',
-      block: currentData.block ?? '0',
+      noLotNumber: false,
       lotNumber: currentData.lotNumber ?? '',
+      noComplement: false,
+      block: currentData.block ?? '0',
       propertyNumber: currentData.propertyNumber ?? '',
       size: currentData.size ?? 0,
       rooms: currentData.rooms ?? 1,
@@ -209,7 +212,17 @@ const EditTargetPropertyForm = ({
               toggleBox={() => setAddressBoxOpen(!addressBoxOpen)}
             >
               <div className="w-full grid grid-cols-12 gap-x-4 gap-y-5 mt-2">
-                <FormSectionLabel>Endereço principal</FormSectionLabel>
+                <FormSectionLabel>
+                  <p>Endereço principal</p>
+                  <Checkbox
+                    label="Sem número"
+                    checked={formik.values.noLotNumber}
+                    name="noLotNumber"
+                    onChange={(stateChanged) => {
+                      formik.setFieldValue('noLotNumber', stateChanged)
+                    }}
+                  />
+                </FormSectionLabel>
                 <span className="col-span-12 md:col-span-4">
                   <CEPField
                     size={formThemeSize}
@@ -288,7 +301,17 @@ const EditTargetPropertyForm = ({
                 </span>
               </div>
               <div className="w-full grid grid-cols-12 gap-x-4 gap-y-5 mt-6">
-                <FormSectionLabel>Complemento</FormSectionLabel>
+                <FormSectionLabel>
+                  <p>Complemento</p>
+                  <Checkbox
+                    label="Sem complemento"
+                    checked={formik.values.noComplement}
+                    name="noComplement"
+                    onChange={(stateChanged) => {
+                      formik.setFieldValue('noComplement', stateChanged)
+                    }}
+                  />
+                </FormSectionLabel>
                 <span className="col-span-6 md:col-span-4">
                   <Input
                     label="Identificação"
@@ -430,14 +453,6 @@ const EditTargetPropertyForm = ({
         </div>
       </form>
     </div>
-  )
-}
-
-function FormSectionLabel({ children }: { children: ReactNode | string }) {
-  return (
-    <p className="col-span-12 mb-2 text-brand-primary-900 font-semibold uppercase border-b-brand-gray-400 border-b-2">
-      {children}
-    </p>
   )
 }
 
