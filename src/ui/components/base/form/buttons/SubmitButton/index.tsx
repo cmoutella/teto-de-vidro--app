@@ -4,9 +4,10 @@ import cx from 'classnames'
 interface SubmitButtonProps {
   isDisabled: boolean
   label: string
+  fullWidth?: boolean
 }
 
-function SubmitButton({ isDisabled, label }: SubmitButtonProps) {
+function SubmitButton({ isDisabled, label, fullWidth = false }: SubmitButtonProps) {
   return (
     <Button
       label={label}
@@ -17,6 +18,7 @@ function SubmitButton({ isDisabled, label }: SubmitButtonProps) {
       type="submit"
       size="xxlarge"
       disabled={isDisabled}
+      fullWidth={fullWidth}
     />
   )
 }

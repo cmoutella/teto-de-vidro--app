@@ -23,13 +23,19 @@ interface TargetPropertyInterface {
   sellPrice: number
   rentPrice: number
   iptu: number
-  priority: number
-  huntingStage: PropertyHuntingStage
-  isActive: boolean
-  visitDate: string
-  realtor: string
-  realtorContact: string
 
+  isActive: boolean
+  huntingStage: PropertyHuntingStage
+  priority: number
+  visitDate: string
+
+  // contact
+  realState?: string
+  realStatePhoneNumber?: string
+  contactName?: string
+  contactWhatzap?: string
+
+  // lot
   lotId: string
   noLotNumber: boolean
   lotNumber: string
@@ -40,6 +46,7 @@ interface TargetPropertyInterface {
   country: string
   street: string
 
+  // property
   propertyId: string
   noComplement: boolean
   block: string

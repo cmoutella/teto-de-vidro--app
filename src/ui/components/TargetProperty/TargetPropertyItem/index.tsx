@@ -8,7 +8,10 @@ import { useHuntContext } from '@/providers/HuntProvider'
 import { useUIContext } from '@/providers/UIProvider'
 import type { InterfaceHunt } from '@/types/app'
 import type { TargetPropertyInterface } from '@/types/targetProperty'
+import DeleteConfirmation from '@/ui/forms/DeleteConfirmation'
 import EditTargetPropertyForm from '@/ui/forms/TargetProperty/EditTargetProperty'
+import PropertyContactForm from '@/ui/forms/TargetProperty/PropertyContact'
+import { formatMoneyValue } from '@/utils/string/formatMoney'
 import { lastUpdateMessage } from '@/utils/string/lastUpdateMessage'
 
 import Button from '../../base/Button'
@@ -51,6 +54,45 @@ export default function TargetPropertyItem({ target, hunt }: TargetPropertyItemP
     )
   }
 
+  function openDeleteConfirmation(targetId: string) {
+    function handleFail() {
+      toast.error('Algo deu errado')
+      modal.close()
+    }
+
+    function handleSuccess() {
+      modal.close()
+    }
+
+    modal.open(
+      'small',
+      <DeleteConfirmation
+        confirm={async () => await removeTargetProperty(targetId)}
+        close={handleSuccess}
+        onFail={handleFail}
+      />
+    )
+  }
+
+  function openContactFormModal() {
+    function handleFail() {
+      toast.error('Algo deu errado')
+      modal.close()
+    }
+
+    function handleSuccess() {
+      modal.close()
+      toast.success('Informações atualizadas com sucesso!')
+
+      fetchProperties()
+    }
+
+    modal.open(
+      'medium',
+      <PropertyContactForm onSuccess={handleSuccess} currentData={target} onFail={handleFail} />
+    )
+  }
+
   const totalPricing = useMemo(() => {
     if (hunt.type === 'rent' || hunt.type === 'either') {
       return target.rentPrice + (target.condoPricing ?? 0) + target.iptu
@@ -86,7 +128,9 @@ export default function TargetPropertyItem({ target, hunt }: TargetPropertyItemP
   }, [hunt])
 
   const address = useMemo(() => {
-    const complementAddress = target.propertyNumber && `,  ${target.propertyNumber}`
+    const complementAddress =
+      target.propertyNumber &&
+      `,  ${target.block && target.block !== '0' ? `Bl ${target.block}` : ''}${target.propertyNumber}`
 
     const baseAddress = `${target.street ?? '?'}${target.lotNumber && `, ${target.lotNumber}`}${!!complementAddress && complementAddress}`
 
@@ -128,18 +172,20 @@ export default function TargetPropertyItem({ target, hunt }: TargetPropertyItemP
             {/* TODO: colocar as ações no responsivo */}
             <div className="text-xs hidden sm:flex flex-row gap-0.5">
               <Button
-                label="Editar"
+                label={<Icon icon="pencil" mode="outline" size="xs" className="translate-x-0.5" />}
+                onlyIcon={true}
                 className={cx(
-                  'border border-brand-primary-500 text-brand-primary-600 hover:border-brand-primary-600 hover:bg-brand-primary-600 hover:text-white'
+                  'text-brand-primary-600 hover:border-brand-primary-600 hover:bg-brand-primary-600 hover:text-white'
                 )}
                 onClick={() => openEditModal()}
               />
               <Button
                 label={<Icon icon="trash" size="xs" />}
+                onlyIcon={true}
                 className={cx(
-                  'border border-red-500 text-red-600 hover:border-red-600 hover:bg-red-600 hover:text-white !min-w-11 !w-11 flex justify-center'
+                  'text-red-600 hover:border-red-600 hover:bg-red-600 hover:text-white flex justify-center'
                 )}
-                onClick={() => removeTargetProperty(target.id)}
+                onClick={() => openDeleteConfirmation(target.id)}
               />
             </div>
           </div>
@@ -148,30 +194,35 @@ export default function TargetPropertyItem({ target, hunt }: TargetPropertyItemP
               {(hunt.type === 'rent' || hunt.type === 'either') && (
                 <div className="col-span-6 sm:col-span-1 flex flex-col items-start">
                   <p className="text-xs sm:text-sm font-semibold whitespace-nowrap">ALUGUEL</p>
-                  <p>R$ {target.rentPrice}</p>
+                  <p>R$ {formatMoneyValue(target.rentPrice.toString())}</p>
                 </div>
               )}
               {(hunt.type === 'buy' || hunt.type === 'either') && (
                 <div className="col-span-6 sm:col-span-1 flex flex-col items-start">
                   <p className="text-xs sm:text-sm font-semibold whitespace-nowrap">VENDA</p>
-                  <p>R$ {target.sellPrice}</p>
+                  <p>R$ {formatMoneyValue(target.sellPrice.toString())}</p>
                   {!!purchaseBudgetDeviant && <BudgetDiff diff={purchaseBudgetDeviant} />}
                 </div>
               )}
               <div className="col-span-6 sm:col-span-2 flex flex-col items-start">
                 <p className="text-xs sm:text-sm font-semibold whitespace-nowrap">CONDOMÍNIO</p>
                 <p>
-                  R$ {!target.condoPricing || target.condoPricing === 0 ? '?' : target.condoPricing}
+                  R${' '}
+                  {!target.condoPricing || target.condoPricing === 0
+                    ? '?'
+                    : formatMoneyValue(target.condoPricing.toString())}
                 </p>
               </div>
               <div className="col-span-6 sm:col-span-1 flex flex-col items-start">
                 <p className="text-xs sm:text-sm font-semibold whitespace-nowrap">IPTU</p>
-                <p>R$ {target.iptu === 0 ? '?' : target.iptu}</p>
+                <p>R$ {target.iptu === 0 ? '?' : formatMoneyValue(target.iptu.toString())}</p>
               </div>
               <div className="col-span-6 sm:col-span-1 flex flex-col items-start">
                 <p className="text-xs sm:text-sm font-semibold whitespace-nowrap">TOTAL</p>
                 <div className="flex items-center whitespace-nowrap relative">
-                  <p className="text-lg whitespace-nowrap font-semibold">R$ {totalPricing}</p>
+                  <p className="text-lg whitespace-nowrap font-semibold">
+                    R$ {totalPricing && formatMoneyValue(totalPricing?.toString())}
+                  </p>
                   {!!rentBudgetDeviant && <BudgetDiff diff={rentBudgetDeviant} />}
                 </div>
               </div>
@@ -211,12 +262,17 @@ export default function TargetPropertyItem({ target, hunt }: TargetPropertyItemP
                     {target.lotNumber && `, ${target.lotNumber}`}
                   </p>
                 </div>
-                <div className="col-span-1 flex flex-col items-start">
-                  <p className="text-xs sm:text-sm font-semibold whitespace-nowrap text-brand-primary-900 mb-1 sm:mb-2">
-                    COMPLEMENTO
-                  </p>
-                  <p className="text-sm">{target.number ?? '?'}</p>
-                </div>
+                {!target.noComplement && (
+                  <div className="col-span-1 flex flex-col items-start">
+                    <p className="text-xs sm:text-sm font-semibold whitespace-nowrap text-brand-primary-900 mb-1 sm:mb-2">
+                      COMPLEMENTO
+                    </p>
+                    <p className="text-sm">
+                      {target.block && target.block !== '0' && `Bl ${target.block}`}
+                      {target.propertyNumber ?? '?'}
+                    </p>
+                  </div>
+                )}
                 <div className="col-span-1 flex flex-col items-start">
                   <p className="text-xs sm:text-sm font-semibold whitespace-nowrap text-brand-primary-900 mb-1 sm:mb-2">
                     BAIRRO
@@ -238,10 +294,19 @@ export default function TargetPropertyItem({ target, hunt }: TargetPropertyItemP
               </div>
             </div>
             <div className="w-full">
-              <div className="w-full mb-4 p-0.5 border-b-[2px] border-b-brand-primary-700">
+              <div className="w-full mb-4 p-0.5 border-b-[2px] border-b-brand-primary-700 flex justify-between items-center">
                 <p className="sm:text-xl font-medium">Contato</p>
+                <Button
+                  label={<Icon icon="pencil" mode="outline" size="2xs" />}
+                  size="xsmall"
+                  onlyIcon={true}
+                  className={cx(
+                    'text-brand-primary-600 hover:border-brand-primary-600 hover:bg-brand-primary-600 hover:text-white'
+                  )}
+                  onClick={() => openContactFormModal()}
+                />
               </div>
-              {!target.realtor && (
+              {!target.contactName && !target.realState && (
                 <div className="w-full">
                   <p className="text-brand-gray-800">
                     Adicione informações do contato desse imóvel e ao final você pode avaliar o
@@ -249,19 +314,35 @@ export default function TargetPropertyItem({ target, hunt }: TargetPropertyItemP
                   </p>
                 </div>
               )}
-              {!!target.realtor && (
+              {!!target.realState && (
                 <div className="w-full flex flex-wrap gap-x-6 gap-y-2">
                   <div className="col-span-1 flex flex-col items-start">
                     <p className="text-xs sm:text-sm font-medium whitespace-nowrap text-brand-primary-900 mb-1 sm:mb-2">
-                      IMOBILIÁRIA
+                      Imobiliária
                     </p>
-                    <p className="text-sm">{target.realtor}</p>
+                    <p className="text-sm">{target.realState}</p>
                   </div>
                   <div className="col-span-1 flex flex-col items-start">
                     <p className="text-xs sm:text-sm font-medium whitespace-nowrap text-brand-primary-900 mb-1 sm:mb-2">
-                      TELEFONE
+                      Telefone
                     </p>
-                    <p className="text-sm">{target.realtorContact ?? '?'}</p>
+                    <p className="text-sm">{target.realStatePhoneNumber ?? '?'}</p>
+                  </div>
+                </div>
+              )}
+              {!!target.contactName && (
+                <div className="w-full flex flex-wrap gap-x-6 gap-y-2">
+                  <div className="col-span-1 flex flex-col items-start">
+                    <p className="text-xs sm:text-sm font-medium whitespace-nowrap text-brand-primary-900 mb-1 sm:mb-2">
+                      Nome do Contato
+                    </p>
+                    <p className="text-sm">{target.contactName}</p>
+                  </div>
+                  <div className="col-span-1 flex flex-col items-start">
+                    <p className="text-xs sm:text-sm font-medium whitespace-nowrap text-brand-primary-900 mb-1 sm:mb-2">
+                      WhatZap
+                    </p>
+                    <p className="text-sm">{target.contactWhatzap ?? '?'}</p>
                   </div>
                 </div>
               )}
@@ -280,7 +361,7 @@ export default function TargetPropertyItem({ target, hunt }: TargetPropertyItemP
 }
 
 function BudgetDiff({ diff }: { diff: number }) {
-  const baseStyles = 'text-xs font-medium absolute -top-2 right-1 tracking-wider'
+  const baseStyles = 'text-xs font-medium absolute -top-2 -right-1 tracking-wider'
 
   if (diff > 0) {
     return <span className={cx('text-red-800', baseStyles)}>+{diff.toFixed(1)}%</span>
