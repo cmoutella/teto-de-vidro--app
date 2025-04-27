@@ -11,6 +11,7 @@ import type { TargetPropertyInterface } from '@/types/targetProperty'
 import DeleteConfirmation from '@/ui/forms/DeleteConfirmation'
 import EditTargetPropertyForm from '@/ui/forms/TargetProperty/EditTargetProperty'
 import PropertyContactForm from '@/ui/forms/TargetProperty/PropertyContact'
+import { useAddressString } from '@/utils/address/useAddressString'
 import { formatMoneyValue } from '@/utils/string/formatMoney'
 import { lastUpdateMessage } from '@/utils/string/lastUpdateMessage'
 
@@ -127,16 +128,14 @@ export default function TargetPropertyItem({ target, hunt }: TargetPropertyItemP
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [hunt])
 
-  const address = useMemo(() => {
-    const complementAddress =
-      target.propertyNumber &&
-      `,  ${target.block && target.block !== '0' ? `Bl ${target.block}` : ''}${target.propertyNumber}`
-
-    const baseAddress = `${target.street ?? '?'}${target.lotNumber && `, ${target.lotNumber}`}${!!complementAddress && complementAddress}`
-
-    const locationAddress = ` - ${target.city ?? '?'},  ${target.uf ?? '?'}`
-    return `${baseAddress}${locationAddress}`
-  }, [target])
+  const address = useAddressString({
+    street: target.street,
+    lotNumber: target.lotNumber,
+    block: target.block,
+    propertyNumber: target.propertyNumber,
+    city: target.city,
+    uf: target.uf
+  })
 
   const CollapseIcon = useCallback(() => {
     const style = cx(
