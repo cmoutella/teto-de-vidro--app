@@ -20,6 +20,7 @@ import { CEPField } from '@/ui/components/base/form/fields/cep/CEPField'
 import { MoneyField } from '@/ui/components/base/form/fields/money/MoneyField'
 import { FormSectionLabel } from '@/ui/components/base/form/FormSectionLabel'
 import Input from '@/ui/components/base/form/inputs/Input'
+import { formatMoneyValue } from '@/utils/string/formatMoney'
 
 interface EditTargetPropertyFormProps {
   onSuccess: (_id: string) => void
@@ -154,15 +155,15 @@ const EditTargetPropertyForm = ({
   }, [formik])
 
   const pricing = useMemo(() => {
-    const noPriceData = (!formik.values.rentPrice && !formik.values.sellPrice) || !huntSettings
-    if (noPriceData) return 'Insira os valores para este imóvel'
+    if ((!formik.values.rentPrice && !formik.values.sellPrice) || !huntSettings)
+      return 'Insira os valores para este imóvel'
 
     if (huntSettings.type === 'buy') {
-      return `Venda: ${formik.values.sellPrice} | Total: ${formik.values.sellPrice + formik.values.condoPricing + formik.values.iptu}`
+      return `Venda: ${formatMoneyValue(formik.values.sellPrice.toString())} | Gastos mensais: ${formatMoneyValue((Number(formik.values.condoPricing) + Number(formik.values.iptu)).toString())}`
     } else {
-      return `Aluguel: ${formik.values.rentPrice} | Total: ${formik.values.rentPrice + formik.values.condoPricing + formik.values.iptu}`
+      return `Aluguel: ${formatMoneyValue(formik.values.rentPrice.toString())} | Total mensal: ${formatMoneyValue((Number(formik.values.rentPrice) + Number(formik.values.condoPricing) + Number(formik.values.iptu)).toString())}`
     }
-  }, [formik])
+  }, [formik, huntSettings])
 
   const enableButton = useMemo(() => {
     const hasMinimalData =
@@ -414,6 +415,7 @@ const EditTargetPropertyForm = ({
                     value={formik.values.rentPrice}
                     onChange={(value: number) => formik.setFieldValue('rentPrice', value)}
                     currencySymbol="R$"
+                    siblingHeight={true}
                   />
                 </span>
                 <span className="col-span-6 md:col-span-3">
@@ -426,6 +428,7 @@ const EditTargetPropertyForm = ({
                     value={formik.values.sellPrice}
                     onChange={(value: number) => formik.setFieldValue('sellPrice', value)}
                     currencySymbol="R$"
+                    siblingHeight={true}
                   />
                 </span>
                 <span className="col-span-6 md:col-span-3">
@@ -438,11 +441,13 @@ const EditTargetPropertyForm = ({
                     value={formik.values.condoPricing}
                     onChange={(value: number) => formik.setFieldValue('condoPricing', value)}
                     currencySymbol="R$"
+                    siblingHeight={true}
                   />
                 </span>
                 <span className="col-span-6 md:col-span-3">
                   <MoneyField
                     label="IPTU"
+                    description="Custo mensal iptu"
                     name="iptu"
                     size={formThemeSize}
                     theme={themePallete}
