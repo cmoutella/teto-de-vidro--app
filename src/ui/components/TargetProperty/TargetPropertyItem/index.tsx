@@ -189,21 +189,21 @@ export default function TargetPropertyItem({ target, hunt }: TargetPropertyItemP
             </div>
           </div>
           <div className="w-full">
-            <div className="grid grid-cols-12 gap-4 sm:gap-2 sm: gap-x-4">
+            <div className="grid grid-cols-12 gap-4 sm:gap-2 gap-x-4">
               {(hunt.type === 'rent' || hunt.type === 'either') && (
-                <div className="col-span-6 sm:col-span-1 flex flex-col items-start">
+                <div className="col-span-6 md:col-span-2 xl:col-span-1 flex flex-col items-start">
                   <p className="text-xs sm:text-sm font-semibold whitespace-nowrap">ALUGUEL</p>
                   <p>R$ {formatMoneyValue(target.rentPrice.toString())}</p>
                 </div>
               )}
               {(hunt.type === 'buy' || hunt.type === 'either') && (
-                <div className="col-span-6 sm:col-span-1 flex flex-col items-start">
+                <div className="col-span-6 md:col-span-2 xl:col-span-1 flex flex-col items-start">
                   <p className="text-xs sm:text-sm font-semibold whitespace-nowrap">VENDA</p>
                   <p>R$ {formatMoneyValue(target.sellPrice.toString())}</p>
                   {!!purchaseBudgetDeviant && <BudgetDiff diff={purchaseBudgetDeviant} />}
                 </div>
               )}
-              <div className="col-span-6 sm:col-span-2 flex flex-col items-start">
+              <div className="col-span-6 md:col-span-2 xl:col-span-1 flex flex-col items-start">
                 <p className="text-xs sm:text-sm font-semibold whitespace-nowrap">CONDOMÍNIO</p>
                 <p>
                   R${' '}
@@ -212,20 +212,20 @@ export default function TargetPropertyItem({ target, hunt }: TargetPropertyItemP
                     : formatMoneyValue(target.condoPricing.toString())}
                 </p>
               </div>
-              <div className="col-span-6 sm:col-span-1 flex flex-col items-start">
+              <div className="col-span-6 md:col-span-2 xl:col-span-1 flex flex-col items-start">
                 <p className="text-xs sm:text-sm font-semibold whitespace-nowrap">IPTU</p>
                 <p>R$ {target.iptu === 0 ? '?' : formatMoneyValue(target.iptu.toString())}</p>
               </div>
-              <div className="col-span-6 sm:col-span-1 flex flex-col items-start">
+              <div className="col-span-6 md:col-span-2 xl:col-span-1 flex flex-col items-start">
                 <p className="text-xs sm:text-sm font-semibold whitespace-nowrap">TOTAL</p>
-                <div className="flex items-center whitespace-nowrap relative">
-                  <p className="text-lg whitespace-nowrap font-semibold">
+                <div className="flex items-center whitespace-nowrap">
+                  <p className="text-lg whitespace-nowrap font-semibold relative">
                     R$ {totalPricing && formatMoneyValue(totalPricing?.toString())}
+                    {!!rentBudgetDeviant && <BudgetDiff diff={rentBudgetDeviant} />}
                   </p>
-                  {!!rentBudgetDeviant && <BudgetDiff diff={rentBudgetDeviant} />}
                 </div>
               </div>
-              <div className="col-span-6 sm:col-span-1 flex-col items-start hidden md:flex">
+              <div className="col-span-6 md:col-span-2 xl:col-span-1 flex-col items-start hidden md:flex">
                 <p className="text-xs sm:text-sm font-semibold whitespace-nowrap">TAMANHO</p>
                 <p>{target.size === 0 ? '?' : `${target.size}m2`}</p>
               </div>
@@ -360,7 +360,7 @@ export default function TargetPropertyItem({ target, hunt }: TargetPropertyItemP
 }
 
 function BudgetDiff({ diff }: { diff: number }) {
-  const baseStyles = 'text-xs font-medium absolute -top-2 -right-1 tracking-wider'
+  const baseStyles = 'text-xs font-medium absolute -top-2 -right-4 tracking-wider'
 
   if (diff > 0) {
     return <span className={cx('text-red-800', baseStyles)}>+{diff.toFixed(1)}%</span>
