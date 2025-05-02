@@ -15,6 +15,7 @@ import { createTargetProperty } from '@/requests/targetProperty/create'
 import type { AddressKeys } from '@/services/cep'
 import { CEPService } from '@/services/cep'
 import type { InterfaceHunt } from '@/types/app'
+import type { TargetAmenity } from '@/types/targetProperty'
 import Button from '@/ui/components/base/Button'
 import SubmitButton from '@/ui/components/base/form/buttons/SubmitButton'
 import { Checkbox } from '@/ui/components/base/form/Checkbox'
@@ -93,7 +94,8 @@ const CreateTargetPropertyForm = ({
       iptu: 0,
       sellPrice: 0,
       rentPrice: 0,
-      condoPricing: 0
+      condoPricing: 0,
+      targetAmenities: []
     },
     validationSchema,
     isInitialValid: false,
@@ -144,8 +146,6 @@ const CreateTargetPropertyForm = ({
 
     const res = await scraper({ url: ad })
 
-    console.log('scrapped data', res)
-
     if (!res) {
       formik.setFieldError('adURL', 'Não foi possível buscar os dados do anúncio.')
     }
@@ -154,15 +154,14 @@ const CreateTargetPropertyForm = ({
       formik.setFieldValue(entry, res[entry])
     }
 
-    if (res?.rentPrice) {
-      formik.setFieldValue('rentPrice', res.rentPrice)
-    }
-    if (res?.sellPrice) {
-      formik.setFieldValue('sellPrice', res.sellPrice)
-    }
+    if (res?.amenities) {
+      const adAmenities = []
 
-    if (res?.condoPricing) {
-      formik.setFieldValue('condoPricing', res.condoPricing)
+      for (const amnt in res.amenities) {
+        adAmenities.push({ identifier: amnt, reportedBy: 'ad' } as TargetAmenity)
+      }
+
+      await formik.setFieldValue('targetAmenities', adAmenities)
     }
   }
 

@@ -8,11 +8,8 @@ import type { TargetPropertyInterface } from '@/types/targetProperty'
 export async function POST(req: NextRequest) {
   const body = await req.json()
 
-  if (!body.huntId) {
-    return NextResponse.json(
-      { error: 'Dados insuficiêntes para buscar os targets da hunt' },
-      { status: 400 }
-    )
+  if (!body.targetId || !body.amenityId) {
+    return NextResponse.json({ error: 'Dados insuficiêntes.' }, { status: 400 })
   }
 
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL
@@ -27,7 +24,7 @@ export async function POST(req: NextRequest) {
 
   try {
     const res = await fetch(
-      `${baseUrl}/target-property/search/${body.huntId}?page=${body.page}&limit=${body.perPage}`,
+      `${baseUrl}/target-property/${body.targetId}/amenity/${body.amenityId}`,
       {
         method: 'GET',
         mode: 'cors',
@@ -43,13 +40,13 @@ export async function POST(req: NextRequest) {
     } else if (res.status >= 500) {
       throw new Error('Erro interno no servidor')
     } else if (res.status >= 400) {
-      throw new Error('Não foi possível trazer sua busca agora')
+      throw new Error('Erro ao executar')
     }
 
     const response = await res.json()
 
     if (response.error) {
-      throw new Error('Não foi possivel buscar os targets dessa hunt agora')
+      throw new Error('Não foi possivel remover essa amenity do target agora')
     }
 
     const { data } = response as SuccessResponse<PaginatedData<TargetPropertyInterface>>
