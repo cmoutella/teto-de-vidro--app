@@ -16,6 +16,7 @@ export interface ButtonProps extends ButtonHeadlessProps {
   borderRadius?: ButtonRadius
   rounded?: boolean
   flat?: boolean
+  onlyIcon?: boolean
 }
 
 const Button = ({
@@ -27,6 +28,7 @@ const Button = ({
   rounded,
   className,
   disabled,
+  onlyIcon = false,
   ...otherProps
 }: ButtonProps) => {
   const bSize = rounded ? roundedBtnSize[size] : btnSize[size]
@@ -37,7 +39,7 @@ const Button = ({
         { 'cursor-pointer': !disabled },
         bSize,
         {
-          'w-full': fullWidth
+          '!w-full': fullWidth
         },
         {
           'hover:drop-shadow-md active:shadow-inner': !flat && !disabled
@@ -45,6 +47,10 @@ const Button = ({
         btnBorderRadius[borderRadius],
         { 'rounded-full': rounded },
         { 'flex justify-center items-center': rounded },
+        {
+          '!min-w-10 !w-10': onlyIcon && size === 'medium',
+          '!min-w-8 !w-8': onlyIcon && size === 'small'
+        },
         className
       )}
       disabled={disabled}

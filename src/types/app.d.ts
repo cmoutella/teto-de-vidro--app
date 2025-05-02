@@ -65,3 +65,10 @@ export interface InterfaceHunt {
   minBudget: number
   maxBudget: number
 }
+
+export type AmenityOf = 'lot' | 'property'
+export interface AmenityData {
+  identifier: string
+  label?: string
+  amenityOf?: AmenityOf
+}

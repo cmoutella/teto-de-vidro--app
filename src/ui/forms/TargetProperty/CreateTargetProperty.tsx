@@ -15,6 +15,7 @@ import { createTargetProperty } from '@/requests/targetProperty/create'
 import type { AddressKeys } from '@/services/cep'
 import { CEPService } from '@/services/cep'
 import type { InterfaceHunt } from '@/types/app'
+import type { TargetAmenity } from '@/types/targetProperty'
 import Button from '@/ui/components/base/Button'
 import SubmitButton from '@/ui/components/base/form/buttons/SubmitButton'
 import { Checkbox } from '@/ui/components/base/form/Checkbox'
@@ -23,7 +24,9 @@ import { MoneyField } from '@/ui/components/base/form/fields/money/MoneyField'
 import { FormSectionLabel } from '@/ui/components/base/form/FormSectionLabel'
 import Input from '@/ui/components/base/form/inputs/Input'
 import InputAndActionButton from '@/ui/components/base/form/inputs/InputAndActionButton'
-import { formatMoneyValue } from '@/utils/string/formatMoney'
+import { useAddressString } from '@/utils/address/useAddressString'
+
+import { usePriceString } from './shared/usePriceString'
 
 interface CreateTargetPropertyFormProps {
   onSuccess: (_id: string) => void
@@ -91,7 +94,8 @@ const CreateTargetPropertyForm = ({
       iptu: 0,
       sellPrice: 0,
       rentPrice: 0,
-      condoPricing: 0
+      condoPricing: 0,
+      targetAmenities: []
     },
     validationSchema,
     isInitialValid: false,
@@ -150,15 +154,14 @@ const CreateTargetPropertyForm = ({
       formik.setFieldValue(entry, res[entry])
     }
 
-    if (res?.rentPrice) {
-      formik.setFieldValue('rentPrice', formatMoneyValue(res.rentPrice.toString()))
-    }
-    if (res?.sellPrice) {
-      formik.setFieldValue('sellPrice', formatMoneyValue(res.sellPrice.toString()))
-    }
+    if (res?.amenities) {
+      const adAmenities = []
 
-    if (res?.condoPricing) {
-      formik.setFieldValue('condoPricing', formatMoneyValue(res.condoPricing.toString()))
+      for (const amnt in res.amenities) {
+        adAmenities.push({ identifier: amnt, reportedBy: 'ad' } as TargetAmenity)
+      }
+
+      await formik.setFieldValue('targetAmenities', adAmenities)
     }
   }
 
@@ -186,25 +189,22 @@ const CreateTargetPropertyForm = ({
     )
   }, [formik])
 
-  const address = useMemo(() => {
-    if (!formik.values.street) return 'Complete as informações de endereço'
+  const address = useAddressString({
+    street: formik.values.street,
+    lotNumber: formik.values.lotNumber,
+    block: formik.values.block,
+    propertyNumber: formik.values.propertyNumber,
+    city: formik.values.city,
+    uf: formik.values.uf
+  })
 
-    const complementAddress = formik.values.propertyNumber && `,  ${formik.values.propertyNumber}`
-    const baseAddress = `${formik.values.street ?? '?'}${formik.values.lotNumber && `, ${formik.values.lotNumber}`}${complementAddress}`
-    const locationAddress = ` - ${formik.values.city ?? '?'},  ${formik.values.uf ?? '?'}`
-    return `${baseAddress}${locationAddress}`
-  }, [formik])
-
-  const pricing = useMemo(() => {
-    if ((!formik.values.rentPrice && !formik.values.sellPrice) || !huntSettings)
-      return 'Insira os valores para este imóvel'
-
-    if (huntSettings.type === 'buy') {
-      return `Venda: ${formik.values.sellPrice} | Total: ${formik.values.sellPrice + formik.values.condoPricing + formik.values.iptu}`
-    } else {
-      return `Aluguel: ${formik.values.rentPrice} | Total: ${formik.values.rentPrice + formik.values.condoPricing + formik.values.iptu}`
-    }
-  }, [formik, huntSettings])
+  const pricing = usePriceString({
+    rentPrice: formik.values.rentPrice,
+    sellPrice: formik.values.sellPrice,
+    condoPricing: formik.values.condoPricing,
+    huntSettings: huntSettings,
+    iptu: formik.values.iptu
+  })
 
   return (
     <div className="w-full">
@@ -466,6 +466,7 @@ const CreateTargetPropertyForm = ({
                     value={formik.values.rentPrice}
                     onChange={(value: number) => formik.setFieldValue('rentPrice', value)}
                     currencySymbol="R$"
+                    siblingHeight={true}
                   />
                 </span>
                 <span className="col-span-6 md:col-span-3">
@@ -478,6 +479,7 @@ const CreateTargetPropertyForm = ({
                     value={formik.values.sellPrice}
                     onChange={(value: number) => formik.setFieldValue('sellPrice', value)}
                     currencySymbol="R$"
+                    siblingHeight={true}
                   />
                 </span>
                 <span className="col-span-6 md:col-span-3">
@@ -490,11 +492,13 @@ const CreateTargetPropertyForm = ({
                     value={formik.values.condoPricing}
                     onChange={(value: number) => formik.setFieldValue('condoPricing', value)}
                     currencySymbol="R$"
+                    siblingHeight={true}
                   />
                 </span>
                 <span className="col-span-6 md:col-span-3">
                   <MoneyField
                     label="IPTU"
+                    description="Custo mensal"
                     name="iptu"
                     size={formThemeSize}
                     theme={themePallete}

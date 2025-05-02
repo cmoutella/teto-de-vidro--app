@@ -2,6 +2,7 @@ import type { ReactNode } from 'react'
 
 import cx from 'classnames'
 
+import OfficeMicro from '@/assets/icons/micro/building-library.svg'
 import CheckMicro from '@/assets/icons/micro/check.svg'
 import ChevronDownMicro from '@/assets/icons/micro/chevron-down.svg'
 import ChevronLeftMicro from '@/assets/icons/micro/chevron-left.svg'
@@ -11,10 +12,12 @@ import EyeSlashMicro from '@/assets/icons/micro/eye-slash.svg'
 import EyeMicro from '@/assets/icons/micro/eye.svg'
 import MinusCircleMicro from '@/assets/icons/micro/minus-circle.svg'
 import MinusMicro from '@/assets/icons/micro/minus.svg'
+import PencilMicro from '@/assets/icons/micro/pencil.svg'
 import PlusCircleMicro from '@/assets/icons/micro/plus-circle.svg'
 import PlusMicro from '@/assets/icons/micro/plus.svg'
 import TrashMicro from '@/assets/icons/micro/trash.svg'
 import XMicro from '@/assets/icons/micro/x.svg'
+import OfficeMini from '@/assets/icons/mini/building-library.svg'
 import CheckMini from '@/assets/icons/mini/check.svg'
 import ChevronDownMini from '@/assets/icons/mini/chevron-down.svg'
 import ChevronLeftMini from '@/assets/icons/mini/chevron-left.svg'
@@ -24,10 +27,12 @@ import EyeSlashMini from '@/assets/icons/mini/eye-slash.svg'
 import EyeMini from '@/assets/icons/mini/eye.svg'
 import MinusCircleMini from '@/assets/icons/mini/minus-circle.svg'
 import MinusMini from '@/assets/icons/mini/minus.svg'
+import PencilMini from '@/assets/icons/mini/pencil.svg'
 import PlusCircleMini from '@/assets/icons/mini/plus-circle.svg'
 import PlusMini from '@/assets/icons/mini/plus.svg'
 import TrashMini from '@/assets/icons/mini/trash.svg'
 import XMini from '@/assets/icons/mini/x.svg'
+import OfficeOutline from '@/assets/icons/outline/building-library.svg'
 import CheckOutline from '@/assets/icons/outline/check.svg'
 import ChevronDownOutline from '@/assets/icons/outline/chevron-down.svg'
 import ChevronLeftOutline from '@/assets/icons/outline/chevron-left.svg'
@@ -37,10 +42,12 @@ import EyeSlashOutline from '@/assets/icons/outline/eye-slash.svg'
 import EyeOutline from '@/assets/icons/outline/eye.svg'
 import MinusCircleOutline from '@/assets/icons/outline/minus-circle.svg'
 import MinusOutline from '@/assets/icons/outline/minus.svg'
+import PencilOutline from '@/assets/icons/outline/pencil.svg'
 import PlusCircleOutline from '@/assets/icons/outline/plus-circle.svg'
 import PlusOutline from '@/assets/icons/outline/plus.svg'
 import TrashOutline from '@/assets/icons/outline/trash.svg'
 import XOutline from '@/assets/icons/outline/x.svg'
+import OfficeSolid from '@/assets/icons/solid/building-library.svg'
 import CheckSolid from '@/assets/icons/solid/check.svg'
 import ChevronDownSolid from '@/assets/icons/solid/chevron-down.svg'
 import ChevronLeftSolid from '@/assets/icons/solid/chevron-left.svg'
@@ -50,6 +57,7 @@ import EyeSlashSolid from '@/assets/icons/solid/eye-slash.svg'
 import EyeSolid from '@/assets/icons/solid/eye.svg'
 import MinusCircleSolid from '@/assets/icons/solid/minus-circle.svg'
 import MinusSolid from '@/assets/icons/solid/minus.svg'
+import PencilSolid from '@/assets/icons/solid/pencil.svg'
 import PlusCircleSolid from '@/assets/icons/solid/plus-circle.svg'
 import PlusSolid from '@/assets/icons/solid/plus.svg'
 import TrashSolid from '@/assets/icons/solid/trash.svg'
@@ -67,6 +75,8 @@ type AvailableIcon =
   | 'eye-slash'
   | 'minus'
   | 'minus-circle'
+  | 'office'
+  | 'pencil'
   | 'plus'
   | 'plus-circle'
   | 'trash'
@@ -92,6 +102,8 @@ const Icon = ({ icon, className, mode = 'outline', size = 'sm', onClick }: IconP
     check: CheckSolid,
     minus: MinusSolid,
     'minus-circle': MinusCircleSolid,
+    office: OfficeSolid,
+    pencil: PencilSolid,
     plus: PlusSolid,
     'plus-circle': PlusCircleSolid,
     'chevron-up': ChevronUpSolid,
@@ -111,6 +123,8 @@ const Icon = ({ icon, className, mode = 'outline', size = 'sm', onClick }: IconP
     check: CheckOutline,
     minus: MinusOutline,
     'minus-circle': MinusCircleOutline,
+    office: OfficeOutline,
+    pencil: PencilOutline,
     plus: PlusOutline,
     'plus-circle': PlusCircleOutline,
     'chevron-up': ChevronUpOutline,
@@ -130,6 +144,8 @@ const Icon = ({ icon, className, mode = 'outline', size = 'sm', onClick }: IconP
     check: CheckMini,
     minus: MinusMini,
     'minus-circle': MinusCircleMini,
+    office: OfficeMini,
+    pencil: PencilMini,
     plus: PlusMini,
     'plus-circle': PlusCircleMini,
     'chevron-up': ChevronUpMini,
@@ -149,6 +165,8 @@ const Icon = ({ icon, className, mode = 'outline', size = 'sm', onClick }: IconP
     check: CheckMicro,
     minus: MinusMicro,
     'minus-circle': MinusCircleMicro,
+    office: OfficeMicro,
+    pencil: PencilMicro,
     plus: PlusMicro,
     'plus-circle': PlusCircleMicro,
     'chevron-up': ChevronUpMicro,

@@ -1,3 +1,4 @@
+import type { AmenityData, AmenityOf } from './app'
 export type PropertyHuntingStage =
   | 'new'
   | 'iniciated'
@@ -11,6 +12,13 @@ export type PropertyHuntingStage =
   | 'approved'
   | 'denied'
 
+export type AmenityReport = 'user' | 'ad'
+export interface TargetAmenity extends Omit<AmenityData, 'label' | 'amenityOf'> {
+  reportedBy: AmenityReport
+  userId?: string
+  label?: string
+  amenityOf: AmenityOf
+}
 interface TargetPropertyInterface {
   id: string
 
@@ -23,13 +31,21 @@ interface TargetPropertyInterface {
   sellPrice: number
   rentPrice: number
   iptu: number
-  priority: number
-  huntingStage: PropertyHuntingStage
-  isActive: boolean
-  visitDate: string
-  realtor: string
-  realtorContact: string
 
+  isActive: boolean
+  huntingStage: PropertyHuntingStage
+  priority: number
+  visitDate: string
+
+  targetAmenities: TargetAmenity[]
+
+  // contact
+  realState?: string
+  realStatePhoneNumber?: string
+  contactName?: string
+  contactWhatzap?: string
+
+  // lot
   lotId: string
   noLotNumber: boolean
   lotNumber: string
@@ -40,6 +56,7 @@ interface TargetPropertyInterface {
   country: string
   street: string
 
+  // property
   propertyId: string
   noComplement: boolean
   block: string

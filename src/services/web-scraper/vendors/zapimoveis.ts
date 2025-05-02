@@ -1,6 +1,7 @@
 import type { AdScrapedData } from '../shared/type'
 
-interface ZapImoveisScrapedData extends Record<string, string | string[] | number | undefined> {
+interface ZapImoveisScrapedData
+  extends Record<string, string | string[] | number | boolean | undefined> {
   rentPrice?: number
   condoPricing?: number
   iptu?: number
@@ -26,13 +27,26 @@ export function sanitizeZap(data: ZapImoveisScrapedData) {
     numberOfSuites,
     ...other
   } = data
+
+  const amenities: Record<string, boolean> = {}
+  const rest: Record<string, string | string[] | number> = {}
+
+  for (const key in other) {
+    if (typeof other[key] === 'boolean') {
+      amenities[key] = true
+    } else {
+      rest[key] = other[key] as string | string[] | number
+    }
+  }
+
   const sanitized: AdScrapedData = {
     size: floorSize,
     rooms: numberOfRooms,
     bathrooms: numberOfBathroomsTotal,
     parkingSpots: numberOfParkingSpaces,
     suites: numberOfSuites,
-    ...other
+    amenities: amenities,
+    ...rest
   }
 
   return sanitized

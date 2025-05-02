@@ -20,6 +20,9 @@ import { CEPField } from '@/ui/components/base/form/fields/cep/CEPField'
 import { MoneyField } from '@/ui/components/base/form/fields/money/MoneyField'
 import { FormSectionLabel } from '@/ui/components/base/form/FormSectionLabel'
 import Input from '@/ui/components/base/form/inputs/Input'
+import { useAddressString } from '@/utils/address/useAddressString'
+
+import { usePriceString } from './shared/usePriceString'
 
 interface EditTargetPropertyFormProps {
   onSuccess: (_id: string) => void
@@ -142,25 +145,22 @@ const EditTargetPropertyForm = ({
     }
   }
 
-  const address = useMemo(() => {
-    if (!formik.values.street) return 'Complete as informações de endereço'
+  const address = useAddressString({
+    street: formik.values.street,
+    lotNumber: formik.values.lotNumber,
+    block: formik.values.block,
+    propertyNumber: formik.values.propertyNumber,
+    city: formik.values.city,
+    uf: formik.values.uf
+  })
 
-    const complementAddress = formik.values.propertyNumber && `,  ${formik.values.propertyNumber}`
-    const baseAddress = `${formik.values.street ?? '?'}${formik.values.lotNumber && `, ${formik.values.lotNumber}`}${complementAddress}`
-    const locationAddress = ` - ${formik.values.city ?? '?'},  ${formik.values.uf ?? '?'}`
-    return `${baseAddress}${locationAddress}`
-  }, [formik])
-
-  const pricing = useMemo(() => {
-    const noPriceData = (!formik.values.rentPrice && !formik.values.sellPrice) || !huntSettings
-    if (noPriceData) return 'Insira os valores para este imóvel'
-
-    if (huntSettings.type === 'buy') {
-      return `Venda: ${formik.values.sellPrice} | Total: ${formik.values.sellPrice + formik.values.condoPricing + formik.values.iptu}`
-    } else {
-      return `Aluguel: ${formik.values.rentPrice} | Total: ${formik.values.rentPrice + formik.values.condoPricing + formik.values.iptu}`
-    }
-  }, [formik])
+  const pricing = usePriceString({
+    rentPrice: formik.values.rentPrice,
+    sellPrice: formik.values.sellPrice,
+    condoPricing: formik.values.condoPricing,
+    huntSettings: huntSettings,
+    iptu: formik.values.iptu
+  })
 
   const enableButton = useMemo(() => {
     const hasMinimalData =
@@ -412,6 +412,7 @@ const EditTargetPropertyForm = ({
                     value={formik.values.rentPrice}
                     onChange={(value: number) => formik.setFieldValue('rentPrice', value)}
                     currencySymbol="R$"
+                    siblingHeight={true}
                   />
                 </span>
                 <span className="col-span-6 md:col-span-3">
@@ -424,6 +425,7 @@ const EditTargetPropertyForm = ({
                     value={formik.values.sellPrice}
                     onChange={(value: number) => formik.setFieldValue('sellPrice', value)}
                     currencySymbol="R$"
+                    siblingHeight={true}
                   />
                 </span>
                 <span className="col-span-6 md:col-span-3">
@@ -436,11 +438,13 @@ const EditTargetPropertyForm = ({
                     value={formik.values.condoPricing}
                     onChange={(value: number) => formik.setFieldValue('condoPricing', value)}
                     currencySymbol="R$"
+                    siblingHeight={true}
                   />
                 </span>
                 <span className="col-span-6 md:col-span-3">
                   <MoneyField
                     label="IPTU"
+                    description="Custo mensal iptu"
                     name="iptu"
                     size={formThemeSize}
                     theme={themePallete}

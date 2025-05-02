@@ -8,6 +8,8 @@ import Input from '../../inputs/Input'
 interface MoneyFieldProps {
   label: string
   name: string
+  description?: string
+  siblingHeight?: boolean
   theme: FormTheme
   size: FormSizes
   placeholder: string
@@ -19,8 +21,10 @@ interface MoneyFieldProps {
 export function MoneyField({
   label,
   name,
+  description,
   theme,
   size,
+  siblingHeight,
   placeholder,
   value,
   currencySymbol,
@@ -35,6 +39,7 @@ export function MoneyField({
   return (
     <Input
       label={label}
+      description={description}
       name={name}
       type="text"
       themeSize={size}
@@ -43,6 +48,7 @@ export function MoneyField({
       value={formatMoneyValue(value.toString())}
       onChange={handleMoneyChange}
       fieldSymbol={currencySymbol}
+      siblingHeight={siblingHeight}
     />
   )
 }
