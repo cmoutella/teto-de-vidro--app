@@ -4,7 +4,7 @@ import type { InterfaceUser } from '@/types/app'
 type GetUserRequest = (_id: string, _token: string) => Promise<InterfaceUser | undefined>
 
 export const getUserRequest: GetUserRequest = async (id, token) => {
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_API_URL
 
   if (!baseUrl) return undefined
 
