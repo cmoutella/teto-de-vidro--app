@@ -1,26 +1,55 @@
+import type { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
 
-import { webScraper } from '@/services/web-scraper'
+import { appCokies } from '@/config/cookies'
+import type { SuccessResponse } from '@/types/apiPatterns'
+import type { AdScrapedData } from '@/types/scraper'
 
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
+  const body = await req.json()
+
+  if (!body.url) {
+    return NextResponse.json({ error: 'A url deve ser enviada no body' }, { status: 400 })
+  }
+
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_API_URL
+
+  const authCookie = req.cookies.get(appCokies.auth)?.value
+  const tokenFromCookie = authCookie ? JSON.parse(authCookie).token : undefined
+
+  const authorization =
+    req.headers.get('authorization') ?? (tokenFromCookie && `Bearer ${tokenFromCookie}`)
+
+  if (!baseUrl) return undefined
+
   try {
-    const body = await req.json()
+    const res = await fetch(`${baseUrl}/scraper?url=${body.url}`, {
+      method: 'GET',
+      mode: 'cors',
+      headers: {
+        'Content-Type': 'application/json',
+        ...(authorization ? { Authorization: authorization } : {})
+      }
+    })
 
-    if (!body.url) {
-      return NextResponse.json({ error: 'A url deve ser enviada no body' }, { status: 400 })
+    if (res.status === 401) {
+      throw new Error('Erro de autorização')
+    } else if (res.status >= 500) {
+      throw new Error('Erro interno no servidor')
+    } else if (res.status >= 400) {
+      throw new Error('Não foi possível buscar os dados do anúncio')
     }
 
-    // Instancia o serviço com a URL fornecida
-    const scraper = await webScraper(body.url)
+    const response = await res.json()
 
-    if (!scraper) {
-      return NextResponse.json({ error: 'O serviço está indisponível' }, { status: 401 })
+    if (response.error) {
+      throw new Error(response.error)
     }
 
-    const pageData = await scraper.fetch()
+    const { data } = response as SuccessResponse<AdScrapedData>
 
     return NextResponse.json(
-      { message: 'Serviço chamado com sucesso', data: pageData },
+      { message: 'Serviço chamado com sucesso', data: data },
       { status: 200 }
     )
   } catch (error) {
