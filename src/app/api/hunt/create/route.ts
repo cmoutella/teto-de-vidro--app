@@ -13,7 +13,7 @@ import type { InterfaceHunt } from '@/types/app'
 export async function POST(req: NextRequest) {
   const body = await req.json()
 
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_API_URL
 
   if (!baseUrl) return undefined
 

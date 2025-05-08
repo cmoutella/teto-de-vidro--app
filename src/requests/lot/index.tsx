@@ -15,7 +15,7 @@ export type GetLotsByAddressProps = {
 type GetAllLotsByAddressRequest = (_requestBody: GetLotsByAddressProps) => Promise<InterfaceLot[]>
 
 export const getAllLotsByAddress: GetAllLotsByAddressRequest = async (requestBody) => {
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_API_URL
 
   if (!baseUrl) return []
 

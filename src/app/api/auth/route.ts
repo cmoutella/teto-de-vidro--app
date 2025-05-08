@@ -9,7 +9,7 @@ export async function POST(req: Request) {
   if (!body.password || !body.email) {
     return NextResponse.json({ error: 'E-mail ou senha estão ausentes' }, { status: 400 })
   }
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_API_URL
 
   if (!baseUrl) return undefined
 
