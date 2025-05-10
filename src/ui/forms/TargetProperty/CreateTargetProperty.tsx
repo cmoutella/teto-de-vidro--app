@@ -1,5 +1,5 @@
 'use client'
-import { useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import { useSessionContext } from '@providers/AuthProvider'
 import type { FormSizes, FormTheme } from '@ui/base/shared/formTheme'
@@ -46,6 +46,7 @@ const CreateTargetPropertyForm = ({
 }: CreateTargetPropertyFormProps) => {
   const [addressBoxOpen, setAddressBoxOpen] = useState<boolean>(false)
   const [priceBoxOpen, setPriceBoxOpen] = useState<boolean>(false)
+  const [submitEnabled, setSubmitEnabled] = useState(false)
 
   const validationSchema = Yup.object({
     nickname: Yup.string().required('Campo obrigatório'),
@@ -98,7 +99,6 @@ const CreateTargetPropertyForm = ({
       targetAmenities: []
     },
     validationSchema,
-    isInitialValid: false,
     validateOnBlur: true,
     validateOnChange: false,
     onSubmit: handleSubmit
@@ -106,6 +106,15 @@ const CreateTargetPropertyForm = ({
 
   const { user } = useSessionContext()
   const { modal } = useUIContext()
+
+  useEffect(() => {
+    const noMinimalInfo = formik.values.street === '' || formik.values.nickname === ''
+    const actionInProgress = formik.isSubmitting || formik.isValidating
+
+    const shouldEnable = !noMinimalInfo && formik.isValid && !actionInProgress
+
+    setSubmitEnabled(shouldEnable)
+  }, [formik])
 
   async function handleSubmit(values: CreateTargetPropertyRequestProps) {
     if (!formik.isValid || !user) return
@@ -180,14 +189,6 @@ const CreateTargetPropertyForm = ({
       formik.setFieldValue(dt, data[dt as AddressKeys] ?? '')
     }
   }
-
-  const enableButton = useMemo(() => {
-    return (
-      (formik.values.street !== '' && formik.values.nickname !== '') ||
-      formik.isValid ||
-      formik.isSubmitting
-    )
-  }, [formik])
 
   const address = useAddressString({
     street: formik.values.street,
@@ -512,7 +513,7 @@ const CreateTargetPropertyForm = ({
             </CollapsableBox>
           </div>
         </section>
-        <SubmitButton isDisabled={!enableButton} label="Criar" />
+        <SubmitButton isDisabled={!submitEnabled} label="Criar" />
       </form>
     </div>
   )
