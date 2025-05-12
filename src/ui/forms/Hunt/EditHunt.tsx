@@ -1,4 +1,6 @@
 'use client'
+import { useEffect, useState } from 'react'
+
 import { useSessionContext } from '@providers/AuthProvider'
 import type { CreateHuntRequestProps } from '@requests/hunt/create'
 import SubmitButton from '@ui/base/form/buttons/SubmitButton'
@@ -25,6 +27,8 @@ const formThemeSize: FormSizes = 'lg'
 const themePallete: FormTheme = 'light'
 
 const EditHuntForm = ({ onSuccess, onFail, currentData }: EditHuntFormProps) => {
+  const [submitEnabled, setSubmitEnabled] = useState(false)
+
   const validationSchema = Yup.object({
     type: Yup.string().required(),
     movingExpected: Yup.string().test(
@@ -34,6 +38,10 @@ const EditHuntForm = ({ onSuccess, onFail, currentData }: EditHuntFormProps) => 
           // Retorna verdadeiro para ignorar a validação quando o valor está ausente
           return true
         }
+
+        const valueChanged = value !== currentData.movingExpected
+
+        if (!valueChanged) return true
 
         const inputedDate = new Date(value)
 
@@ -63,6 +71,15 @@ const EditHuntForm = ({ onSuccess, onFail, currentData }: EditHuntFormProps) => 
   })
 
   const { user } = useSessionContext()
+
+  useEffect(() => {
+    const noMinimalInfo = formik.values.title === ''
+    const actionInProgress = formik.isSubmitting || formik.isValidating
+
+    const shouldEnable = !noMinimalInfo && formik.isValid && !actionInProgress
+
+    setSubmitEnabled(shouldEnable)
+  }, [formik])
 
   async function handleSubmit(values: Omit<CreateHuntRequestProps, 'creatorId'>) {
     if (!formik.isValid || !user) return
@@ -185,10 +202,7 @@ const EditHuntForm = ({ onSuccess, onFail, currentData }: EditHuntFormProps) => 
         </div>
 
         <div className="flex flex-col gap-2 col-span-12 justify-center items-center pt-3 sm:pt-5">
-          <SubmitButton
-            isDisabled={!formik.isValid || formik.isSubmitting}
-            label="Salvar alterações"
-          />
+          <SubmitButton isDisabled={!submitEnabled} label="Salvar alterações" />
         </div>
       </form>
     </div>
