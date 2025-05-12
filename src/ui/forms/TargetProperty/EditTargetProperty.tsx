@@ -1,5 +1,5 @@
 'use client'
-import { useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import { useSessionContext } from '@providers/AuthProvider'
 import type { FormSizes, FormTheme } from '@ui/base/shared/formTheme'
@@ -42,6 +42,7 @@ const EditTargetPropertyForm = ({
 }: EditTargetPropertyFormProps) => {
   const [addressBoxOpen, setAddressBoxOpen] = useState<boolean>(false)
   const [priceBoxOpen, setPriceBoxOpen] = useState<boolean>(true)
+  const [submitEnabled, setSubmitEnabled] = useState(false)
 
   const validationSchema = Yup.object({
     nickname: Yup.string().required('Campo obrigatório'),
@@ -92,6 +93,15 @@ const EditTargetPropertyForm = ({
 
   const { user } = useSessionContext()
   const { modal } = useUIContext()
+
+  useEffect(() => {
+    const noMinimalInfo = formik.values.street === '' || formik.values.nickname === ''
+    const actionInProgress = formik.isSubmitting || formik.isValidating
+
+    const shouldEnable = !noMinimalInfo && formik.isValid && !actionInProgress
+
+    setSubmitEnabled(shouldEnable)
+  }, [formik])
 
   async function handleSubmit(values: CreateTargetPropertyRequestProps) {
     if (!formik.isValid || !user) return
@@ -161,27 +171,6 @@ const EditTargetPropertyForm = ({
     huntSettings: huntSettings,
     iptu: formik.values.iptu
   })
-
-  const enableButton = useMemo(() => {
-    const hasMinimalData =
-      (formik.values.street !== '' && formik.values.nickname !== '') ||
-      formik.isValid ||
-      formik.isSubmitting
-
-    const dataHasChange: string[] = []
-
-    for (const targetInfo in formik.values) {
-      const formikValue = formik.values[targetInfo as never]
-      const currentValue = currentData[targetInfo as never]
-      if (formikValue !== currentValue) {
-        if (!((formikValue === 0 || formikValue === '') && !currentValue)) {
-          dataHasChange.push(targetInfo)
-        }
-      }
-    }
-
-    return hasMinimalData && dataHasChange.length >= 1
-  }, [formik])
 
   return (
     <div className="w-full">
@@ -459,7 +448,7 @@ const EditTargetPropertyForm = ({
           </div>
         </section>
         <div className="w-full flex justify-center md:justify-end items-center">
-          <SubmitButton isDisabled={!enableButton} label="Atualizar" />
+          <SubmitButton isDisabled={!submitEnabled} label="Atualizar" />
         </div>
       </form>
     </div>
