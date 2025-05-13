@@ -8,6 +8,7 @@ import { useUIContext } from '@/providers/UIProvider'
 import { editTargetProperty } from '@/requests/targetProperty/edit'
 import type { PropertyHuntingStage, TargetPropertyInterface } from '@/types/targetProperty'
 import ScheduledVisitForm from '@/ui/forms/TargetProperty/ScheduledVisit'
+import UpdateStateWithComment from '@/ui/forms/TargetProperty/StateChangeComment'
 
 import SelectRaw from '../../base/_raw/Select'
 
@@ -70,14 +71,26 @@ export function StagePill({ stage, targetId }: StagePillProps) {
         updateStage(newStage, { isActive: false })
         break
       case 'disappeared':
-        updateStage(newStage, { isActive: false })
+        handleUpdateWithComment(
+          newStage,
+          { isActive: false },
+          { title: 'O negociante sumiu?', commentLabel: 'Conte sobre a sua experiência' }
+        )
+
         break
       case 'visited':
-        updateStage(newStage, { isActive: true })
-        // handleVisited(newStage)
+        handleUpdateWithComment(
+          newStage,
+          { isActive: false },
+          { title: 'Como foi a visita?', commentLabel: 'O que você achou do que viu?' }
+        )
         break
       case 'quit':
-        updateStage(newStage, { isActive: false })
+        handleUpdateWithComment(
+          newStage,
+          { isActive: false },
+          { title: 'Desistiu do imóvel?', commentLabel: 'Alguma coisa desagradou? O que?' }
+        )
         break
       case 'denied':
         updateStage(newStage, { isActive: false })
@@ -99,21 +112,32 @@ export function StagePill({ stage, targetId }: StagePillProps) {
     )
   }
 
-  // TODO: feature comentários
-  // function handleVisited(newStage: PropertyHuntingStage) {
-  //   modal.open(
-  //     'small',
-  //     <ScheduledVisitForm
-  //       onSuccess={modal.close}
-  //       onFail={modal.close}
-  //       submit={async (data: Partial<TargetPropertyInterface>) => await updateStage(newStage, data)}
-  //     />
-  //   )
-  // }
+  function handleUpdateWithComment(
+    newStage: PropertyHuntingStage,
+    otherData: Partial<TargetPropertyInterface>,
+    uiOptions: {
+      title: string
+      commentLabel?: string
+    }
+  ) {
+    modal.open(
+      'small',
+      <UpdateStateWithComment
+        formTitle={uiOptions.title}
+        commentLabel={uiOptions.commentLabel ?? undefined}
+        onSuccess={modal.close}
+        onFail={modal.close}
+        submit={async (data: Partial<TargetPropertyInterface>) =>
+          await updateStage(newStage, { ...otherData, ...data })
+        }
+      />
+    )
+  }
 
   async function updateStage(
     newStage: PropertyHuntingStage,
     otherData?: Partial<TargetPropertyInterface>
+    // comment?: TargetOnUpdateComment
   ) {
     try {
       const res = await editTargetProperty(targetId, { huntingStage: newStage, ...otherData })
