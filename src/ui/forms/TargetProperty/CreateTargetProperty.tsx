@@ -1,5 +1,6 @@
 'use client'
 import { useEffect, useState } from 'react'
+import toast from 'react-hot-toast'
 
 import { useSessionContext } from '@providers/AuthProvider'
 import type { FormSizes, FormTheme } from '@ui/base/shared/formTheme'
@@ -156,7 +157,7 @@ const CreateTargetPropertyForm = ({
     const res = await scraper({ url: ad })
 
     if (!res) {
-      formik.setFieldError('adURL', 'Não foi possível buscar os dados do anúncio.')
+      toast('Não foi possível buscar os dados do anúncio no momento.')
     }
 
     for (const entry in res) {
@@ -270,8 +271,8 @@ const CreateTargetPropertyForm = ({
                     label="Sem número"
                     checked={formik.values.noLotNumber}
                     name="noLotNumber"
-                    onChange={(stateChanged) => {
-                      formik.setFieldValue('noLotNumber', stateChanged)
+                    onChange={async (stateChanged) => {
+                      await formik.setFieldValue('noLotNumber', stateChanged)
                     }}
                   />
                 </FormSectionLabel>
@@ -280,7 +281,9 @@ const CreateTargetPropertyForm = ({
                     size={formThemeSize}
                     theme={themePallete}
                     value={formik.values.postalCode}
-                    onChange={(value: string) => formik.setFieldValue('postalCode', value)}
+                    onChange={async (value: string) =>
+                      await formik.setFieldValue('postalCode', value)
+                    }
                     onBlur={completeFieldsByCEP}
                     error={formik.errors.postalCode}
                   />
@@ -361,8 +364,8 @@ const CreateTargetPropertyForm = ({
                     label="Sem complemento"
                     checked={formik.values.noComplement}
                     name="noComplement"
-                    onChange={(stateChanged) => {
-                      formik.setFieldValue('noComplement', stateChanged)
+                    onChange={async (stateChanged) => {
+                      await formik.setFieldValue('noComplement', stateChanged)
                     }}
                   />
                 </FormSectionLabel>
@@ -465,7 +468,9 @@ const CreateTargetPropertyForm = ({
                     theme={themePallete}
                     placeholder={`Aluguel`}
                     value={formik.values.rentPrice}
-                    onChange={(value: number) => formik.setFieldValue('rentPrice', value)}
+                    onChange={async (value: number) =>
+                      await formik.setFieldValue('rentPrice', value)
+                    }
                     currencySymbol="R$"
                     siblingHeight={true}
                   />
@@ -478,7 +483,9 @@ const CreateTargetPropertyForm = ({
                     theme={themePallete}
                     placeholder={`Preço de venda`}
                     value={formik.values.sellPrice}
-                    onChange={(value: number) => formik.setFieldValue('sellPrice', value)}
+                    onChange={async (value: number) =>
+                      await formik.setFieldValue('sellPrice', value)
+                    }
                     currencySymbol="R$"
                     siblingHeight={true}
                   />
@@ -491,7 +498,9 @@ const CreateTargetPropertyForm = ({
                     theme={themePallete}
                     placeholder={`Valor do condomínio`}
                     value={formik.values.condoPricing}
-                    onChange={(value: number) => formik.setFieldValue('condoPricing', value)}
+                    onChange={async (value: number) =>
+                      await formik.setFieldValue('condoPricing', value)
+                    }
                     currencySymbol="R$"
                     siblingHeight={true}
                   />
@@ -505,7 +514,7 @@ const CreateTargetPropertyForm = ({
                     theme={themePallete}
                     placeholder={`Valor do IPTU por mês`}
                     value={formik.values.iptu}
-                    onChange={(value: number) => formik.setFieldValue('iptu', value)}
+                    onChange={async (value: number) => await formik.setFieldValue('iptu', value)}
                     currencySymbol="R$"
                   />
                 </span>
