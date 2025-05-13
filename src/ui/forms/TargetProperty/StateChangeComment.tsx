@@ -139,7 +139,7 @@ const UpdateStateWithComment = ({
         )}
 
         <div className="flex flex-col gap-2 col-span-12 justify-center items-center pt-5">
-          <SubmitButton isDisabled={!submitEnabled} label="Salvar visita" />
+          <SubmitButton isDisabled={!submitEnabled} label="Confirmar" />
         </div>
       </form>
     </div>
