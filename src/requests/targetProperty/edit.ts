@@ -1,11 +1,13 @@
 import type { SuccessResponse } from '@/types/apiPatterns'
+import type { CommentOnUpdateTarget } from '@/types/comment'
 import type { TargetPropertyInterface } from '@/types/targetProperty'
 
 export type EditTargetRequestProps = Partial<Omit<TargetPropertyInterface, 'id' | 'targets'>>
 
 type EditTargetRequest = (
   _id: string,
-  _bodyData: EditTargetRequestProps
+  _targetData: EditTargetRequestProps,
+  _comment?: CommentOnUpdateTarget
 ) => Promise<
   | {
       data: TargetPropertyInterface | undefined
@@ -15,7 +17,7 @@ type EditTargetRequest = (
   | undefined
 >
 
-export const editTargetProperty: EditTargetRequest = async (id, bodyData) => {
+export const editTargetProperty: EditTargetRequest = async (id, targetData, commentData) => {
   const baseUrl = 'http://localhost:3000'
 
   try {
@@ -25,7 +27,7 @@ export const editTargetProperty: EditTargetRequest = async (id, bodyData) => {
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ id, data: bodyData })
+      body: JSON.stringify({ id, data: { target: targetData, comment: commentData ?? undefined } })
     }).then((res) => res.json())
 
     if (res.error === 'ALREADY_EXISTS') {

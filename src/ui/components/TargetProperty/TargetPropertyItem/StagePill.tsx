@@ -6,6 +6,7 @@ import cx from 'classnames'
 
 import { useUIContext } from '@/providers/UIProvider'
 import { editTargetProperty } from '@/requests/targetProperty/edit'
+import type { CommentOnUpdateTarget } from '@/types/comment'
 import type { PropertyHuntingStage, TargetPropertyInterface } from '@/types/targetProperty'
 import ScheduledVisitForm from '@/ui/forms/TargetProperty/ScheduledVisit'
 import UpdateStateWithComment from '@/ui/forms/TargetProperty/StateChangeComment'
@@ -127,20 +128,22 @@ export function StagePill({ stage, targetId }: StagePillProps) {
         commentLabel={uiOptions.commentLabel ?? undefined}
         onSuccess={modal.close}
         onFail={modal.close}
-        submit={async (data: Partial<TargetPropertyInterface>) =>
-          await updateStage(newStage, { ...otherData, ...data })
-        }
+        submit={async (data: CommentOnUpdateTarget) => await updateStage(newStage, otherData, data)}
       />
     )
   }
 
   async function updateStage(
     newStage: PropertyHuntingStage,
-    otherData?: Partial<TargetPropertyInterface>
-    // comment?: TargetOnUpdateComment
+    otherData?: Partial<TargetPropertyInterface>,
+    comment?: CommentOnUpdateTarget
   ) {
     try {
-      const res = await editTargetProperty(targetId, { huntingStage: newStage, ...otherData })
+      const res = await editTargetProperty(
+        targetId,
+        { huntingStage: newStage, ...otherData },
+        comment
+      )
 
       if (!res) {
         throw new Error()
