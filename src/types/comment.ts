@@ -22,4 +22,4 @@ export interface InterfaceComment {
   updatedAt: string
 }
 
-export type TargetOnUpdateComment = Pick<InterfaceComment, 'comment' | 'topic' | 'author'>
+export type CommentOnUpdateTarget = Pick<InterfaceComment, 'comment' | 'topic' | 'author'>

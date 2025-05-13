@@ -7,7 +7,7 @@ import SubmitButton from '@ui/base/form/buttons/SubmitButton'
 import type { FormSizes, FormTheme } from '@ui/base/shared/formTheme'
 import { useFormik } from 'formik'
 
-import type { CommentTopic } from '@/types/comment'
+import type { CommentOnUpdateTarget, CommentTopic } from '@/types/comment'
 import type { TargetPropertyInterface } from '@/types/targetProperty'
 import Input from '@/ui/components/base/form/inputs/Input'
 import { RadioGroup } from '@/ui/components/base/form/RadioGroup'
@@ -18,7 +18,7 @@ interface UpdateStateWithCommentProps {
   onFail: () => void
   formTitle: string
   commentLabel?: string
-  submit: (_d: Partial<TargetPropertyInterface>) => Promise<unknown>
+  submit: (_d: CommentOnUpdateTarget) => Promise<unknown>
 }
 
 const formThemeSize: FormSizes = 'lg'
@@ -56,15 +56,17 @@ const UpdateStateWithComment = ({
 
   const { user } = useSessionContext()
 
-  async function handleSubmit(values: { comment: string; topic: string }) {
+  async function handleSubmit(values: { comment: string; topic: string; otherTopic: string }) {
     if (!formik.isValid || !user) return
 
     const { comment } = values
 
-    const data = {
-      comment: comment ?? undefined,
+    const commentTopic = values.topic === 'other' ? values.otherTopic : values.topic
 
-      isActive: true
+    const data: CommentOnUpdateTarget = {
+      comment: comment ?? undefined,
+      topic: commentTopic,
+      author: user.id
     }
 
     const res = await submit(data)
