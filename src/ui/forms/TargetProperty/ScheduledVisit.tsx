@@ -15,8 +15,7 @@ import { formatStringDate, formatTime } from '@/utils/string/formatDate'
 interface ScheduledVisitFormProps {
   onSuccess: (_h: Partial<TargetPropertyInterface>) => void
   onFail: () => void
-  submit: (_d: Partial<TargetPropertyInterface>) => Promise<void>
-  // currentData: Partial<TargetPropertyInterface>
+  submit: (_d: Partial<TargetPropertyInterface>) => Promise<unknown>
 }
 
 const formThemeSize: FormSizes = 'lg'
