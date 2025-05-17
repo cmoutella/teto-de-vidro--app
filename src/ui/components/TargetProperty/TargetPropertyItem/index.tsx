@@ -9,7 +9,6 @@ import { useUIContext } from '@/providers/UIProvider'
 import type { InterfaceHunt } from '@/types/app'
 import type { TargetPropertyInterface } from '@/types/targetProperty'
 import DeleteConfirmation from '@/ui/forms/DeleteConfirmation'
-import AddAmenityToTargetForm from '@/ui/forms/TargetProperty/AddAmenity'
 import EditTargetPropertyForm from '@/ui/forms/TargetProperty/EditTargetProperty'
 import PropertyContactForm from '@/ui/forms/TargetProperty/PropertyContact'
 import { useAddressString } from '@/utils/address/useAddressString'
@@ -18,15 +17,7 @@ import { lastUpdateMessage } from '@/utils/string/lastUpdateMessage'
 
 import Button from '../../base/Button'
 import Icon from '../../base/Icon'
-import {
-  AmenityPill,
-  hoverLotAmenity,
-  hoverOtherAmenity,
-  hoverPropertyAmenity,
-  lotAmenityBorderColor,
-  otherAmenityBorderColor,
-  propertyAmenityBorderColor
-} from './AmenityPill'
+import { AmenitiesDisplay } from './amenity/AmenitiesDisplay'
 import { BudgetDiff } from './BudgetDiff'
 import { StagePill } from './StagePill'
 
@@ -102,29 +93,6 @@ export default function TargetPropertyItem({ target, hunt }: TargetPropertyItemP
     modal.open(
       'medium',
       <PropertyContactForm onSuccess={handleSuccess} currentData={target} onFail={handleFail} />
-    )
-  }
-
-  function openAddAmenityModal() {
-    function handleFail() {
-      toast.error('Algo deu errado')
-      modal.close()
-    }
-
-    function handleSuccess() {
-      modal.close()
-      toast.success('Informações atualizadas com sucesso!')
-
-      fetchProperties()
-    }
-
-    modal.open(
-      'medium',
-      <AddAmenityToTargetForm
-        onSuccess={handleSuccess}
-        targetId={target.id as never}
-        onFail={handleFail}
-      />
     )
   }
 
@@ -382,47 +350,11 @@ export default function TargetPropertyItem({ target, hunt }: TargetPropertyItemP
             </div>
           </div>
           <div className="sm:col-span-7">
+            <AmenitiesDisplay amenities={target.targetAmenities} targetId={target.id} />
             <div className="w-full">
               <div className="w-full mb-4 p-0.5 border-b-[2px] border-b-brand-primary-700 flex justify-between items-center">
-                <p className="sm:text-xl font-medium">Facilidades</p>
-                <Button
-                  label={<Icon icon="plus" mode="outline" size="2xs" />}
-                  size="xsmall"
-                  onlyIcon={true}
-                  className={cx(
-                    'text-brand-primary-600 hover:border-brand-primary-600 hover:bg-brand-primary-600 hover:text-white'
-                  )}
-                  onClick={() => openAddAmenityModal()}
-                />
-              </div>
-              <div className="w-full flex gap-1.5 pb-2 justify-end items-center">
-                <p className={`text-sm mr-2`}>Legenda:</p>
-                <p
-                  className={`text-xs border border-1 rounded-lg px-1 py-0.5 ${propertyAmenityBorderColor} ${hoverPropertyAmenity}`}
-                >
-                  Propriedade
-                </p>
-                <p
-                  className={`text-xs border border-1 rounded-lg px-1 py-0.5 ${lotAmenityBorderColor} ${hoverLotAmenity}`}
-                >
-                  Condomínio
-                </p>
-                <p
-                  className={`text-xs border border-1 rounded-lg px-1 py-0.5 ${otherAmenityBorderColor} ${hoverOtherAmenity}`}
-                >
-                  Sem classificação
-                </p>
-              </div>
-              <div className="w-full flex flex-wrap gap-x-2 gap-y-3 sm:gap-y-2">
-                {target.targetAmenities &&
-                  target.targetAmenities.length >= 1 &&
-                  target.targetAmenities.map((amnt) => {
-                    return (
-                      <div key={amnt.identifier}>
-                        <AmenityPill amenity={amnt} targetId={target.id as never} />
-                      </div>
-                    )
-                  })}
+                <p className="sm:text-xl font-medium">Comentários</p>
+                <div> Vem aí </div>
               </div>
             </div>
           </div>

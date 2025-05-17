@@ -9,7 +9,7 @@ import { removeAmenityFromTarget } from '@/requests/targetProperty/removeAmenity
 import type { TargetAmenity, TargetPropertyInterface } from '@/types/targetProperty'
 import DeleteConfirmation from '@/ui/forms/DeleteConfirmation'
 
-import Icon from '../../base/Icon'
+import Icon from '../../../base/Icon'
 
 interface AmenityPillProps {
   amenity: TargetAmenity
