@@ -15,9 +15,11 @@ export type GetLotsByAddressProps = {
 type GetAllLotsByAddressRequest = (_requestBody: GetLotsByAddressProps) => Promise<InterfaceLot[]>
 
 export const getAllLotsByAddress: GetAllLotsByAddressRequest = async (requestBody) => {
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_API_URL
+  const baseUrl = process.env.NEXT_PUBLIC_APPLICATION_URL
 
-  if (!baseUrl) return []
+  if (!baseUrl) {
+    throw new Error('A url base não foi definida')
+  }
 
   const fetchUrl = `${baseUrl}/address/lots`
 

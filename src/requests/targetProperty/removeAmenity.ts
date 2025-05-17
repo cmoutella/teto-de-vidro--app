@@ -10,9 +10,11 @@ export const removeAmenityFromTarget: RemoveAmenityFromTargetRequest = async (
   targetId,
   amenityId
 ) => {
-  const baseUrl = 'http://localhost:3000'
+  const baseUrl = process.env.NEXT_PUBLIC_APPLICATION_URL
 
-  if (!baseUrl) return undefined
+  if (!baseUrl) {
+    throw new Error('A url base não foi definida')
+  }
 
   try {
     const res = await fetch(`${baseUrl}/api/target-property/amenity/remove`, {

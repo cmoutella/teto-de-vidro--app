@@ -13,9 +13,11 @@ export const addAmenityToTarget: RemoveAmenityFromTargetRequest = async (
   amenityData,
   userId
 ) => {
-  const baseUrl = 'http://localhost:3000'
+  const baseUrl = process.env.NEXT_PUBLIC_APPLICATION_URL
 
-  if (!baseUrl) return undefined
+  if (!baseUrl) {
+    throw new Error('A url base não foi definida')
+  }
 
   const payload = {
     targetId: targetId,

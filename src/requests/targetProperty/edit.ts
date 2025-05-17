@@ -18,7 +18,11 @@ type EditTargetRequest = (
 >
 
 export const editTargetProperty: EditTargetRequest = async (id, targetData, commentData) => {
-  const baseUrl = 'http://localhost:3000'
+  const baseUrl = process.env.NEXT_PUBLIC_APPLICATION_URL
+
+  if (!baseUrl) {
+    throw new Error('A url base não foi definida')
+  }
 
   try {
     const res = await fetch(`${baseUrl}/api/target-property/update`, {
