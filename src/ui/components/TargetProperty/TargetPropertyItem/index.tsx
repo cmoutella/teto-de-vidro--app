@@ -19,6 +19,7 @@ import Button from '../../base/Button'
 import Icon from '../../base/Icon'
 import { AmenitiesDisplay } from './amenity/AmenitiesDisplay'
 import { BudgetDiff } from './BudgetDiff'
+import { CommentsDisplay } from './comments/CommentsDisplay'
 import { StagePill } from './StagePill'
 
 interface TargetPropertyItemProps {
@@ -245,7 +246,7 @@ export default function TargetPropertyItem({ target, hunt }: TargetPropertyItemP
       {isOpen && (
         <div
           className={
-            'sm:grid sm:grid-cols-12 rounded-b-md border-b border-x border-b-brand-primary-400 border-x-brand-primary-400 text-brand-primary-800 p-3 sm:px-4 sm:pt-3 pb-6 gap-4'
+            'sm:grid sm:grid-cols-12 rounded-b-md border-b border-x border-b-brand-primary-400 border-x-brand-primary-400 text-brand-primary-800 p-3 sm:px-4 sm:pt-3 pb-6 gap-4 gap-x-5'
           }
         >
           <div className="sm:col-span-5 flex flex-col gap-5">
@@ -351,11 +352,8 @@ export default function TargetPropertyItem({ target, hunt }: TargetPropertyItemP
           </div>
           <div className="sm:col-span-7">
             <AmenitiesDisplay amenities={target.targetAmenities} targetId={target.id} />
-            <div className="w-full">
-              <div className="w-full mb-4 p-0.5 border-b-[2px] border-b-brand-primary-700 flex justify-between items-center">
-                <p className="sm:text-xl font-medium">Comentários</p>
-                <div> Vem aí </div>
-              </div>
+            <div className="mt-4 w-full">
+              <CommentsDisplay targetId={target.id} />
             </div>
           </div>
         </div>
