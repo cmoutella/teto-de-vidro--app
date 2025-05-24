@@ -1,5 +1,5 @@
 import type { SuccessResponse } from '@/types/apiPatterns'
-import type { CommentOnUpdateTarget } from '@/types/comment'
+import type { TargetComment } from '@/types/comment'
 import type { TargetPropertyInterface } from '@/types/targetProperty'
 
 export type EditTargetRequestProps = Partial<Omit<TargetPropertyInterface, 'id' | 'targets'>>
@@ -7,7 +7,7 @@ export type EditTargetRequestProps = Partial<Omit<TargetPropertyInterface, 'id' 
 type EditTargetRequest = (
   _id: string,
   _targetData: EditTargetRequestProps,
-  _comment?: CommentOnUpdateTarget
+  _comment?: TargetComment
 ) => Promise<
   | {
       data: TargetPropertyInterface | undefined

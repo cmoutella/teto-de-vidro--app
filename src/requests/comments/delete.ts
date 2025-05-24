@@ -2,9 +2,9 @@ import type { TargetPropertyInterface } from '@/types/targetProperty'
 
 export type EditHuntRequestProps = Omit<TargetPropertyInterface, 'id' | 'targets'>
 
-type DeleteTargetRequest = (_id: string) => Promise<boolean | undefined>
+type DeleteCommentRequest = (_id: string) => Promise<boolean | undefined>
 
-export const deleteTargetProperty: DeleteTargetRequest = async (id) => {
+export const deleteComment: DeleteCommentRequest = async (id) => {
   const baseUrl = process.env.NEXT_PUBLIC_APPLICATION_URL
 
   if (!baseUrl) {
@@ -12,13 +12,12 @@ export const deleteTargetProperty: DeleteTargetRequest = async (id) => {
   }
 
   try {
-    const res: Response = await fetch(`${baseUrl}/api/target-property/delete`, {
-      method: 'POST',
+    const res: Response = await fetch(`${baseUrl}/api/comment/${id}/delete`, {
+      method: 'DELETE',
       mode: 'cors',
       headers: {
         'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ id })
+      }
     })
 
     if (!res || res.error) {
