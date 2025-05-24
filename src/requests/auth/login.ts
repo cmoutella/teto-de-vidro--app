@@ -4,7 +4,11 @@ import type { UserAuth } from '@/types/apiResponses'
 type LoginRequest = (_email: string, _password: string) => Promise<UserAuth | undefined>
 
 export const authLogin: LoginRequest = async (email, password) => {
-  const baseUrl = 'http://localhost:3000'
+  const baseUrl = process.env.NEXT_PUBLIC_APPLICATION_URL
+
+  if (!baseUrl) {
+    throw new Error('A url base não foi definida')
+  }
 
   const credentials = { email: email, password: password }
 

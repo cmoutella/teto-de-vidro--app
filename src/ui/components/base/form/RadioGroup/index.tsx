@@ -1,19 +1,33 @@
-import type { RawRadioOption } from '../../_raw/RadioGroup'
+import type { RawRadioGroupProps, RawRadioOption } from '../../_raw/RadioGroup'
 import { RawRadioGroup } from '../../_raw/RadioGroup'
 import FieldWrapper from '../../_raw/wrappers/Field'
 
-interface RadioGroupProps {
-  name: string
+interface RadioGroupProps extends RawRadioGroupProps {
   label: string
   description?: string
-  options: RawRadioOption[]
-  onChange: (_val: RawRadioOption) => void
+  current: RawRadioOption
 }
 
-export function RadioGroup({ name, label, description, options, onChange }: RadioGroupProps) {
+export function RadioGroup({
+  name,
+  label,
+  description,
+  options,
+  current,
+  direction,
+  manyColumns,
+  onChange
+}: RadioGroupProps) {
   return (
     <FieldWrapper label={label} description={description}>
-      <RawRadioGroup name={name} options={options} onChange={onChange} />
+      <RawRadioGroup
+        name={name}
+        options={options}
+        current={current}
+        direction={direction}
+        manyColumns={manyColumns}
+        onChange={onChange}
+      />
     </FieldWrapper>
   )
 }

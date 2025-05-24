@@ -1,11 +1,13 @@
 import type { SuccessResponse } from '@/types/apiPatterns'
+import type { TargetComment } from '@/types/comment'
 import type { TargetPropertyInterface } from '@/types/targetProperty'
 
 export type EditTargetRequestProps = Partial<Omit<TargetPropertyInterface, 'id' | 'targets'>>
 
 type EditTargetRequest = (
   _id: string,
-  _bodyData: EditTargetRequestProps
+  _targetData: EditTargetRequestProps,
+  _comment?: TargetComment
 ) => Promise<
   | {
       data: TargetPropertyInterface | undefined
@@ -15,8 +17,12 @@ type EditTargetRequest = (
   | undefined
 >
 
-export const editTargetProperty: EditTargetRequest = async (id, bodyData) => {
-  const baseUrl = 'http://localhost:3000'
+export const editTargetProperty: EditTargetRequest = async (id, targetData, commentData) => {
+  const baseUrl = process.env.NEXT_PUBLIC_APPLICATION_URL
+
+  if (!baseUrl) {
+    throw new Error('A url base não foi definida')
+  }
 
   try {
     const res = await fetch(`${baseUrl}/api/target-property/update`, {
@@ -25,7 +31,7 @@ export const editTargetProperty: EditTargetRequest = async (id, bodyData) => {
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ id, data: bodyData })
+      body: JSON.stringify({ id, data: { target: targetData, comment: commentData ?? undefined } })
     }).then((res) => res.json())
 
     if (res.error === 'ALREADY_EXISTS') {

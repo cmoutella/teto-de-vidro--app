@@ -15,6 +15,7 @@ import MinusMicro from '@/assets/icons/micro/minus.svg'
 import PencilMicro from '@/assets/icons/micro/pencil.svg'
 import PlusCircleMicro from '@/assets/icons/micro/plus-circle.svg'
 import PlusMicro from '@/assets/icons/micro/plus.svg'
+import RecycleMicro from '@/assets/icons/micro/recycle.svg'
 import TrashMicro from '@/assets/icons/micro/trash.svg'
 import XMicro from '@/assets/icons/micro/x.svg'
 import OfficeMini from '@/assets/icons/mini/building-library.svg'
@@ -30,6 +31,7 @@ import MinusMini from '@/assets/icons/mini/minus.svg'
 import PencilMini from '@/assets/icons/mini/pencil.svg'
 import PlusCircleMini from '@/assets/icons/mini/plus-circle.svg'
 import PlusMini from '@/assets/icons/mini/plus.svg'
+import RecycleMini from '@/assets/icons/mini/recycle.svg'
 import TrashMini from '@/assets/icons/mini/trash.svg'
 import XMini from '@/assets/icons/mini/x.svg'
 import OfficeOutline from '@/assets/icons/outline/building-library.svg'
@@ -45,6 +47,7 @@ import MinusOutline from '@/assets/icons/outline/minus.svg'
 import PencilOutline from '@/assets/icons/outline/pencil.svg'
 import PlusCircleOutline from '@/assets/icons/outline/plus-circle.svg'
 import PlusOutline from '@/assets/icons/outline/plus.svg'
+import RecycleOutline from '@/assets/icons/outline/recycle.svg'
 import TrashOutline from '@/assets/icons/outline/trash.svg'
 import XOutline from '@/assets/icons/outline/x.svg'
 import OfficeSolid from '@/assets/icons/solid/building-library.svg'
@@ -60,6 +63,7 @@ import MinusSolid from '@/assets/icons/solid/minus.svg'
 import PencilSolid from '@/assets/icons/solid/pencil.svg'
 import PlusCircleSolid from '@/assets/icons/solid/plus-circle.svg'
 import PlusSolid from '@/assets/icons/solid/plus.svg'
+import RecycleSolid from '@/assets/icons/solid/recycle.svg'
 import TrashSolid from '@/assets/icons/solid/trash.svg'
 import XSolid from '@/assets/icons/solid/x.svg'
 
@@ -79,6 +83,7 @@ type AvailableIcon =
   | 'pencil'
   | 'plus'
   | 'plus-circle'
+  | 'recycle'
   | 'trash'
   | 'x'
 
@@ -112,6 +117,7 @@ const Icon = ({ icon, className, mode = 'outline', size = 'sm', onClick }: IconP
     'chevron-right': ChevronRightSolid,
     eye: EyeSolid,
     'eye-slash': EyeSlashSolid,
+    recycle: RecycleSolid,
     trash: TrashSolid,
     x: XSolid
   }
@@ -133,6 +139,7 @@ const Icon = ({ icon, className, mode = 'outline', size = 'sm', onClick }: IconP
     'chevron-right': ChevronRightOutline,
     eye: EyeOutline,
     'eye-slash': EyeSlashOutline,
+    recycle: RecycleOutline,
     trash: TrashOutline,
     x: XOutline
   }
@@ -154,6 +161,7 @@ const Icon = ({ icon, className, mode = 'outline', size = 'sm', onClick }: IconP
     'chevron-right': ChevronRightMini,
     eye: EyeMini,
     'eye-slash': EyeSlashMini,
+    recycle: RecycleMini,
     trash: TrashMini,
     x: XMini
   }
@@ -175,6 +183,7 @@ const Icon = ({ icon, className, mode = 'outline', size = 'sm', onClick }: IconP
     'chevron-right': ChevronRightMicro,
     eye: EyeMicro,
     'eye-slash': EyeSlashMicro,
+    recycle: RecycleMicro,
     trash: TrashMicro,
     x: XMicro
   }

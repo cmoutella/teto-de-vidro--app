@@ -35,7 +35,7 @@ const FieldWrapper = ({
       {(label || description) && (
         <span>
           {label && (
-            <LabelHeadless className={cx(formTheme[theme].label, 'uppercase whitespace-nowrap')}>
+            <LabelHeadless className={cx(formTheme[theme].label, 'uppercase max-w-36')}>
               {label}
             </LabelHeadless>
           )}

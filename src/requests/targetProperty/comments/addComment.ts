@@ -1,16 +1,17 @@
 import type { SuccessResponse } from '@/types/apiPatterns'
-import type { AmenityData, InterfaceUser } from '@/types/app'
-import type { TargetAmenity, TargetPropertyInterface } from '@/types/targetProperty'
+import type { InterfaceUser } from '@/types/app'
+import type { InterfaceComment, TargetComment } from '@/types/comment'
+import type { TargetPropertyInterface } from '@/types/targetProperty'
 
-type RemoveAmenityFromTargetRequest = (
+type AddCommentToTargetRequest = (
   _targetId: Pick<TargetPropertyInterface, 'id'>,
-  _amenityData: AmenityData,
+  _commentData: Omit<TargetComment, 'author'>,
   _userId?: Pick<InterfaceUser, 'id'>
-) => Promise<{ success: boolean } | undefined>
+) => Promise<InterfaceComment | undefined>
 
-export const addAmenityToTarget: RemoveAmenityFromTargetRequest = async (
+export const addCommentToTarget: AddCommentToTargetRequest = async (
   targetId,
-  amenityData,
+  commentData,
   userId
 ) => {
   const baseUrl = process.env.NEXT_PUBLIC_APPLICATION_URL
@@ -20,16 +21,14 @@ export const addAmenityToTarget: RemoveAmenityFromTargetRequest = async (
   }
 
   const payload = {
-    targetId: targetId,
-    amenity: {
-      ...amenityData,
-      reportedBy: userId ? 'user' : 'ad',
-      userId: userId
-    } as TargetAmenity
+    comment: {
+      ...commentData,
+      author: userId as never
+    } as TargetComment
   }
 
   try {
-    const res = await fetch(`${baseUrl}/api/target-property/amenity/add`, {
+    const res = await fetch(`${baseUrl}/api/target-property/${targetId}/comment/add`, {
       method: 'POST',
       mode: 'cors',
       headers: {
@@ -42,7 +41,7 @@ export const addAmenityToTarget: RemoveAmenityFromTargetRequest = async (
       throw Error('Não foi possível encontrar a informação solicitada')
     }
 
-    const { data } = res as SuccessResponse<{ success: boolean }>
+    const { data } = res as SuccessResponse<InterfaceComment>
 
     return data
   } catch (_err) {

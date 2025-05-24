@@ -1,12 +1,14 @@
-import { useEffect, useState } from 'react'
-
 import { Radio as HeadlessRadio, RadioGroup as HeadlessRadioGroup } from '@headlessui/react'
+import cx from 'classnames'
 
 export type RawRadioOption = Record<string, unknown> & { id: string; label: string }
 
-interface RawRadioGroupProps {
+export interface RawRadioGroupProps {
   options: RawRadioOption[]
+  current: RawRadioOption
   name: string
+  direction?: 'vertical' | 'horizontal'
+  manyColumns?: boolean
   onChange: (_val: RawRadioOption) => void
 }
 
@@ -20,30 +22,40 @@ const Radio = ({ selected }: { selected: boolean }) => {
   )
 }
 
-export function RawRadioGroup({ name, options, onChange }: RawRadioGroupProps) {
-  const [selected, setSelected] = useState<RawRadioOption>(options[0])
-
-  useEffect(() => {
-    onChange(selected)
-  }, [selected])
-
+export function RawRadioGroup({
+  name,
+  options,
+  current,
+  direction = 'horizontal',
+  manyColumns,
+  onChange
+}: RawRadioGroupProps) {
   return (
     <HeadlessRadioGroup
-      value={selected}
+      value={current}
       name={name}
-      onChange={setSelected}
-      className="flex items-center justify-start gap-2"
+      onChange={onChange}
+      className={cx('gap-x-4 gap-y-2', {
+        'flex flex-col items-start': direction === 'vertical' && !manyColumns,
+        'flex flex-row items-center justify-start': direction === 'horizontal' && !manyColumns,
+        'grid grid-cols-2': manyColumns
+      })}
     >
       {options.map((opt) => (
         <HeadlessRadio
           key={opt.id}
           value={opt}
-          className="group relative flex cursor-pointer rounded-lg px-5 py-4 shadow-md transition focus:not-data-focus:outline-none data-focus:outline data-focus:outline-white w-full hover:shadow-lg text-brand-primary-600 hover:text-brand-primary-700 font-medium"
+          className={cx(
+            'group relative font-medium',
+            'rounded-lg p-1 cursor-pointer',
+            'flex justify-start items-center gap-2',
+            { 'w-full': !manyColumns, 'col-span-1': manyColumns },
+            'transition focus:not-data-focus:outline-none data-focus:outline data-focus:outline-white',
+            'hover:shadow-md text-brand-primary-600 hover:text-brand-primary-700 '
+          )}
         >
-          <div className="w-full flex items-center justify-start gap-2">
-            <Radio selected={opt.id === selected.id} />
-            <p className="text-sm leading-none whitespace-nowrap">{opt.label}</p>
-          </div>
+          <Radio selected={opt.id === current.id} />
+          <p className="text-sm leading-none whitespace-nowrap">{opt.label}</p>
         </HeadlessRadio>
       ))}
     </HeadlessRadioGroup>
