@@ -1,13 +1,17 @@
 import { useEffect, useState } from 'react'
+import toast from 'react-hot-toast'
 
 import cx from 'classnames'
 
 import { useSessionContext } from '@/providers/AuthProvider'
+import { useUIContext } from '@/providers/UIProvider'
+import { addCommentToTarget } from '@/requests/targetProperty/comments/addComment'
 import { getTargetComments } from '@/requests/targetProperty/comments/getComment'
-import type { InterfaceComment } from '@/types/comment'
+import type { InterfaceComment, TargetComment } from '@/types/comment'
 import Button from '@/ui/components/base/Button'
 import Icon from '@/ui/components/base/Icon'
 import { Pagination } from '@/ui/components/Pagination'
+import TargetCommentForm from '@/ui/forms/TargetProperty/TargetCommentForm'
 
 import { OneComment } from './OneComment'
 
@@ -23,6 +27,7 @@ export function CommentsDisplay({ targetId }: CommentsDisplayProps) {
   const perPage = 6
 
   const { user } = useSessionContext()
+  const { modal } = useUIContext()
 
   useEffect(() => {
     getComments()
@@ -46,9 +51,41 @@ export function CommentsDisplay({ targetId }: CommentsDisplayProps) {
     }
   }
 
-  function newComment() {
-    // TODO
-    console.log('COMMENT NEW not implemented')
+  function handleNewComment() {
+    const labels = [
+      'O que você achou?',
+      'O lugar te surpreendeu ou decepcionou?',
+      'A localização te agradou?',
+      'O lugar era bem iluminado?',
+      'O espaço era do tamanho que você imaginava?',
+      'A cozinha era como? Ampla? Pequena?',
+      'Tinha algum detalhe que te incomodou logo de cara?',
+      'O prédio em si parecia bem cuidado? Rolou olhar a portaria, elevador, essas coisas?',
+      'É silencioso? O que você achou de barulho? Era tranquilo ou você ouviu muito som da rua ou dos vizinhos?'
+    ]
+
+    function onSuccess() {
+      toast.success('Comentário criado com sucesso')
+      getComments()
+      modal.close()
+    }
+    function onFail() {
+      toast.error('Não foi possível enviar seu comentário')
+      modal.close()
+    }
+
+    modal.open(
+      'small',
+      <TargetCommentForm
+        formTitle="Novo comentário"
+        commentLabel={labels[Math.floor(Math.random() * labels.length)]}
+        onSuccess={onSuccess}
+        onFail={onFail}
+        submit={async (data: TargetComment) =>
+          await addCommentToTarget(targetId as never, data, user?.id as never)
+        }
+      />
+    )
   }
 
   return (
@@ -72,14 +109,13 @@ export function CommentsDisplay({ targetId }: CommentsDisplayProps) {
             className={cx(
               'text-brand-primary-600 hover:border-brand-primary-600 hover:bg-brand-primary-600 hover:text-white'
             )}
-            onClick={() => newComment()}
+            onClick={() => handleNewComment()}
           />
         </div>
       </div>
       <div className="w-full flex flex-wrap gap-x-2 gap-y-3 sm:gap-y-2">
         <div className="w-full flex flex-col items-start gap-y-1">
-          {!isLoading &&
-            comments.length >= 1 &&
+          {comments.length >= 1 &&
             comments.map((comm) => {
               return (
                 <div
@@ -88,20 +124,26 @@ export function CommentsDisplay({ targetId }: CommentsDisplayProps) {
                     'self-end': user?.id === comm.author
                   })}
                 >
-                  <OneComment comment={comm} isMyComment={user?.id === comm.author} />
+                  <OneComment
+                    comment={comm}
+                    isMyComment={user?.id === comm.author}
+                    updateCommentList={getComments}
+                  />
                 </div>
               )
             })}
         </div>
-        <Pagination
-          currentPage={page}
-          maxPage={maxPage}
-          toPage={(p) => setPage(p)}
-          isFirstPage={page === 1}
-          isLastPage={page === maxPage}
-          nextPage={() => setPage(page + 1)}
-          prevPage={() => setPage(page - 1)}
-        />
+        {comments.length >= 1 && (
+          <Pagination
+            currentPage={page}
+            maxPage={maxPage}
+            toPage={(p) => setPage(p)}
+            isFirstPage={page === 1}
+            isLastPage={page === maxPage}
+            nextPage={() => setPage(page + 1)}
+            prevPage={() => setPage(page - 1)}
+          />
+        )}
       </div>
     </div>
   )

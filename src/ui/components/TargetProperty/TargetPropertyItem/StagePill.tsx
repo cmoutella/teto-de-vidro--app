@@ -6,10 +6,10 @@ import cx from 'classnames'
 
 import { useUIContext } from '@/providers/UIProvider'
 import { editTargetProperty } from '@/requests/targetProperty/edit'
-import type { CommentOnUpdateTarget } from '@/types/comment'
+import type { TargetComment } from '@/types/comment'
 import type { PropertyHuntingStage, TargetPropertyInterface } from '@/types/targetProperty'
 import ScheduledVisitForm from '@/ui/forms/TargetProperty/ScheduledVisit'
-import UpdateStateWithComment from '@/ui/forms/TargetProperty/StateChangeComment'
+import TargetCommentForm from '@/ui/forms/TargetProperty/TargetCommentForm'
 
 import SelectRaw from '../../base/_raw/Select'
 
@@ -123,12 +123,13 @@ export function StagePill({ stage, targetId }: StagePillProps) {
   ) {
     modal.open(
       'small',
-      <UpdateStateWithComment
+      <TargetCommentForm
         formTitle={uiOptions.title}
         commentLabel={uiOptions.commentLabel ?? undefined}
         onSuccess={modal.close}
         onFail={modal.close}
-        submit={async (data: CommentOnUpdateTarget) => await updateStage(newStage, otherData, data)}
+        enableEmptyComment={true}
+        submit={async (data: TargetComment) => await updateStage(newStage, otherData, data)}
       />
     )
   }
@@ -136,7 +137,7 @@ export function StagePill({ stage, targetId }: StagePillProps) {
   async function updateStage(
     newStage: PropertyHuntingStage,
     otherData?: Partial<TargetPropertyInterface>,
-    comment?: CommentOnUpdateTarget
+    comment?: TargetComment
   ) {
     try {
       const res = await editTargetProperty(

@@ -5,20 +5,22 @@ import { useEffect, useState } from 'react'
 import { useSessionContext } from '@providers/AuthProvider'
 import SubmitButton from '@ui/base/form/buttons/SubmitButton'
 import type { FormSizes, FormTheme } from '@ui/base/shared/formTheme'
+import cx from 'classnames'
 import { useFormik } from 'formik'
 
-import type { CommentOnUpdateTarget, CommentTopic } from '@/types/comment'
+import type { CommentTopic, TargetComment } from '@/types/comment'
 import type { TargetPropertyInterface } from '@/types/targetProperty'
 import Input from '@/ui/components/base/form/inputs/Input'
 import { RadioGroup } from '@/ui/components/base/form/RadioGroup'
 import TextAreaInput from '@/ui/components/base/form/Textarea'
 
-interface UpdateStateWithCommentProps {
+interface TargetCommentFormProps {
   onSuccess: (_h: Partial<TargetPropertyInterface>) => void
   onFail: () => void
   formTitle: string
   commentLabel?: string
-  submit: (_d: CommentOnUpdateTarget) => Promise<unknown>
+  enableEmptyComment?: boolean
+  submit: (_d: TargetComment) => Promise<unknown>
 }
 
 const formThemeSize: FormSizes = 'lg'
@@ -33,13 +35,14 @@ const topicOptions: { id: CommentTopic; label: string }[] = [
   { id: 'other', label: 'Outro' }
 ]
 
-const UpdateStateWithComment = ({
+const TargetCommentForm = ({
   onSuccess,
   onFail,
   formTitle,
   commentLabel = 'Deixe um comentário',
+  enableEmptyComment,
   submit
-}: UpdateStateWithCommentProps) => {
+}: TargetCommentFormProps) => {
   const [showTopics, setShowTopics] = useState(false)
   const [submitEnabled, setSubmitEnabled] = useState(true)
 
@@ -57,16 +60,19 @@ const UpdateStateWithComment = ({
   const { user } = useSessionContext()
 
   async function handleSubmit(values: { comment: string; topic: string; otherTopic: string }) {
+    console.log('trying to submit', formik.isValid)
+    console.log('trying to submit', user)
     if (!formik.isValid || !user) return
 
     const { comment } = values
 
     const commentTopic = values.topic === 'other' ? values.otherTopic : values.topic
 
-    const data: CommentOnUpdateTarget = {
+    const data: TargetComment = {
       comment: comment ?? undefined,
       topic: commentTopic,
-      author: user.id
+      author: user.id,
+      authorPrivacy: 'allowed'
     }
 
     const res = await submit(data)
@@ -84,14 +90,16 @@ const UpdateStateWithComment = ({
 
     await formik.setFieldValue('comment', value)
 
-    if (value.length >= 10) {
+    if (value.length >= 5) {
       setShowTopics(true)
     }
   }
 
   useEffect(() => {
     const actionInProgress = !formik.isValid || formik.isSubmitting
-    const comment = formik.values.comment === '' || (formik.values.comment !== '' && showTopics)
+    const comment =
+      (enableEmptyComment && formik.values.comment === '') ||
+      (formik.values.comment !== '' && showTopics)
     const hasTopic =
       formik.values.topic !== 'other' ||
       (formik.values.topic === 'other' && formik.values.otherTopic !== '')
@@ -138,12 +146,18 @@ const UpdateStateWithComment = ({
           </span>
         )}
 
-        <div className="flex flex-col gap-2 col-span-12 justify-center items-center pt-5">
-          <SubmitButton isDisabled={!submitEnabled} label="Confirmar" />
+        <div className={cx('flex flex-col gap-2 col-span-12 justify-center items-center pt-5')}>
+          <SubmitButton
+            isDisabled={!submitEnabled}
+            label={
+              submitEnabled && formik.values.comment === '' ? 'Enviar sem comentário' : 'Enviar'
+            }
+            noWrap={true}
+          />
         </div>
       </form>
     </div>
   )
 }
 
-export default UpdateStateWithComment
+export default TargetCommentForm

@@ -32,8 +32,6 @@ export const getTargetComments: GetTargetCommentsRequest = async (
       }
     }).then((res) => res.json())
 
-    console.log('res', res)
-
     if (res.error) {
       throw new Error('Não foi possível encontrar a informação solicitada')
     }
