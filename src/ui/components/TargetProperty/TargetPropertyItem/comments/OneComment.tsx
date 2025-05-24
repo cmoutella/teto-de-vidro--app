@@ -7,10 +7,12 @@ import { differenceInMinutes } from 'date-fns/differenceInMinutes'
 
 import { useUIContext } from '@/providers/UIProvider'
 import { deleteComment } from '@/requests/comments/delete'
-import type { InterfaceComment } from '@/types/comment'
+import { editComment } from '@/requests/comments/edit'
+import type { InterfaceComment, TargetComment } from '@/types/comment'
 import Button from '@/ui/components/base/Button'
 import Icon from '@/ui/components/base/Icon'
 import DeleteConfirmation from '@/ui/forms/DeleteConfirmation'
+import TargetCommentForm from '@/ui/forms/TargetProperty/TargetCommentForm'
 import { lastUpdateMessage } from '@/utils/string/lastUpdateMessage'
 
 interface OneCommentProps {
@@ -24,9 +26,30 @@ export function OneComment({ comment, isMyComment, updateCommentList }: OneComme
 
   const { modal } = useUIContext()
 
-  function handleEdit() {
-    // TODO:
-    console.log('COMMENT EDIT not implemented')
+  function handleEditComment() {
+    function onSuccess() {
+      toast.success('Comentário editado')
+      updateCommentList()
+      modal.close()
+    }
+    function onFail() {
+      toast.error('Não foi possível editar seu comentário')
+      modal.close()
+    }
+
+    modal.open(
+      'small',
+      <TargetCommentForm
+        formTitle="Atualizar comentário"
+        commentLabel="Comentário"
+        currentComment={comment}
+        onSuccess={onSuccess}
+        onFail={onFail}
+        submit={async (data: TargetComment) =>
+          await editComment(comment.id, { ...comment, ...data })
+        }
+      />
+    )
   }
 
   function openDeleteConfirmation() {
@@ -82,7 +105,7 @@ export function OneComment({ comment, isMyComment, updateCommentList }: OneComme
               className={cx(
                 'text-brand-primary-600 hover:border-brand-primary-600 hover:bg-brand-primary-600 hover:text-white'
               )}
-              onClick={() => handleEdit()}
+              onClick={() => handleEditComment()}
             />
           )}
           {isMyComment && (

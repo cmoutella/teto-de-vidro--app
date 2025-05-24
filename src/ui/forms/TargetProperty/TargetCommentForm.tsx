@@ -8,7 +8,7 @@ import type { FormSizes, FormTheme } from '@ui/base/shared/formTheme'
 import cx from 'classnames'
 import { useFormik } from 'formik'
 
-import type { CommentTopic, TargetComment } from '@/types/comment'
+import type { CommentTopic, InterfaceComment, TargetComment } from '@/types/comment'
 import type { TargetPropertyInterface } from '@/types/targetProperty'
 import Input from '@/ui/components/base/form/inputs/Input'
 import { RadioGroup } from '@/ui/components/base/form/RadioGroup'
@@ -20,7 +20,8 @@ interface TargetCommentFormProps {
   formTitle: string
   commentLabel?: string
   enableEmptyComment?: boolean
-  submit: (_d: TargetComment) => Promise<unknown>
+  currentComment?: InterfaceComment
+  submit: (_d: TargetComment) => Promise<InterfaceComment | undefined>
 }
 
 const formThemeSize: FormSizes = 'lg'
@@ -41,16 +42,27 @@ const TargetCommentForm = ({
   formTitle,
   commentLabel = 'Deixe um comentário',
   enableEmptyComment,
+  currentComment,
   submit
 }: TargetCommentFormProps) => {
   const [showTopics, setShowTopics] = useState(false)
   const [submitEnabled, setSubmitEnabled] = useState(true)
 
+  const initiateTopic =
+    currentComment?.topic && topicOptions.find((i) => currentComment.topic === i.id)
+      ? currentComment.topic
+      : topicOptions[0].id
+
+  const initiateOther =
+    currentComment?.topic && !topicOptions.find((i) => currentComment.topic === i.id)
+      ? currentComment.topic
+      : ''
+
   const formik = useFormik({
     initialValues: {
-      comment: '',
-      topic: topicOptions[0].id,
-      otherTopic: ''
+      comment: currentComment?.comment ?? '',
+      topic: initiateTopic,
+      otherTopic: initiateOther
     },
     validateOnBlur: true,
     validateOnChange: false,
@@ -60,8 +72,6 @@ const TargetCommentForm = ({
   const { user } = useSessionContext()
 
   async function handleSubmit(values: { comment: string; topic: string; otherTopic: string }) {
-    console.log('trying to submit', formik.isValid)
-    console.log('trying to submit', user)
     if (!formik.isValid || !user) return
 
     const { comment } = values
@@ -127,6 +137,7 @@ const TargetCommentForm = ({
               label="Meu comentário é sobre:"
               name="topic"
               options={topicOptions}
+              current={topicOptions.find((i) => i.id === formik.values.topic) as never}
               manyColumns={true}
               onChange={async (value) => await formik.setFieldValue('topic', value.id)}
             />

@@ -1,5 +1,3 @@
-import { useEffect, useState } from 'react'
-
 import { Radio as HeadlessRadio, RadioGroup as HeadlessRadioGroup } from '@headlessui/react'
 import cx from 'classnames'
 
@@ -7,6 +5,7 @@ export type RawRadioOption = Record<string, unknown> & { id: string; label: stri
 
 export interface RawRadioGroupProps {
   options: RawRadioOption[]
+  current: RawRadioOption
   name: string
   direction?: 'vertical' | 'horizontal'
   manyColumns?: boolean
@@ -26,21 +25,16 @@ const Radio = ({ selected }: { selected: boolean }) => {
 export function RawRadioGroup({
   name,
   options,
+  current,
   direction = 'horizontal',
   manyColumns,
   onChange
 }: RawRadioGroupProps) {
-  const [selected, setSelected] = useState<RawRadioOption>(options[0])
-
-  useEffect(() => {
-    onChange(selected)
-  }, [selected])
-
   return (
     <HeadlessRadioGroup
-      value={selected}
+      value={current}
       name={name}
-      onChange={setSelected}
+      onChange={onChange}
       className={cx('gap-x-4 gap-y-2', {
         'flex flex-col items-start': direction === 'vertical' && !manyColumns,
         'flex flex-row items-center justify-start': direction === 'horizontal' && !manyColumns,
@@ -60,7 +54,7 @@ export function RawRadioGroup({
             'hover:shadow-md text-brand-primary-600 hover:text-brand-primary-700 '
           )}
         >
-          <Radio selected={opt.id === selected.id} />
+          <Radio selected={opt.id === current.id} />
           <p className="text-sm leading-none whitespace-nowrap">{opt.label}</p>
         </HeadlessRadio>
       ))}

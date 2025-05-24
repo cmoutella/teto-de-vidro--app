@@ -1,13 +1,13 @@
 import type { SuccessResponse } from '@/types/apiPatterns'
 import type { InterfaceUser } from '@/types/app'
-import type { TargetComment } from '@/types/comment'
+import type { InterfaceComment, TargetComment } from '@/types/comment'
 import type { TargetPropertyInterface } from '@/types/targetProperty'
 
 type AddCommentToTargetRequest = (
   _targetId: Pick<TargetPropertyInterface, 'id'>,
   _commentData: Omit<TargetComment, 'author'>,
   _userId?: Pick<InterfaceUser, 'id'>
-) => Promise<{ success: boolean } | undefined>
+) => Promise<InterfaceComment | undefined>
 
 export const addCommentToTarget: AddCommentToTargetRequest = async (
   targetId,
@@ -41,7 +41,7 @@ export const addCommentToTarget: AddCommentToTargetRequest = async (
       throw Error('Não foi possível encontrar a informação solicitada')
     }
 
-    const { data } = res as SuccessResponse<{ success: boolean }>
+    const { data } = res as SuccessResponse<InterfaceComment>
 
     return data
   } catch (_err) {

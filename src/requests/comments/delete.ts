@@ -21,7 +21,7 @@ export const deleteComment: DeleteCommentRequest = async (id) => {
     })
 
     if (!res || res.error) {
-      throw Error('Não foi possível criar agora, tente novamente mais tarde')
+      throw Error('Não foi possível apagar agora, tente novamente mais tarde')
     }
 
     return res.status === 200
