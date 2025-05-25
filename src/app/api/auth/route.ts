@@ -13,7 +13,7 @@ export async function POST(req: Request) {
 
   if (!baseUrl) return undefined
 
-  const loginUrl = `${baseUrl}/users/login`
+  const loginUrl = `${baseUrl}/auth/login`
   const credentials = { email: body.email, password: body.password }
 
   try {
