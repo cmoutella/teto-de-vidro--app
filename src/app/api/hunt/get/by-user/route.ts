@@ -31,17 +31,14 @@ export async function POST(req: NextRequest) {
     req.headers.get('authorization') ?? (tokenFromCookie && `Bearer ${tokenFromCookie}`)
 
   try {
-    const res = await fetch(
-      `${baseUrl}/hunt/search/${body.userId}?page=${body.page}&limit=${body.perPage}`,
-      {
-        method: 'GET',
-        mode: 'cors',
-        headers: {
-          'Content-Type': 'application/json',
-          ...(authorization ? { Authorization: authorization } : {})
-        }
+    const res = await fetch(`${baseUrl}/hunt/search/user?page=${body.page}&limit=${body.perPage}`, {
+      method: 'GET',
+      mode: 'cors',
+      headers: {
+        'Content-Type': 'application/json',
+        ...(authorization ? { Authorization: authorization } : {})
       }
-    )
+    })
 
     if (res.status === 401) {
       throw new Error('Erro de autorização')
@@ -52,6 +49,7 @@ export async function POST(req: NextRequest) {
     }
 
     const response = await res.json()
+    console.log('teste', response)
 
     if (response.error) {
       throw new Error('Não foi possivel buscar as hunts do usuário')
