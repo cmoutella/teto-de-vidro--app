@@ -1,14 +1,17 @@
 export type Gender = 'male' | 'female' | 'neutral'
-
+export type UserRole = 'beta' | 'guest' | 'regular' | 'tester' | 'admin' | 'master'
 export interface InterfaceUser {
   id: string
-  nickName: string
   name: string
+  familyName: string
+  accessLevel: string
+  role: UserRole
   password: string
   profession?: string
   gender: Gender
   birthDate: string
   email: string
+  lastLogin: string
 }
 
 export type SessionUser = Omit<InterfaceUser, 'password'> | undefined
