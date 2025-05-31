@@ -21,7 +21,7 @@ export function getUserFn(): SessionUser {
   return undefined
 }
 
-export async function handleUserResponse(loginAuth?: UserAuth) {
+export async function validateAuthentication(loginAuth?: UserAuth) {
   const store = storage()
   const currAuth: UserAuth = store.getToken()
 

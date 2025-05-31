@@ -49,7 +49,6 @@ export async function POST(req: NextRequest) {
     }
 
     const response = await res.json()
-    console.log('teste', response)
 
     if (response.error) {
       throw new Error('Não foi possivel buscar as hunts do usuário')

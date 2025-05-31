@@ -2,9 +2,8 @@
 import { createContext, useContext, useMemo, useState } from 'react'
 
 import { authLogin } from '@requests/auth/login'
-import { useRouter } from 'next/navigation'
 
-import { getUserFn, handleUserResponse } from '@/services/auth'
+import { getUserFn, validateAuthentication } from '@/services/auth'
 import storage from '@/services/storage'
 import type { UserAuth } from '@/types/apiResponses'
 import type { SessionUser } from '@/types/app'
@@ -39,7 +38,6 @@ export const useSessionContext = () => {
 
 export const SessionProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<SessionUser>(DEFAULT_VALUES.user)
-  const router = useRouter()
 
   const authStorage = storage()
 
@@ -48,9 +46,9 @@ export const SessionProvider = ({ children }: { children: React.ReactNode }) => 
 
     if (!auth) return
 
-    await handleUserResponse(auth).then((res) => {
+    await validateAuthentication(auth).then((res) => {
       setUser(res)
-      router.push('/')
+      window.location.reload()
     })
   }
 
@@ -62,9 +60,10 @@ export const SessionProvider = ({ children }: { children: React.ReactNode }) => 
   const authenticate = () => {
     if (user) return
 
-    handleUserResponse()
+    validateAuthentication()
       .then((user) => {
         setUser(user)
+        window.location.reload()
       })
       .catch((_err) => {
         // showToast({
@@ -72,7 +71,7 @@ export const SessionProvider = ({ children }: { children: React.ReactNode }) => 
         //   message: "Não foi possivel realizar o login tente mais tarde",
         // });
         setTimeout(() => {
-          router.push('/login')
+          window.location.replace('/login')
         }, 3000)
       })
   }
