@@ -54,10 +54,16 @@ export interface InterfaceAddress extends PropertyDataProps, LotDataProps {}
 
 export type CONTRACT_TYPE = 'buy' | 'rent' | 'either'
 
+export type HuntParticipant = {
+  id: string
+  name: string
+  status: 'waiting' | 'accepted'
+}
+
 export interface InterfaceHunt {
   id: string
   creatorId: string
-  invitedUsers?: string[]
+  huntUsers: HuntParticipant[]
   title?: string
   type: CONTRACT_TYPE
   movingExpected?: string
