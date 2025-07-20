@@ -4,15 +4,14 @@ import { toast } from 'react-hot-toast'
 
 import Button from '@ui/base/Button'
 import TargetPropertyList from '@ui/TargetProperty/TargetPropertyList'
-import cx from 'classnames'
 
-import { useSessionContext } from '@/providers/AuthProvider'
 import { HuntProvider, useHuntContext } from '@/providers/HuntProvider'
 import { useUIContext } from '@/providers/UIProvider'
 import type { InterfaceHunt } from '@/types/app'
 import EditHuntForm from '@/ui/forms/Hunt/EditHunt'
-import InviteUserForm from '@/ui/forms/Hunt/InviteUsers'
 import CreateTargetPropertyForm from '@/ui/forms/TargetProperty/CreateTargetProperty'
+
+import { HuntParticipants } from './components/HuntParticipants'
 
 interface HuntViewProps {
   hunt: InterfaceHunt
@@ -20,7 +19,6 @@ interface HuntViewProps {
 
 const HuntView = () => {
   const { hunt, update } = useHuntContext()
-  const { user } = useSessionContext()
   const { modal } = useUIContext()
 
   function handleCreateTargetProperty() {
@@ -66,22 +64,6 @@ const HuntView = () => {
     )
   }
 
-  function handleInviteModal() {
-    function onSuccess(updatedHunt: InterfaceHunt) {
-      update(updatedHunt)
-      toast('Convites enviados')
-    }
-    function onFail() {
-      toast('Não foi possível enviar os convites')
-    }
-    modal.open(
-      'medium',
-      <InviteUserForm huntId={hunt?.id as never} onSuccess={onSuccess} onFail={onFail} />
-    )
-  }
-
-  const participants = hunt?.huntUsers?.filter((u) => user && u.id !== user.id) ?? []
-
   return (
     <div className="w-full">
       <div className="w-full flex justify-center flex-col items-center px-3 sm:px-14 py-5 sm:py-10 gap-3">
@@ -94,34 +76,7 @@ const HuntView = () => {
                     # {(hunt as InterfaceHunt).title}
                   </h3>
                 </div>
-                <div className="flex justify-start items-end gap-3">
-                  {participants.length >= 1 && (
-                    <div className="leading-none">
-                      Com{' '}
-                      {participants.map((p, i) => {
-                        return (
-                          <span key={p.id}>
-                            <span>{p.name}</span> {i < participants.length - 1 && 'e'}
-                          </span>
-                        )
-                      })}
-                    </div>
-                  )}
-                  <Button
-                    label="Convide alguém"
-                    onClick={handleInviteModal}
-                    size="xsmall"
-                    className={cx(
-                      {
-                        'text-white bg-brand-primary-400 hover:bg-brand-primary-500 !py-1 px-2':
-                          participants.length <= 0,
-                        'text-sky-600 hover:text-sky-700 underline hover:underline-offset-1 hover:scale-105 !pb-0':
-                          participants.length >= 1
-                      },
-                      'text-medium '
-                    )}
-                  />
-                </div>
+                <HuntParticipants huntUsers={hunt?.huntUsers ?? []} />
               </div>
               <div className="flex flex-row items-center justify-end gap-2">
                 <Button
