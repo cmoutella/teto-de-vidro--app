@@ -105,7 +105,7 @@ const InviteUserForm = ({ onSuccess, onFail, huntId }: InviteUserFormProps) => {
               name: string
               email: string
             }>
-          ).email
+          )?.email
         : undefined
 
       return error
@@ -126,7 +126,7 @@ const InviteUserForm = ({ onSuccess, onFail, huntId }: InviteUserFormProps) => {
               name: string
               email: string
             }>
-          ).name
+          )?.name
         : undefined
 
       return error
