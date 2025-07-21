@@ -23,7 +23,7 @@ export function HuntParticipants({ huntUsers }: HuntParticipantsProps) {
     setReady(true)
   }, [])
 
-  const { user } = useSessionContext()
+  const { user, updatePermissions } = useSessionContext()
   const { hunt, update } = useHuntContext()
   const { modal } = useUIContext()
 
@@ -36,8 +36,9 @@ export function HuntParticipants({ huntUsers }: HuntParticipantsProps) {
   }
 
   function handleInviteModal() {
-    function onSuccess(updatedHunt: InterfaceHunt) {
+    async function onSuccess(updatedHunt: InterfaceHunt) {
       update(updatedHunt)
+      await updatePermissions()
       toast('Convites enviados')
     }
     function onFail() {
@@ -57,7 +58,7 @@ export function HuntParticipants({ huntUsers }: HuntParticipantsProps) {
           {participants.map((p, i) => {
             return (
               <span key={p.id}>
-                <span>{p.name}</span> {i < participants.length - 1 && 'e'}
+                <span>{p.name}</span> {i < participants.length - 1 && 'e '}
               </span>
             )
           })}

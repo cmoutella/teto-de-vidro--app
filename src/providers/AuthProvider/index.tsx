@@ -1,17 +1,19 @@
 'use client'
-import { createContext, useContext, useMemo, useState } from 'react'
+import { createContext, useContext, useEffect, useMemo, useState } from 'react'
 
 import { authLogin } from '@requests/auth/login'
 
+import { getUserPermissionsRequest } from '@/requests/user/getUserPermissionsRequest'
 import { getUserFn, validateAuthentication } from '@/services/auth'
 import storage from '@/services/storage'
-import type { UserAuth } from '@/types/apiResponses'
+import type { AuthData } from '@/types/apiResponses'
 import type { SessionUser } from '@/types/app'
 
 interface SessionContext {
   user?: SessionUser
   isLogged: boolean
-  authenticate: (_token: UserAuth) => void
+  authenticate: (_token: AuthData) => void
+  updatePermissions: () => Promise<void>
   login: (_username: string, _password: string) => void
   logout: () => void
 }
@@ -21,7 +23,8 @@ const DEFAULT_VALUES = {
   isLogged: storage().hasToken(),
   login: (_u: string, _p: string) => {},
   logout: () => {},
-  authenticate: () => {}
+  authenticate: () => {},
+  updatePermissions: async () => {}
 }
 
 const SessionContext = createContext<SessionContext>(DEFAULT_VALUES)
@@ -38,6 +41,12 @@ export const useSessionContext = () => {
 
 export const SessionProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<SessionUser>(DEFAULT_VALUES.user)
+
+  useEffect(() => {
+    if (user && !user.permissions) {
+      updatePermissions()
+    }
+  }, [user])
 
   const authStorage = storage()
 
@@ -76,6 +85,16 @@ export const SessionProvider = ({ children }: { children: React.ReactNode }) => 
       })
   }
 
+  async function updatePermissions() {
+    if (!user) return
+    const permissions = await getUserPermissionsRequest(user.id)
+
+    if (!permissions) return
+
+    const updatedUser = { ...user, permissions }
+    setUser(updatedUser)
+  }
+
   // TODO: esse nao ta rolando, pq?
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const isLogged = useMemo(() => user !== undefined && authStorage.hasToken(), [user])
@@ -85,7 +104,8 @@ export const SessionProvider = ({ children }: { children: React.ReactNode }) => 
     isLogged,
     login,
     logout,
-    authenticate
+    authenticate,
+    updatePermissions
   }
 
   return <SessionContext.Provider value={value}>{children}</SessionContext.Provider>
