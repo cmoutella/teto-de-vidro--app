@@ -50,6 +50,16 @@ export function HuntParticipants({ huntUsers }: HuntParticipantsProps) {
     )
   }
 
+  function listConnections(index: number) {
+    if (index >= participants.length - 1) {
+      return
+    } else if (index === participants.length - 2) {
+      return ' e '
+    } else {
+      return ', '
+    }
+  }
+
   return (
     <div className="flex justify-start items-end gap-3">
       {participants.length >= 1 && (
@@ -58,26 +68,29 @@ export function HuntParticipants({ huntUsers }: HuntParticipantsProps) {
           {participants.map((p, i) => {
             return (
               <span key={p.id}>
-                <span>{p.name}</span> {i < participants.length - 1 && 'e '}
+                <span>{p.name}</span>
+                {listConnections(i)}
               </span>
             )
           })}
         </div>
       )}
-      <Button
-        label="Convide alguém"
-        onClick={handleInviteModal}
-        size="xsmall"
-        className={cx(
-          {
-            'text-white bg-brand-primary-400 hover:bg-brand-primary-500 !py-1 px-2':
-              participants.length <= 0,
-            'text-sky-600 hover:text-sky-700 underline hover:underline-offset-1 hover:scale-105 !pb-0':
-              participants.length >= 1
-          },
-          'text-medium '
-        )}
-      />
+      {(user?.permissions?.invitationsLimit ?? 0) >= 1 && (
+        <Button
+          label="Convide alguém"
+          onClick={handleInviteModal}
+          size="xsmall"
+          className={cx(
+            {
+              'text-white bg-brand-primary-400 hover:bg-brand-primary-500 !py-1 px-2':
+                participants.length <= 0,
+              'text-sky-600 hover:text-sky-700 underline hover:underline-offset-1 hover:scale-105 !pb-0':
+                participants.length >= 1
+            },
+            'text-medium '
+          )}
+        />
+      )}
     </div>
   )
 }
