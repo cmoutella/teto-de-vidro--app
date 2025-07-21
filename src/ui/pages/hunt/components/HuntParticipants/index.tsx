@@ -46,7 +46,13 @@ export function HuntParticipants({ huntUsers }: HuntParticipantsProps) {
     }
     modal.open(
       'medium',
-      <InviteUserForm huntId={hunt?.id as never} onSuccess={onSuccess} onFail={onFail} />
+      <InviteUserForm
+        huntId={hunt?.id as never}
+        onSuccess={onSuccess}
+        onFail={onFail}
+        invitationLimit={user?.permissions?.invitationsLimit ?? 0}
+        currentUser={user}
+      />
     )
   }
 

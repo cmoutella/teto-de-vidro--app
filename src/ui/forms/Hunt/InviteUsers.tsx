@@ -1,7 +1,6 @@
 'use client'
 import { useCallback, useEffect, useState } from 'react'
 
-import { useSessionContext } from '@providers/AuthProvider'
 import SubmitButton from '@ui/base/form/buttons/SubmitButton'
 import Input from '@ui/base/form/inputs/Input'
 import type { FormSizes, FormTheme } from '@ui/base/shared/formTheme'
@@ -12,6 +11,7 @@ import * as Yup from 'yup'
 import { inviteUsers } from '@/requests/hunt/inviteUsers'
 import type { InterfaceHunt } from '@/types/hunt'
 import type { UserInvitationData } from '@/types/invitation'
+import type { SessionUser } from '@/types/user'
 import Button from '@/ui/components/base/Button'
 import Icon from '@/ui/components/base/Icon'
 import { formatEmailInput } from '@/utils/string/formatEmailInput'
@@ -20,12 +20,20 @@ interface InviteUserFormProps {
   onSuccess: (_h: InterfaceHunt) => void
   onFail: () => void
   huntId: string
+  invitationLimit: number
+  currentUser: SessionUser
 }
 
 const formThemeSize: FormSizes = 'md'
 const themePallete: FormTheme = 'light'
 
-const InviteUserForm = ({ onSuccess, onFail, huntId }: InviteUserFormProps) => {
+const InviteUserForm = ({
+  onSuccess,
+  onFail,
+  huntId,
+  invitationLimit,
+  currentUser
+}: InviteUserFormProps) => {
   const [submitEnabled, setSubmitEnabled] = useState(false)
 
   const validationSchema = Yup.object({
@@ -45,8 +53,6 @@ const InviteUserForm = ({ onSuccess, onFail, huntId }: InviteUserFormProps) => {
     validationSchema,
     onSubmit: handleSubmit
   })
-
-  const { user } = useSessionContext()
 
   useEffect(() => {
     const actionInProgress = formik.isSubmitting || formik.isValidating
@@ -68,7 +74,7 @@ const InviteUserForm = ({ onSuccess, onFail, huntId }: InviteUserFormProps) => {
   }
 
   async function handleSubmit(values: { usersInvited: UserInvitationData[] }) {
-    if (!formik.isValid || !user) return
+    if (!formik.isValid || !currentUser) return
 
     const invitations = values.usersInvited.filter((invites) => {
       const nameFilled = !!invites.name && invites.name !== ''
@@ -190,14 +196,16 @@ const InviteUserForm = ({ onSuccess, onFail, huntId }: InviteUserFormProps) => {
               </div>
             )
           })}
-          <div className="w-full flex justify-end mt-3">
-            <Button
-              label="Incluir convidado"
-              size="small"
-              onClick={addInvitationField}
-              className="bg-brand-primary-500 hover:bg-brand-primary-600 text-white"
-            />
-          </div>
+          {invitationLimit - formik.values.usersInvited.length >= 1 && (
+            <div className="w-full flex justify-end mt-3">
+              <Button
+                label="Incluir convidado"
+                size="small"
+                onClick={addInvitationField}
+                className="bg-brand-primary-500 hover:bg-brand-primary-600 text-white"
+              />
+            </div>
+          )}
         </div>
 
         <div className="flex col-span-12 justify-center pt-3 sm:pt-5">
