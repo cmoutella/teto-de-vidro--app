@@ -18,7 +18,7 @@ interface HuntViewProps {
 }
 
 const HuntView = () => {
-  const { hunt, update } = useHuntContext()
+  const { hunt, targetsLeft, update } = useHuntContext()
   const { modal } = useUIContext()
 
   function handleCreateTargetProperty() {
@@ -87,12 +87,14 @@ const HuntView = () => {
                   size="large"
                   onClick={handleEditHunt}
                 />
-                <Button
-                  label="Adicionar imóvel"
-                  className={'bg-brand-primary-500 hover:bg-brand-primary-600 text-white'}
-                  size="large"
-                  onClick={handleCreateTargetProperty}
-                />
+                {targetsLeft >= 1 && (
+                  <Button
+                    label="Adicionar imóvel"
+                    className={'bg-brand-primary-500 hover:bg-brand-primary-600 text-white'}
+                    size="large"
+                    onClick={handleCreateTargetProperty}
+                  />
+                )}
               </div>
             </div>
           </div>
