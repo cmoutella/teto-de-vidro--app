@@ -2,7 +2,7 @@
 import cx from 'classnames'
 import { useRouter } from 'next/navigation'
 
-import type { InterfaceUser } from '@/types/app'
+import type { InterfaceUser } from '@/types/user'
 import { logout } from '@/utils/auth/logout'
 
 import type { ButtonProps } from '../base/Button'

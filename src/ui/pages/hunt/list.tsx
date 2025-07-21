@@ -4,7 +4,7 @@ import Button from '@ui/base/Button'
 import cx from 'classnames'
 import { useRouter } from 'next/navigation'
 
-import type { InterfaceHunt } from '@/types/app'
+import type { InterfaceHunt } from '@/types/hunt'
 
 interface ListHuntViewInterface {
   hunts: InterfaceHunt[]

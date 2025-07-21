@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server'
 
 import { appCokies } from '@/config/cookies'
 import type { SuccessResponse } from '@/types/apiPatterns'
-import type { InterfaceHunt } from '@/types/app'
+import type { InterfaceHunt } from '@/types/hunt'
 
 /**
  * CREATE HUNT

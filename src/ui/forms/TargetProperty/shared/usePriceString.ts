@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 
-import type { CONTRACT_TYPE } from '@/types/app'
+import type { CONTRACT_TYPE } from '@/types/hunt'
 import { formatMoneyValue } from '@/utils/string/formatMoney'
 
 export function usePriceString(data: {

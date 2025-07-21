@@ -5,7 +5,7 @@ import { toast } from 'react-hot-toast'
 import { getHuntById } from '@/requests/hunt/getById'
 import { deleteTargetProperty } from '@/requests/targetProperty/delete'
 import { getAllTargetPropertiesfromHunt } from '@/requests/targetProperty/getAllTargetProperties'
-import type { InterfaceHunt } from '@/types/app'
+import type { InterfaceHunt } from '@/types/hunt'
 import type { TargetPropertyInterface } from '@/types/targetProperty'
 import { DEFAULT_HUNT_LIST_PER_PAGE } from '@/ui/pages/hunt/consts/perPage'
 

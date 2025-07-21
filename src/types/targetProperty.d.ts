@@ -1,4 +1,4 @@
-import type { AmenityData, AmenityOf } from './app'
+import type { AmenityData, AmenityOf } from './hunt'
 export type PropertyHuntingStage =
   | 'new'
   | 'iniciated'

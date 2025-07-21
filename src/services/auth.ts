@@ -2,7 +2,7 @@
 
 import storage from '@/services/storage'
 import type { AuthData, UserAuthResponse } from '@/types/apiResponses'
-import type { SessionUser } from '@/types/app'
+import type { SessionUser } from '@/types/user'
 import { isTokenValid } from '@/utils/auth/token'
 
 export interface UserResponse {

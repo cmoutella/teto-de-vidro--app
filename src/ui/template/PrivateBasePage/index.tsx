@@ -2,7 +2,7 @@ import type { ReactNode } from 'react'
 
 import PrivateNavbar from '@ui/Navbar/PrivateNavbar'
 
-import type { InterfaceUser } from '@/types/app'
+import type { InterfaceUser } from '@/types/user'
 
 const PrivateBasePage = ({
   children,

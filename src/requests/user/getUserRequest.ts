@@ -1,5 +1,5 @@
 import type { SuccessResponse } from '@/types/apiPatterns'
-import type { InterfaceUser } from '@/types/app'
+import type { InterfaceUser } from '@/types/user'
 
 type GetUserRequest = (_id: string, _token: string) => Promise<InterfaceUser | undefined>
 

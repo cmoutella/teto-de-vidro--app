@@ -7,7 +7,7 @@ import { getUserPermissionsRequest } from '@/requests/user/getUserPermissionsReq
 import { getUserFn, validateAuthentication } from '@/services/auth'
 import storage from '@/services/storage'
 import type { AuthData } from '@/types/apiResponses'
-import type { SessionUser } from '@/types/app'
+import type { SessionUser } from '@/types/user'
 
 interface SessionContext {
   user?: SessionUser

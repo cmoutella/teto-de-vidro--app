@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server'
 
 import { appCokies } from '@/config/cookies'
 import type { SuccessResponse } from '@/types/apiPatterns'
-import type { UserPermissions } from '@/types/app'
+import type { UserPermissions } from '@/types/user'
 
 /**
  * GET USER PERMISSIONS

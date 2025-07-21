@@ -10,7 +10,7 @@ import { useFormik } from 'formik'
 import * as Yup from 'yup'
 
 import { inviteUsers } from '@/requests/hunt/inviteUsers'
-import type { InterfaceHunt } from '@/types/app'
+import type { InterfaceHunt } from '@/types/hunt'
 import type { UserInvitationData } from '@/types/invitation'
 import Button from '@/ui/components/base/Button'
 import Icon from '@/ui/components/base/Icon'

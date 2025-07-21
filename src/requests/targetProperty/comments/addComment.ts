@@ -1,7 +1,7 @@
 import type { SuccessResponse } from '@/types/apiPatterns'
-import type { InterfaceUser } from '@/types/app'
 import type { InterfaceComment, TargetComment } from '@/types/comment'
 import type { TargetPropertyInterface } from '@/types/targetProperty'
+import type { InterfaceUser } from '@/types/user'
 
 type AddCommentToTargetRequest = (
   _targetId: Pick<TargetPropertyInterface, 'id'>,

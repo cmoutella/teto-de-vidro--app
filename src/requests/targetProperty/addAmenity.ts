@@ -1,6 +1,7 @@
 import type { SuccessResponse } from '@/types/apiPatterns'
-import type { AmenityData, InterfaceUser } from '@/types/app'
+import type { AmenityData } from '@/types/hunt'
 import type { TargetAmenity, TargetPropertyInterface } from '@/types/targetProperty'
+import type { InterfaceUser } from '@/types/user'
 
 type RemoveAmenityFromTargetRequest = (
   _targetId: Pick<TargetPropertyInterface, 'id'>,

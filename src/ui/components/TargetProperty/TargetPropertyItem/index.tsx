@@ -6,7 +6,7 @@ import cx from 'classnames'
 
 import { useHuntContext } from '@/providers/HuntProvider'
 import { useUIContext } from '@/providers/UIProvider'
-import type { InterfaceHunt } from '@/types/app'
+import type { InterfaceHunt } from '@/types/hunt'
 import type { TargetPropertyInterface } from '@/types/targetProperty'
 import DeleteConfirmation from '@/ui/forms/DeleteConfirmation'
 import EditTargetPropertyForm from '@/ui/forms/TargetProperty/EditTargetProperty'

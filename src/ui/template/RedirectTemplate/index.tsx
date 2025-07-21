@@ -7,7 +7,7 @@ interface RedirectTemplateProps {
 const RedirectTemplate = ({ description }: RedirectTemplateProps) => {
   return (
     <div className="w-full min-h-full">
-      <PublicNavbar />
+      <PublicNavbar user={null} />
       <div>
         <h2>Você está sendo redirecionado</h2>
 

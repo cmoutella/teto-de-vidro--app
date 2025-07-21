@@ -7,7 +7,7 @@ import TargetPropertyList from '@ui/TargetProperty/TargetPropertyList'
 
 import { HuntProvider, useHuntContext } from '@/providers/HuntProvider'
 import { useUIContext } from '@/providers/UIProvider'
-import type { InterfaceHunt } from '@/types/app'
+import type { InterfaceHunt } from '@/types/hunt'
 import EditHuntForm from '@/ui/forms/Hunt/EditHunt'
 import CreateTargetPropertyForm from '@/ui/forms/TargetProperty/CreateTargetProperty'
 

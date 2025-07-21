@@ -1,5 +1,5 @@
+import type { InterfaceLot } from '@/types/address'
 import type { SuccessResponse } from '@/types/apiPatterns'
-import type { InterfaceLot } from '@/types/app'
 
 export type GetLotsByAddressProps = {
   street: string

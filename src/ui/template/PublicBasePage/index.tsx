@@ -2,7 +2,7 @@ import type { ReactNode } from 'react'
 
 import PublicNavbar from '@ui/Navbar/PublicNavbar'
 
-import type { InterfaceUser } from '@/types/app'
+import type { InterfaceUser } from '@/types/user'
 
 const PublicBasePage = ({
   children,

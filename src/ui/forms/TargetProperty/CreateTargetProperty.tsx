@@ -15,7 +15,7 @@ import type { CreateTargetPropertyRequestProps } from '@/requests/targetProperty
 import { createTargetProperty } from '@/requests/targetProperty/create'
 import type { AddressKeys } from '@/services/cep'
 import { CEPService } from '@/services/cep'
-import type { InterfaceHunt } from '@/types/app'
+import type { InterfaceHunt } from '@/types/hunt'
 import type { TargetAmenity } from '@/types/targetProperty'
 import Button from '@/ui/components/base/Button'
 import SubmitButton from '@/ui/components/base/form/buttons/SubmitButton'

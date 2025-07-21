@@ -1,4 +1,4 @@
-import type { InterfaceUser } from './app'
+import type { InterfaceUser } from './user'
 
 export interface UserAuthResponse {
   token: string

@@ -1,5 +1,5 @@
 import type { SuccessResponse } from '@/types/apiPatterns'
-import type { UserPermissions } from '@/types/app'
+import type { UserPermissions } from '@/types/user'
 
 type GetUserPermissionsRequest = (
   _id: string,

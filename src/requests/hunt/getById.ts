@@ -1,5 +1,5 @@
 import type { SuccessResponse } from '@/types/apiPatterns'
-import type { InterfaceHunt } from '@/types/app'
+import type { InterfaceHunt } from '@/types/hunt'
 
 type GetHuntByIdRequest = (
   _huntId: string,
