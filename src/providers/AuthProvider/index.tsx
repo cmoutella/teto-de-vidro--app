@@ -41,22 +41,27 @@ export const useSessionContext = () => {
 
 export const SessionProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<SessionUser>(DEFAULT_VALUES.user)
-
-  useEffect(() => {
-    if (user && !user.permissions) {
-      updatePermissions()
-    }
-  }, [user])
+  const [tryData, setTryData] = useState<boolean>(true)
 
   const authStorage = storage()
+
+  useEffect(() => {
+    if (user && !user.permissions && tryData) {
+      updatePermissions()
+    }
+    setTryData(false)
+  }, [user, tryData])
 
   const login = async (email: string, password: string) => {
     const auth = await authLogin(email, password)
 
     if (!auth) return
 
-    await validateAuthentication(auth).then((res) => {
-      setUser(res)
+    await validateAuthentication(auth).then(async (res) => {
+      const permissions = await getPermissions(res.id)
+      const data = { ...user, permissions } as SessionUser
+
+      setUser(data)
       window.location.reload()
     })
   }
@@ -70,8 +75,12 @@ export const SessionProvider = ({ children }: { children: React.ReactNode }) => 
     if (user) return
 
     validateAuthentication()
-      .then((user) => {
-        setUser(user)
+      .then(async (res) => {
+        const permissions = await getPermissions(res.id)
+
+        const data = { ...res, permissions } as SessionUser
+
+        setUser(data)
         window.location.reload()
       })
       .catch((_err) => {
@@ -85,14 +94,21 @@ export const SessionProvider = ({ children }: { children: React.ReactNode }) => 
       })
   }
 
-  async function updatePermissions() {
-    if (!user) return
-    const permissions = await getUserPermissionsRequest(user.id)
+  async function getPermissions(userId: string) {
+    const permissions = await getUserPermissionsRequest(userId)
 
     if (!permissions) return
 
-    const updatedUser = { ...user, permissions }
-    setUser(updatedUser)
+    return permissions
+  }
+
+  async function updatePermissions() {
+    if (!user) return
+    const permissions = await getPermissions(user.id)
+
+    if (!permissions) return
+
+    setUser({ ...user, permissions })
   }
 
   // TODO: esse nao ta rolando, pq?
