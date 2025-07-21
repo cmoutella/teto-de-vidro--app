@@ -1,5 +1,5 @@
-import type { AdScrapedData } from '@/services/web-scraper/shared/type'
 import type { SuccessResponse } from '@/types/apiPatterns'
+import type { AdScrapedData } from '@/types/scraper'
 
 export type ScraperRequestProps = { url: string }
 
@@ -8,9 +8,7 @@ type ScraperRequest = (_bodyData: ScraperRequestProps) => Promise<AdScrapedData 
 export const scraper: ScraperRequest = async (bodyData) => {
   const baseUrl = process.env.NEXT_PUBLIC_APPLICATION_URL
 
-  if (!baseUrl) {
-    throw new Error('A url base não foi definida')
-  }
+  if (!baseUrl) throw new Error('Application APP url not defined')
 
   try {
     const res = await fetch(`${baseUrl}/api/scraper`, {

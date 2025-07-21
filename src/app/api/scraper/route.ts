@@ -20,7 +20,7 @@ export async function POST(req: NextRequest) {
   const authorization =
     req.headers.get('authorization') ?? (tokenFromCookie && `Bearer ${tokenFromCookie}`)
 
-  if (!baseUrl) return undefined
+  if (!baseUrl) throw new Error('Application API url not defined')
 
   try {
     const res = await fetch(`${baseUrl}/scraper?url=${body.url}`, {

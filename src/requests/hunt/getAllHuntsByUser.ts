@@ -16,9 +16,7 @@ export const getAllHuntsByUser: GetAllHuntsByUserRequest = async (
 ) => {
   const baseUrl = process.env.NEXT_PUBLIC_APPLICATION_URL
 
-  if (!baseUrl) {
-    throw new Error('A url base não foi definida')
-  }
+  if (!baseUrl) throw new Error('Application APP url not defined')
 
   try {
     const res = await fetch(`${baseUrl}/api/hunt/get/by-user`, {
