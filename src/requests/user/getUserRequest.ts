@@ -1,12 +1,12 @@
 import type { SuccessResponse } from '@/types/apiPatterns'
-import type { InterfaceUser } from '@/types/app'
+import type { InterfaceUser } from '@/types/user'
 
 type GetUserRequest = (_id: string, _token: string) => Promise<InterfaceUser | undefined>
 
 export const getUserRequest: GetUserRequest = async (id, token) => {
   const baseUrl = process.env.NEXT_PUBLIC_BASE_API_URL
 
-  if (!baseUrl) return undefined
+  if (!baseUrl) throw new Error('Application API url not defined')
 
   const loginUrl = `${baseUrl}/users/${id}`
 

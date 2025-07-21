@@ -7,9 +7,7 @@ type DeleteTargetRequest = (_id: string) => Promise<boolean | undefined>
 export const deleteTargetProperty: DeleteTargetRequest = async (id) => {
   const baseUrl = process.env.NEXT_PUBLIC_APPLICATION_URL
 
-  if (!baseUrl) {
-    throw new Error('A url base não foi definida')
-  }
+  if (!baseUrl) throw new Error('Application APP url not defined')
 
   try {
     const res: Response = await fetch(`${baseUrl}/api/target-property/delete`, {

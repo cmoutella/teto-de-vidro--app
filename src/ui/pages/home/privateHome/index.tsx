@@ -2,7 +2,8 @@
 
 import PrivateBasePage from '@template/PrivateBasePage'
 
-import type { InterfaceHunt, InterfaceUser } from '@/types/app'
+import type { InterfaceHunt } from '@/types/hunt'
+import type { InterfaceUser } from '@/types/user'
 import { genderVowel } from '@/utils/lang'
 
 import NextMoveDashboard from '../components/NextMove'

@@ -15,7 +15,7 @@ import { useFormik } from 'formik'
 import * as Yup from 'yup'
 
 import { editHunt } from '@/requests/hunt/edit'
-import type { InterfaceHunt } from '@/types/app'
+import type { InterfaceHunt } from '@/types/hunt'
 
 interface EditHuntFormProps {
   onSuccess: (_h: InterfaceHunt) => void

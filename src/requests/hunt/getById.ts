@@ -1,5 +1,5 @@
 import type { SuccessResponse } from '@/types/apiPatterns'
-import type { InterfaceHunt } from '@/types/app'
+import type { InterfaceHunt } from '@/types/hunt'
 
 type GetHuntByIdRequest = (
   _huntId: string,
@@ -9,9 +9,7 @@ type GetHuntByIdRequest = (
 export const getHuntById: GetHuntByIdRequest = async (huntId, options) => {
   const baseUrl = process.env.NEXT_PUBLIC_APPLICATION_URL
 
-  if (!baseUrl) {
-    throw new Error('A url base não foi definida')
-  }
+  if (!baseUrl) throw new Error('Application APP url not defined')
 
   try {
     const res = await fetch(`${baseUrl}/api/hunt/get`, {

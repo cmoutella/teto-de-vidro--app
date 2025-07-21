@@ -10,7 +10,7 @@ import { useFormik } from 'formik'
 import * as Yup from 'yup'
 
 import { addAmenityToTarget } from '@/requests/targetProperty/addAmenity'
-import type { AmenityData } from '@/types/app'
+import type { AmenityData } from '@/types/hunt'
 import type { TargetPropertyInterface } from '@/types/targetProperty'
 import type { RawRadioOption } from '@/ui/components/base/_raw/RadioGroup'
 import { RadioGroup } from '@/ui/components/base/form/RadioGroup'

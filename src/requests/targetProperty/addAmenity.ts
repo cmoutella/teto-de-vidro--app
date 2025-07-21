@@ -1,6 +1,7 @@
 import type { SuccessResponse } from '@/types/apiPatterns'
-import type { AmenityData, InterfaceUser } from '@/types/app'
+import type { AmenityData } from '@/types/hunt'
 import type { TargetAmenity, TargetPropertyInterface } from '@/types/targetProperty'
+import type { InterfaceUser } from '@/types/user'
 
 type RemoveAmenityFromTargetRequest = (
   _targetId: Pick<TargetPropertyInterface, 'id'>,
@@ -15,9 +16,7 @@ export const addAmenityToTarget: RemoveAmenityFromTargetRequest = async (
 ) => {
   const baseUrl = process.env.NEXT_PUBLIC_APPLICATION_URL
 
-  if (!baseUrl) {
-    throw new Error('A url base não foi definida')
-  }
+  if (!baseUrl) throw new Error('Application APP url not defined')
 
   const payload = {
     targetId: targetId,

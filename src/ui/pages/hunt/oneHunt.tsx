@@ -7,17 +7,18 @@ import TargetPropertyList from '@ui/TargetProperty/TargetPropertyList'
 
 import { HuntProvider, useHuntContext } from '@/providers/HuntProvider'
 import { useUIContext } from '@/providers/UIProvider'
-import type { InterfaceHunt } from '@/types/app'
+import type { InterfaceHunt } from '@/types/hunt'
 import EditHuntForm from '@/ui/forms/Hunt/EditHunt'
 import CreateTargetPropertyForm from '@/ui/forms/TargetProperty/CreateTargetProperty'
+
+import { HuntParticipants } from './components/HuntParticipants'
 
 interface HuntViewProps {
   hunt: InterfaceHunt
 }
 
 const HuntView = () => {
-  const { hunt, update } = useHuntContext()
-
+  const { hunt, targetsLeft, update } = useHuntContext()
   const { modal } = useUIContext()
 
   function handleCreateTargetProperty() {
@@ -71,13 +72,11 @@ const HuntView = () => {
             <div className="flex flex-col-reverse sm:flex-row sm:items-start w-full sm:justify-between gap-5">
               <div className="flex flex-col gap-y-1.5 justify-start items-start">
                 <div className="flex flex-row items-center justify-start gap-x-2">
-                  <h3 className="text-xl sm:text-2xl font-medium text-brand-primary-900">
+                  <h3 className="text-xl sm:text-3xl font-medium text-brand-primary-900">
                     # {(hunt as InterfaceHunt).title}
                   </h3>
                 </div>
-                {hunt && hunt.invitedUsers && hunt.invitedUsers?.length >= 1 && (
-                  <div>Com Fulana e fulana</div>
-                )}
+                <HuntParticipants huntUsers={hunt?.huntUsers ?? []} />
               </div>
               <div className="flex flex-row items-center justify-end gap-2">
                 <Button
@@ -88,12 +87,14 @@ const HuntView = () => {
                   size="large"
                   onClick={handleEditHunt}
                 />
-                <Button
-                  label="Adicionar imóvel"
-                  className={'bg-brand-primary-500 hover:bg-brand-primary-600 text-white'}
-                  size="large"
-                  onClick={handleCreateTargetProperty}
-                />
+                {targetsLeft >= 1 && (
+                  <Button
+                    label="Adicionar imóvel"
+                    className={'bg-brand-primary-500 hover:bg-brand-primary-600 text-white'}
+                    size="large"
+                    onClick={handleCreateTargetProperty}
+                  />
+                )}
               </div>
             </div>
           </div>

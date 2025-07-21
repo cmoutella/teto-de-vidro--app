@@ -1,5 +1,5 @@
+import type { InterfaceLot } from '@/types/address'
 import type { SuccessResponse } from '@/types/apiPatterns'
-import type { InterfaceLot } from '@/types/app'
 
 export type GetLotsByAddressProps = {
   street: string
@@ -17,9 +17,7 @@ type GetAllLotsByAddressRequest = (_requestBody: GetLotsByAddressProps) => Promi
 export const getAllLotsByAddress: GetAllLotsByAddressRequest = async (requestBody) => {
   const baseUrl = process.env.NEXT_PUBLIC_APPLICATION_URL
 
-  if (!baseUrl) {
-    throw new Error('A url base não foi definida')
-  }
+  if (!baseUrl) throw new Error('Application APP url not defined')
 
   const fetchUrl = `${baseUrl}/address/lots`
 

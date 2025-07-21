@@ -12,7 +12,7 @@ import type { CreateTargetPropertyRequestProps } from '@/requests/targetProperty
 import { editTargetProperty } from '@/requests/targetProperty/edit'
 import type { AddressKeys } from '@/services/cep'
 import { CEPService } from '@/services/cep'
-import type { InterfaceHunt } from '@/types/app'
+import type { InterfaceHunt } from '@/types/hunt'
 import type { TargetPropertyInterface } from '@/types/targetProperty'
 import SubmitButton from '@/ui/components/base/form/buttons/SubmitButton'
 import { Checkbox } from '@/ui/components/base/form/Checkbox'

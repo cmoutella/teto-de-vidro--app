@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server'
 
 import type { SuccessResponse } from '@/types/apiPatterns'
-import type { UserAuth } from '@/types/apiResponses'
+import type { UserAuthResponse } from '@/types/apiResponses'
 
 export async function POST(req: Request) {
   const body = await req.json()
@@ -11,7 +11,7 @@ export async function POST(req: Request) {
   }
   const baseUrl = process.env.NEXT_PUBLIC_BASE_API_URL
 
-  if (!baseUrl) return undefined
+  if (!baseUrl) throw new Error('Application API url not defined')
 
   const loginUrl = `${baseUrl}/auth/login`
   const credentials = { email: body.email, password: body.password }
@@ -30,7 +30,7 @@ export async function POST(req: Request) {
       throw Error('Não foi possivel completar atualizar suas credenciais')
     }
 
-    const { data } = auth as SuccessResponse<UserAuth>
+    const { data } = auth as SuccessResponse<UserAuthResponse>
 
     return NextResponse.json(
       { message: 'Serviço chamado com sucesso', data: data },

@@ -1,11 +1,12 @@
 'use client'
-import { createContext, useContext, useEffect, useState } from 'react'
+import { createContext, useContext, useEffect, useMemo, useState } from 'react'
 import { toast } from 'react-hot-toast'
 
 import { getHuntById } from '@/requests/hunt/getById'
 import { deleteTargetProperty } from '@/requests/targetProperty/delete'
 import { getAllTargetPropertiesfromHunt } from '@/requests/targetProperty/getAllTargetProperties'
-import type { InterfaceHunt } from '@/types/app'
+import { getUserPermissionsRequest } from '@/requests/user/getUserPermissionsRequest'
+import type { HuntPermissions, InterfaceHunt } from '@/types/hunt'
 import type { TargetPropertyInterface } from '@/types/targetProperty'
 import { DEFAULT_HUNT_LIST_PER_PAGE } from '@/ui/pages/hunt/consts/perPage'
 
@@ -30,9 +31,11 @@ interface HuntContext {
   properties: TargetPropertyInterface[]
   fetchProperties: () => void
   removeTargetProperty: (_t: string) => void
+  permissions: HuntPermissions
+  targetsLeft: number
 }
 
-const DEFAULT_VALUES = {
+const DEFAULT_VALUES: HuntContext = {
   update: () => {},
   page: {
     current: 1,
@@ -49,7 +52,11 @@ const DEFAULT_VALUES = {
   },
   properties: [],
   fetchProperties: () => {},
-  removeTargetProperty: (_t: string) => {}
+  removeTargetProperty: (_t: string) => {},
+  permissions: {
+    maxTargets: 0
+  },
+  targetsLeft: 0
 }
 
 const HuntContext = createContext<HuntContext>(DEFAULT_VALUES)
@@ -71,12 +78,23 @@ export const HuntProvider = ({
   initialHuntData: InterfaceHunt
   children: React.ReactNode
 }) => {
-  const [page, setPage] = useState<number>(1)
-  const [totalPages, setTotalPages] = useState<number>(0)
-  const [perPage, setPerPage] = useState<number>(DEFAULT_HUNT_LIST_PER_PAGE)
-  const [properties, setProperties] = useState<TargetPropertyInterface[]>([])
+  const [page, setPage] = useState<number>(DEFAULT_VALUES.page.current)
+  const [totalPages, setTotalPages] = useState<number>(DEFAULT_VALUES.page.total)
+  const [perPage, setPerPage] = useState<number>(DEFAULT_VALUES.page.perPage)
+  const [totalItems, setTotalItems] = useState<number>(0)
+  const [properties, setProperties] = useState<TargetPropertyInterface[]>(DEFAULT_VALUES.properties)
+  const [permissions, setPermissions] = useState<HuntPermissions>(DEFAULT_VALUES.permissions)
+
+  const targetAvailableLimit = useMemo(() => {
+    return permissions.maxTargets - totalItems
+  }, [permissions, totalItems])
 
   const [hunt, setHunt] = useState<InterfaceHunt>(initialHuntData)
+
+  useEffect(() => {
+    getPermissions()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   useEffect(() => {
     if (hunt) {
@@ -99,6 +117,14 @@ export const HuntProvider = ({
     }
   }
 
+  async function getPermissions() {
+    const ownerPermissions = await getUserPermissionsRequest(initialHuntData.creatorId)
+
+    if (!ownerPermissions) return
+
+    setPermissions({ maxTargets: ownerPermissions.targetsPerHuntLimit })
+  }
+
   async function getProperties() {
     const data = await getAllTargetPropertiesfromHunt((hunt as InterfaceHunt).id, page, perPage)
 
@@ -107,9 +133,11 @@ export const HuntProvider = ({
     }
     if (!data || data?.list.length <= 0) {
       setTotalPages(0)
+      setTotalItems(0)
     } else {
       setProperties(data.list as TargetPropertyInterface[])
       setTotalPages(data.totalPages)
+      setTotalItems(data.totalItems)
     }
   }
 
@@ -148,6 +176,8 @@ export const HuntProvider = ({
       isLastPage: page === totalPages
     },
     properties,
+    permissions,
+    targetsLeft: targetAvailableLimit,
     fetchProperties: getProperties,
     removeTargetProperty
   }

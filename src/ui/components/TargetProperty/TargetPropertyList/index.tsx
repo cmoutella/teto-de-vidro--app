@@ -1,5 +1,5 @@
 import { useHuntContext } from '@/providers/HuntProvider'
-import type { InterfaceHunt } from '@/types/app'
+import type { InterfaceHunt } from '@/types/hunt'
 
 import { Pagination } from '../../Pagination'
 import TargetPropertyItem from '../TargetPropertyItem'

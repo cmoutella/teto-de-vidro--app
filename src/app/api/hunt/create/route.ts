@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server'
 
 import { appCokies } from '@/config/cookies'
 import type { SuccessResponse } from '@/types/apiPatterns'
-import type { InterfaceHunt } from '@/types/app'
+import type { InterfaceHunt } from '@/types/hunt'
 
 /**
  * CREATE HUNT
@@ -15,7 +15,7 @@ export async function POST(req: NextRequest) {
 
   const baseUrl = process.env.NEXT_PUBLIC_BASE_API_URL
 
-  if (!baseUrl) return undefined
+  if (!baseUrl) throw new Error('Application API url not defined')
 
   const authCookie = req.cookies.get(appCokies.auth)?.value
   const tokenFromCookie = authCookie ? JSON.parse(authCookie).token : undefined

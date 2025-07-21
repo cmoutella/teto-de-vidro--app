@@ -129,7 +129,9 @@ export function StagePill({ stage, targetId }: StagePillProps) {
         onSuccess={modal.close}
         onFail={modal.close}
         enableEmptyComment={true}
-        submit={async (data: TargetComment) => await updateStage(newStage, otherData, data)}
+        submit={async (data: TargetComment) =>
+          (await updateStage(newStage, otherData, data)) as never
+        }
       />
     )
   }

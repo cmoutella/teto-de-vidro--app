@@ -15,9 +15,7 @@ export const getTargetComments: GetTargetCommentsRequest = async (
 ) => {
   const baseUrl = process.env.NEXT_PUBLIC_APPLICATION_URL
 
-  if (!baseUrl) {
-    throw new Error('A url base não foi definida')
-  }
+  if (!baseUrl) throw new Error('Application APP url not defined')
 
   const fetchUrl = new URL(`${baseUrl}/api/target-property/${targetId}/comment/get`)
   fetchUrl.searchParams.set('page', String(page))

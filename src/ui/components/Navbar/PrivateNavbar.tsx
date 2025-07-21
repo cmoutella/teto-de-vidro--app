@@ -1,4 +1,4 @@
-import type { InterfaceUser } from '@/types/app'
+import type { InterfaceUser } from '@/types/user'
 
 import SessionButton from '../SessionButton'
 import { NavLogo } from './Logo'

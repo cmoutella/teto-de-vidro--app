@@ -1,7 +1,7 @@
 import type { SuccessResponse } from '@/types/apiPatterns'
-import type { InterfaceUser } from '@/types/app'
 import type { InterfaceComment, TargetComment } from '@/types/comment'
 import type { TargetPropertyInterface } from '@/types/targetProperty'
+import type { InterfaceUser } from '@/types/user'
 
 type AddCommentToTargetRequest = (
   _targetId: Pick<TargetPropertyInterface, 'id'>,
@@ -16,9 +16,7 @@ export const addCommentToTarget: AddCommentToTargetRequest = async (
 ) => {
   const baseUrl = process.env.NEXT_PUBLIC_APPLICATION_URL
 
-  if (!baseUrl) {
-    throw new Error('A url base não foi definida')
-  }
+  if (!baseUrl) throw new Error('Application APP url not defined')
 
   const payload = {
     comment: {
