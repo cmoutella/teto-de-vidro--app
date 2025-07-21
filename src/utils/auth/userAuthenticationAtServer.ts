@@ -3,7 +3,7 @@ import { redirect } from 'next/navigation'
 
 import { appCokies } from '@/config/cookies'
 import { cookie } from '@/services/cookies'
-import type { UserAuth } from '@/types/apiResponses'
+import type { AuthData } from '@/types/apiResponses'
 
 import { isTokenValid } from './token'
 
@@ -35,7 +35,7 @@ export async function isUserAuthenticated({
     return null
   }
 
-  const data: UserAuth = JSON.parse(authCookie.value)
+  const data: AuthData = JSON.parse(authCookie.value)
 
   const authValid = isTokenValid(data.expireAt)
 

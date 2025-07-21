@@ -1,7 +1,7 @@
 import type { SuccessResponse } from '@/types/apiPatterns'
-import type { UserAuth } from '@/types/apiResponses'
+import type { AuthData, UserAuthResponse } from '@/types/apiResponses'
 
-type LoginRequest = (_email: string, _password: string) => Promise<UserAuth | undefined>
+type LoginRequest = (_email: string, _password: string) => Promise<AuthData | undefined>
 
 export const authLogin: LoginRequest = async (email, password) => {
   const baseUrl = process.env.NEXT_PUBLIC_APPLICATION_URL
@@ -26,7 +26,7 @@ export const authLogin: LoginRequest = async (email, password) => {
       throw Error('Não foi possivel completar atualizar suas credenciais')
     }
 
-    const { data } = auth as SuccessResponse<UserAuth>
+    const { data } = auth as SuccessResponse<UserAuthResponse>
 
     return data
   } catch (_err) {

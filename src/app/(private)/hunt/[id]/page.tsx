@@ -6,7 +6,7 @@ import { redirect } from 'next/navigation'
 
 import { appCokies } from '@/config/cookies'
 import { cookie } from '@/services/cookies'
-import type { UserAuth } from '@/types/apiResponses'
+import type { AuthData } from '@/types/apiResponses'
 
 const HuntPage = async ({ params }: { params: { id: string } }) => {
   const reqCookies = await cookies()
@@ -14,7 +14,7 @@ const HuntPage = async ({ params }: { params: { id: string } }) => {
   const cookieService = cookie()
   const authCookie = cookieService.server.get(appCokies.auth, reqCookies)
 
-  const data: UserAuth = JSON.parse((authCookie as RequestCookie).value)
+  const data: AuthData = JSON.parse((authCookie as RequestCookie).value)
 
   const hunt = await getHuntById(params.id, { token: data.token })
 

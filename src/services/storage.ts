@@ -1,12 +1,12 @@
 import { appCokies } from '@/config/cookies'
-import type { UserAuth } from '@/types/apiResponses'
+import type { AuthData } from '@/types/apiResponses'
 
 import { cookie } from './cookies'
 
 function authStorage() {
   const cookies = cookie()
 
-  const getToken: () => UserAuth = () => {
+  const getToken: () => AuthData = () => {
     const app = cookies.client.get(appCokies.auth)
 
     if (app) {
@@ -16,7 +16,7 @@ function authStorage() {
     return undefined
   }
 
-  const setToken = (payload: UserAuth) => {
+  const setToken = (payload: AuthData) => {
     cookies.client.set(appCokies.auth, JSON.stringify(payload), new Date(payload.expireAt))
   }
 

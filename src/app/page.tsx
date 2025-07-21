@@ -5,7 +5,7 @@ import { cookies } from 'next/headers'
 
 import { appCokies } from '@/config/cookies'
 import { cookie } from '@/services/cookies'
-import type { UserAuth } from '@/types/apiResponses'
+import type { AuthData } from '@/types/apiResponses'
 import { isTokenValid } from '@/utils/auth/token'
 
 export default async function Home() {
@@ -18,7 +18,7 @@ export default async function Home() {
     return <PublicHomeView />
   }
 
-  const data: UserAuth = JSON.parse(authCookie.value)
+  const data: AuthData = JSON.parse(authCookie.value)
 
   const authValid = isTokenValid(data.expireAt)
 
