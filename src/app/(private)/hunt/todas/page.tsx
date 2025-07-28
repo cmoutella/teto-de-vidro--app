@@ -15,7 +15,9 @@ async function ListHuntsPage() {
 
   const response = await getAllHuntsByUser(userLoggedIn.id, 1, DEFAULT_HUNT_LIST_PER_PAGE)
 
-  return <ListHuntView hunts={response ?? []} />
+  const hunts = response?.list
+
+  return <ListHuntView hunts={hunts ?? []} />
 }
 
 export default ListHuntsPage
