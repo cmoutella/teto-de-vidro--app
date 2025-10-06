@@ -1,4 +1,4 @@
-import Image from 'next/image'
+import OptimizedImage from '@/ui/components/base/image'
 
 import productMockUpImage from './assets/product-mockup.png'
 
@@ -21,25 +21,38 @@ const CONTENT = [
 
 export function SolutionSection() {
   return (
-    <section className="w-full flex justify-center bg-brand-primary-600 py-20 text-white">
-      <div className="container">
-        <h3 className="text-2xl tracking-[0.15em] mb-14">A facilidade que faltava</h3>
-        <div className="flex gap-10">
-          <div className="w-1/2">
+    <section className="w-full flex justify-center bg-brand-primary-600 py-10 sm:py-14 lg:py-20 text-white px-4 lg:px-20">
+      <div className="container lg:px-10">
+        <h3 className="text-xl md:text-xl tracking-[0.15em] mb-10 md:mb-14 w-full">
+          A facilidade que faltava
+        </h3>
+        <div className="flex flex-col items-center lg:flex-row gap-4 sm:gap-6 lg:gap-10">
+          <div className="lg:w-1/2">
             {CONTENT.map((ctnt, i) => {
               return (
-                <div key={`solution-description-${i}`} className="mb-10">
-                  <h4 className="text-2xl mb-4 font-semibold">{ctnt.title}</h4>
-                  <p className="text-xl">{ctnt.description}</p>
+                <div key={`solution-description-${i}`} className="mb-10 sm:mb-12">
+                  <h4 className="text-lg md:text-xl mb-4 font-medium md:font-semibold tracking-wide underline-offset-2">
+                    {ctnt.title}
+                  </h4>
+                  <p className="text-base font-light">{ctnt.description}</p>
                 </div>
               )
             })}
           </div>
-          <div className="w-1/2">
-            <Image
-              src={productMockUpImage}
+          <div className="lg:w-1/2">
+            <OptimizedImage
+              images={{
+                mobile: {
+                  src: productMockUpImage,
+                  height: 400
+                },
+                desktop: {
+                  src: productMockUpImage,
+                  height: 450
+                }
+              }}
               alt="Imagem ilustrativa do produto apresentado"
-              className="w-full translate-x-6"
+              className="h-auto translate-x-5 md:translate-x-8"
             />
           </div>
         </div>
