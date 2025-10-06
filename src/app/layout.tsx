@@ -1,7 +1,9 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
+import Head from 'next/head'
 
 import { AllProviders } from '@/providers'
+
 import './globals.css'
 
 const inter = Inter({ subsets: ['latin'] })
@@ -16,8 +18,17 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode
 }>) {
+  const shouldIndexContent = process.env.NEXT_PUBLIC_ROBOTS_INDEX === 'true'
+
+  const env = process.env.NODE_ENV
+
   return (
     <html lang="pt-BR" className={`w-full`}>
+      <Head>
+        {env === 'development' || env === 'test' || (env === 'production' && shouldIndexContent)}
+        <meta name="robots" content="noindex, nofollow, noarchive, nosnippet" />
+        <meta name="googlebot" content="noindex, nofollow" />
+      </Head>
       <body className={`w-full ${inter.className}`}>
         <AllProviders>{children}</AllProviders>
       </body>
