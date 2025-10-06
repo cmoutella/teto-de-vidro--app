@@ -21,7 +21,7 @@ const CONTENT = [
 
 export function SolutionSection() {
   return (
-    <section className="w-full flex justify-center bg-brand-primary-600 py-10 sm:py-14 lg:py-20 text-white px-4 lg:px-20">
+    <section className="w-full flex justify-center bg-brand-primary-600 py-10 sm:py-14 lg:py-20 text-white px-7 sm:px-14 md:px-20">
       <div className="container lg:px-10">
         <h3 className="text-xl md:text-xl tracking-[0.15em] mb-10 md:mb-14 w-full">
           A facilidade que faltava
