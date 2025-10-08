@@ -1,6 +1,6 @@
 'use client'
 import type { ReactNode } from 'react'
-import { createContext, useContext, useState } from 'react'
+import { createContext, useContext, useEffect, useState } from 'react'
 import { Toaster } from 'react-hot-toast'
 
 import { Loading } from '@/ui/components/base/Loading'
@@ -9,7 +9,11 @@ import Modal from '@/ui/components/base/Modal'
 
 type InterfaceAction = () => void
 
+export type DeviceType = 'mobile' | 'tablet' | 'desktop' | 'large'
+
 interface UIContext {
+  mounted: boolean
+  device: DeviceType
   loading: {
     on: InterfaceAction
     off: InterfaceAction
@@ -26,6 +30,8 @@ interface UIModal extends Pick<ModalProps, 'isOpen' | 'size'> {
 }
 
 const DEFAULT_VALUES = {
+  mounted: false,
+  device: 'desktop' as DeviceType,
   loading: {
     on: () => {},
     off: () => {},
@@ -47,8 +53,32 @@ export const useUIContext = () => {
 }
 
 export const UIProvider = ({ children }: { children: React.ReactNode }) => {
+  const [mounted, setMounted] = useState<boolean>(DEFAULT_VALUES.mounted)
+  const [deviceType, setDeviceType] = useState<DeviceType>(DEFAULT_VALUES.device)
+
   const [loadingScreen, setLoadingScreen] = useState<boolean>(DEFAULT_VALUES.loading.state)
   const [modal, setModal] = useState<UIModal | null>(null)
+
+  useEffect(() => {
+    setMounted(true)
+
+    const updateDevice = (): void => {
+      const width = window.innerWidth
+      if (width <= 768) {
+        setDeviceType('mobile')
+      } else if (width <= 1024) {
+        setDeviceType('tablet')
+      } else if (width <= 1240) {
+        setDeviceType('desktop')
+      } else {
+        setDeviceType('large')
+      }
+    }
+
+    updateDevice()
+    window.addEventListener('resize', updateDevice)
+    return () => window.removeEventListener('resize', updateDevice)
+  }, [])
 
   const showLoadingScreen = () => {
     setLoadingScreen(true)
@@ -66,6 +96,8 @@ export const UIProvider = ({ children }: { children: React.ReactNode }) => {
   }
 
   const value = {
+    mounted: mounted,
+    device: deviceType,
     loading: {
       on: showLoadingScreen,
       off: hideLoadingScreen,
