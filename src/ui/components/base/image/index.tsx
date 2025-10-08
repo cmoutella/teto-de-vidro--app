@@ -13,7 +13,7 @@ interface ImageConfig {
 }
 
 interface ImageSet {
-  mobile: ImageConfig
+  mobile?: ImageConfig
   tablet?: ImageConfig
   desktop: ImageConfig
   large?: ImageConfig
@@ -88,11 +88,11 @@ export default function OptimizedImage({
   const getCurrentImage = (): ImageConfig => {
     switch (device) {
       case 'mobile':
-        return images.mobile
+        return images.mobile ?? images.desktop
       case 'tablet':
-        return images.tablet || images.desktop
+        return images.tablet ?? images.desktop
       case 'large':
-        return images.large || images.desktop
+        return images.large ?? images.desktop
       case 'desktop':
       default:
         return images.desktop
