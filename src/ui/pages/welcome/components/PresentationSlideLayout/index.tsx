@@ -40,6 +40,7 @@ export function PresentationSlideLayout({
                 }
               }}
               className="max-w-[330px] md:max-w-full"
+              priority={true}
             />
           </div>
           <div className="md:h-auto w-full md:w-1/2 px-3 py-4 md:px-8 md:py-8 bg-brand-primary-600 md:bg-white rounded-t-2xl text-white md:text-brand-gray-900 flex flex-col justify-center items-center">
@@ -63,14 +64,16 @@ export function PresentationSlideLayout({
                     label="Pular"
                     onClick={onSkipSlideGroup}
                     size="large"
-                    className={c('bg-brand-gray-200 text-black w-full py-3')}
+                    className={c(
+                      'bg-brand-primary-100 md:bg-brand-primary-200 text-brand-primary-900 w-full py-3'
+                    )}
                   />
                 )}
                 <Button
                   label="Continuar"
                   onClick={onNext}
                   size="large"
-                  className={c('bg-highlight-brand text-black w-full py-3')}
+                  className={c('bg-highlight-brand text-brand-primary-900 w-full py-3')}
                 />
               </div>
             </div>

@@ -1,23 +1,17 @@
 import type { ReactElement } from 'react'
 
-import c from 'classnames'
-
-import Button from '@/ui/components/base/Button'
-
 interface FormSlideLayoutProps {
   title: string
   description: string
   fields: ReactElement
-  submitDisabled: boolean
-  onSubmit: () => void
+  submitButton: ReactElement
 }
 
 export function FormSlideLayout({
   title,
   description,
   fields,
-  submitDisabled,
-  onSubmit
+  submitButton
 }: FormSlideLayoutProps) {
   return (
     <div className="w-full h-full bg-brand-primary-600 flex justify-center items-center pt-10 pb-3">
@@ -36,29 +30,13 @@ export function FormSlideLayout({
             <div className="flex flex-col justify-between items-center gap-6 md:gap-14 w-full max-w-[330px] md:max-w-[400px] md:h-full">
               <div className="w-full">{fields}</div>
               <div className="hidden md:flex flex-col-reverse md:flex-row gap-2 md:gap-3 w-full">
-                <Button
-                  label="Continuar"
-                  onClick={onSubmit}
-                  size="large"
-                  className={c('bg-highlight-brand text-black w-full py-3', {
-                    'disabled:bg-brand-primary-300 md:disabled:bg-brand-gray-500': submitDisabled
-                  })}
-                  disabled={submitDisabled}
-                />
+                {submitButton}
               </div>
             </div>
           </div>
         </div>
         <div className="flex md:hidden flex-col-reverse md:flex-row gap-2 md:gap-3 w-full max-w-[330px] md:max-w-[400px] justify-self-end">
-          <Button
-            label="Continuar"
-            onClick={onSubmit}
-            size="large"
-            className={c('bg-highlight-brand text-black w-full py-3', {
-              'disabled:bg-brand-primary-300 md:disabled:bg-brand-gray-500': submitDisabled
-            })}
-            disabled={submitDisabled}
-          />
+          {submitButton}
         </div>
       </div>
     </div>
