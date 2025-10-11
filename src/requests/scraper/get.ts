@@ -20,13 +20,13 @@ export const scraper: ScraperRequest = async (bodyData) => {
       body: JSON.stringify(bodyData)
     }).then((res) => res.json())
 
-    if (res.error) {
+    if (!res || res.error) {
       throw Error('O serviço scraper não está disponível')
     }
 
     const { data } = res as SuccessResponse<AdScrapedData>
 
-    return data
+    return data.data
   } catch (_err) {
     return undefined
   }
