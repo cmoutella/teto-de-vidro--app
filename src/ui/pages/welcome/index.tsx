@@ -1,21 +1,12 @@
 'use client'
+
 import { useCallback, useState } from 'react'
-import toast from 'react-hot-toast'
-
-import { isFuture, isToday } from 'date-fns'
-import { useFormik } from 'formik'
-import { redirect } from 'next/navigation'
-import * as Yup from 'yup'
-
-import { updateUserRequest } from '@/requests/user/updateUser'
-import type { InterfaceUser } from '@/types/user'
-import PersonalDataWelcomeForm from '@/ui/forms/Welcome/PersonalData'
-import UpdatePasswordWelcomeForm from '@/ui/forms/Welcome/UpdatePassword'
 
 import slide1Illustration from './assets/slide-1.png'
 import slide2Illustration from './assets/slide-2.png'
 import slide3Illustration from './assets/slide-3.png'
-import { FormSlideLayout } from './components/FormSlideLayout'
+import { NewPasswordForm } from './components/FormSlideLayout/NewPasswordForm'
+import { PersonalDataForm } from './components/FormSlideLayout/PersonalDataForm'
 import { PresentationSlideLayout } from './components/PresentationSlideLayout'
 
 interface WelcomeViewProps {
@@ -25,120 +16,6 @@ interface WelcomeViewProps {
 export function WelcomeView({ user }: WelcomeViewProps) {
   const [currentSlideGroup, setCurrentSlideGroup] = useState(0)
   const [currentSlide, setCurrentSlide] = useState(0)
-
-  // Personal Data Form
-  const personalDataValidationSchema = Yup.object({
-    type: Yup.string().required(),
-    movingExpected: Yup.string().test(
-      'A expectativa de mudança deve ser uma data no futuro',
-      (value) => {
-        if (!value) {
-          // Retorna verdadeiro para ignorar a validação quando o valor está ausente
-          return true
-        }
-
-        const inputedDate = new Date(value)
-
-        const validDate = isFuture(inputedDate) && !isToday(inputedDate)
-        return validDate
-      }
-    )
-  })
-
-  const personalDataFormik = useFormik({
-    initialValues: {
-      // birthDate: new Date().toISOString(),
-      birthDate: '',
-      cpf: ''
-    },
-    validationSchema: personalDataValidationSchema,
-    validateOnChange: true,
-    onSubmit: handlePersonalDataSubmit
-  })
-
-  function onPersonalDataFail() {
-    toast.error('Houve um erro no servidor. Tente acessar seu convite novamente mais tarde.')
-
-    setTimeout(() => redirect('/'), 3000)
-  }
-
-  function onPersonalDataSuccess() {
-    onNext()
-  }
-
-  async function handlePersonalDataSubmit(values: Partial<InterfaceUser>) {
-    if (!personalDataFormik.isValid || !user) return
-
-    const data: Partial<InterfaceUser> = {
-      ...values
-    }
-
-    const res = await updateUserRequest(user.id, data)
-
-    if (!res) {
-      onPersonalDataFail()
-      return
-    }
-
-    onPersonalDataSuccess()
-  }
-
-  // Update Password Form
-  const updatePasswordValidationSchema = Yup.object({
-    type: Yup.string().required(),
-    movingExpected: Yup.string().test(
-      'A expectativa de mudança deve ser uma data no futuro',
-      (value) => {
-        if (!value) {
-          // Retorna verdadeiro para ignorar a validação quando o valor está ausente
-          return true
-        }
-
-        const inputedDate = new Date(value)
-
-        const validDate = isFuture(inputedDate) && !isToday(inputedDate)
-        return validDate
-      }
-    )
-  })
-
-  const updatePasswordFormik = useFormik({
-    initialValues: {
-      // birthDate: new Date().toISOString(),
-      password: '',
-      passwordConfirmation: ''
-    },
-    validationSchema: updatePasswordValidationSchema,
-    validateOnChange: true,
-    onSubmit: handleUpdatePasswordSubmit
-  })
-
-  function onUpdatePasswordFail() {
-    toast.error('Houve um erro no servidor. Tente acessar seu convite novamente mais tarde.')
-
-    setTimeout(() => redirect('/'), 3000)
-  }
-
-  function onUpdatePasswordSuccess() {
-    onNext()
-  }
-
-  async function handleUpdatePasswordSubmit(values: Partial<InterfaceUser>) {
-    if (!personalDataFormik.isValid || !user) return
-
-    const data: Partial<InterfaceUser> = {
-      ...values
-    }
-
-    const res = await updateUserRequest(user.id, data)
-
-    if (!res) {
-      onUpdatePasswordFail()
-      return
-    }
-
-    onUpdatePasswordSuccess()
-  }
 
   const slideGroups = [
     {
@@ -178,32 +55,8 @@ export function WelcomeView({ user }: WelcomeViewProps) {
     {
       name: 'form',
       slides: [
-        <FormSlideLayout
-          key="form-1"
-          title={`Estamos quase lá, ${user.name}`}
-          description="Para garantir a confiança nas informações que disponibilizamos e a segurança dos imóveis, condomínios e seus moradores, precisamos de algumas informações suas."
-          fields={
-            <PersonalDataWelcomeForm
-              values={personalDataFormik.values}
-              handleChange={personalDataFormik.handleChange}
-            />
-          }
-          submitDisabled={!personalDataFormik.isValid || personalDataFormik.isSubmitting}
-          onSubmit={personalDataFormik.handleSubmit}
-        />,
-        <FormSlideLayout
-          key="form-2"
-          title="E para confluir"
-          description="Defina a sua senha"
-          fields={
-            <UpdatePasswordWelcomeForm
-              values={updatePasswordFormik.values}
-              handleChange={updatePasswordFormik.handleChange}
-            />
-          }
-          submitDisabled={!updatePasswordFormik.isValid || updatePasswordFormik.isSubmitting}
-          onSubmit={updatePasswordFormik.handleSubmit}
-        />
+        <PersonalDataForm key="welcome-personal-data-form" user={user} onNext={onNext} />,
+        <NewPasswordForm key="welcome-new-password" user={user} onNext={onNext} />
       ]
     }
   ]
