@@ -1,5 +1,5 @@
 'use client'
-import { useState, type ChangeEvent } from 'react'
+import { useMemo, useState, type ChangeEvent } from 'react'
 
 import Input from '@ui/base/form/inputs/Input'
 import type { FormSizes, FormTheme } from '@ui/base/shared/formTheme'
@@ -9,12 +9,19 @@ import Icon from '@/ui/components/base/Icon'
 interface UpdatePasswordWelcomeFormProps {
   values: { password: string; passwordConfirmation: string }
   handleChange: (_e: ChangeEvent) => void
+  passwordErrors: string[]
+  confirmationErrors: string[]
 }
 
 const formThemeSize: FormSizes = 'lg'
 const themePallete: FormTheme = 'light'
 
-const UpdatePasswordWelcomeForm = ({ handleChange, values }: UpdatePasswordWelcomeFormProps) => {
+const UpdatePasswordWelcomeForm = ({
+  handleChange,
+  values,
+  passwordErrors = [],
+  confirmationErrors = []
+}: UpdatePasswordWelcomeFormProps) => {
   const [passwordVisible, setPasswordVisible] = useState<boolean>(false)
   const [passwordConfirmationVisible, setPasswordConfirmationVisible] = useState<boolean>(false)
 
@@ -54,32 +61,67 @@ const UpdatePasswordWelcomeForm = ({ handleChange, values }: UpdatePasswordWelco
     )
   }
 
+  const pErrors = useMemo(
+    () => passwordErrors.filter((item) => item !== 'Nova senha obrigatória'),
+    [passwordErrors]
+  )
+  const cErrors = useMemo(
+    () => confirmationErrors.filter((item) => item !== 'Necessário confirmar a senha'),
+    [confirmationErrors]
+  )
+
   return (
     <form className="w-full flex flex-col gap-3">
-      <Input
-        label="Nova senha"
-        labelStyle="text-white md:text-brand-primary-600"
-        name="password"
-        type={passwordVisible ? 'text' : 'password'}
-        iconButton={<EyeButtonPassword />}
-        themeSize={formThemeSize}
-        theme={themePallete}
-        placeholder={`Informe uma senha`}
-        value={values.password}
-        onChange={handleChange}
-      />
-      <Input
-        label="Confirme a nova senha"
-        labelStyle="text-white md:text-brand-primary-600"
-        name="passwordConfirmation"
-        type={passwordConfirmationVisible ? 'text' : 'password'}
-        iconButton={<EyeButtonPasswordConfirmation />}
-        themeSize={formThemeSize}
-        theme={themePallete}
-        placeholder={`Repita a senha`}
-        value={values.passwordConfirmation}
-        onChange={handleChange}
-      />
+      <div className="w-full">
+        <Input
+          label="Nova senha"
+          labelStyle="text-white md:text-brand-primary-600"
+          name="password"
+          type={passwordVisible ? 'text' : 'password'}
+          iconButton={<EyeButtonPassword />}
+          themeSize={formThemeSize}
+          theme={themePallete}
+          placeholder={`Informe uma senha`}
+          value={values.password}
+          onChange={handleChange}
+        />
+        {pErrors.length >= 1 && (
+          <div className="w-full">
+            {pErrors.map((pError, i) => {
+              return (
+                <p key={`password-error-${i}`} className="w-full text-xs text-red-500">
+                  {pError}
+                </p>
+              )
+            })}
+          </div>
+        )}
+      </div>
+      <div className="w-full">
+        <Input
+          label="Confirme a nova senha"
+          labelStyle="text-white md:text-brand-primary-600"
+          name="passwordConfirmation"
+          type={passwordConfirmationVisible ? 'text' : 'password'}
+          iconButton={<EyeButtonPasswordConfirmation />}
+          themeSize={formThemeSize}
+          theme={themePallete}
+          placeholder={`Repita a senha`}
+          value={values.passwordConfirmation}
+          onChange={handleChange}
+        />
+        {cErrors.length >= 1 && (
+          <div className="w-full">
+            {cErrors.map((cError, i) => {
+              return (
+                <p key={`password-error-${i}`} className="w-full text-xs text-red-500">
+                  {cError}
+                </p>
+              )
+            })}
+          </div>
+        )}
+      </div>
     </form>
   )
 }

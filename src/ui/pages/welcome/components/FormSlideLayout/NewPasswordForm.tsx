@@ -22,7 +22,7 @@ export function NewPasswordForm({ user, onNext }: FormSlideLayoutProps) {
 
   const updatePasswordValidationSchema = Yup.object({
     password: Yup.string()
-      .required('Senha é obrigatória.')
+      .required('Nova senha obrigatória')
       .test('Regras da senha', 'Senha fraca', (value) => {
         const ruleBreaks: string[] = []
 
@@ -54,7 +54,7 @@ export function NewPasswordForm({ user, onNext }: FormSlideLayoutProps) {
         return ruleBreaks.length <= 0
       }),
     passwordConfirmation: Yup.string()
-      .required('Confirmação de senha é obrigatória.')
+      .required('Necessário confirmar a senha')
       .oneOf([Yup.ref('password')], 'As senhas devem ser iguais.')
   })
 
@@ -111,11 +111,14 @@ export function NewPasswordForm({ user, onNext }: FormSlideLayoutProps) {
     <div className="w-full h-full bg-brand-primary-600 flex justify-center items-center pt-10 pb-3">
       <div className="w-full h-full md:max-w-[800px] lg:max-w-[1000px] md:max-h-[600px] md:bg-white md:rounded-3xl flex flex-col justify-between md:justify-center items-center">
         <div className="flex flex-col md:flex-row justify-start md:justify-between items-center h-full w-full">
-          <div className="md:px-4 md:py-8 md:w-1/2 text-white md:text-brand-gray-800 mb-6">
+          <div className="md:px-4 md:py-8 md:ml-4 md:w-1/2 text-white md:text-brand-gray-800 mb-6 h-full md:mt-32">
             <h1 className="text-xl lg:text-2xl flex flex-col text-center mb-6 md:mb-10 font-semibold tracking-wide text-white md:text-brand-primary-700">
-              E para confluir
+              Agora para concluir
             </h1>
-            <p className="text-sm lg:text-base text-center">Defina a sua senha</p>
+            <p className="text-sm lg:text-base text-center">
+              Crie uma senha segura para proteger o acesso à sua conta
+            </p>
+            {/* TODO: colocar uma imagem aqui  */}
           </div>
           <div className="md:h-auto w-full md:w-1/2 px-3 py-4 md:px-8 md:py-8 bg-brand-primary-600 md:bg-white rounded-t-2xl text-white md:text-brand-gray-900 flex flex-col justify-center items-center">
             <div className="flex flex-col justify-between items-center gap-6 md:gap-14 w-full max-w-[330px] md:max-w-[400px] md:h-full">
@@ -123,6 +126,12 @@ export function NewPasswordForm({ user, onNext }: FormSlideLayoutProps) {
                 <UpdatePasswordWelcomeForm
                   values={updatePasswordFormik.values}
                   handleChange={updatePasswordFormik.handleChange}
+                  passwordErrors={passwordRulesErrors}
+                  confirmationErrors={
+                    updatePasswordFormik.errors.passwordConfirmation
+                      ? [updatePasswordFormik.errors.passwordConfirmation]
+                      : []
+                  }
                 />
               </div>
               <div className="hidden md:flex flex-col-reverse md:flex-row gap-2 md:gap-3 w-full">
