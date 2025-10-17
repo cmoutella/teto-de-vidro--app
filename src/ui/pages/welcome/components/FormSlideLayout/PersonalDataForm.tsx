@@ -7,9 +7,11 @@ import { useFormik } from 'formik'
 import { redirect } from 'next/navigation'
 import * as Yup from 'yup'
 
+import { updateUserRequest } from '@/requests/user/initialUpdateUser'
 import type { InterfaceUser } from '@/types/user'
 import Button from '@/ui/components/base/Button'
 import PersonalDataWelcomeForm from '@/ui/forms/Welcome/PersonalData'
+import { normalizeCpf } from '@/utils/string/normalize/normalizeCPF'
 import { isValidCPF } from '@/utils/validate/cpf'
 
 interface FormSlideLayoutProps {
@@ -64,21 +66,24 @@ export function PersonalDataForm({ user, onNext }: FormSlideLayoutProps) {
     setTimeout(() => redirect('/'), 3000)
   }
 
-  async function handlePersonalDataSubmit(values: Partial<InterfaceUser>) {
+  async function handlePersonalDataSubmit(values: { cpf: string; birthDate: string }) {
     if (!personalDataFormik.isValid || !user) return
 
+    const normalizedCPF = normalizeCpf(values.cpf)
+
+    if (!normalizedCPF) return
+
     const data: Partial<InterfaceUser> = {
-      ...values
+      cpf: normalizedCPF,
+      birthDate: new Date(values.birthDate).toISOString()
     }
 
-    console.log('submiting data', data)
+    const res = await updateUserRequest(user.id, data)
 
-    // const res = await updateUserRequest(user.id, data)
-
-    // if (!res) {
-    //   onPersonalDataFail()
-    //   return
-    // }
+    if (!res) {
+      onPersonalDataFail()
+      return
+    }
 
     onNext()
   }
