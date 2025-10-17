@@ -8,15 +8,15 @@ export type UpdateUserRequest = (
 
 // TODO: wip
 
+// autenticar app frontend e armazenar token
+
 export const updateUserRequest: UpdateUserRequest = async (id, newData) => {
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_API_URL
+  const baseUrl = process.env.NEXT_PUBLIC_APPLICATION_URL
 
   if (!baseUrl) throw new Error('Application API url not defined')
 
-  const url = `${baseUrl}/users/${id}`
-
   try {
-    const user = await fetch(url, {
+    const user = await fetch(`${baseUrl}/api/user/${id}/initial-setup`, {
       method: 'PUT',
       mode: 'cors',
       headers: {
