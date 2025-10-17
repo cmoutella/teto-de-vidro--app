@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 
 import type { CONTRACT_TYPE } from '@/types/hunt'
-import { formatMoneyValue } from '@/utils/string/formatMoney'
+import { formatMoneyValue } from '@/utils/string/format/formatMoney'
 
 export function usePriceString(data: {
   rentPrice: number

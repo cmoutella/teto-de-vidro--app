@@ -10,7 +10,7 @@ import { useFormik } from 'formik'
 import * as Yup from 'yup'
 
 import type { TargetPropertyInterface } from '@/types/targetProperty'
-import { formatStringDate, formatTime } from '@/utils/string/formatDate'
+import { formatStringDate, formatTime } from '@/utils/string/format/formatDate'
 
 interface ScheduledVisitFormProps {
   onSuccess: (_h: Partial<TargetPropertyInterface>) => void

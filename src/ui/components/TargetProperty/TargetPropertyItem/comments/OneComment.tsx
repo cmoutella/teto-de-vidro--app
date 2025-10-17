@@ -13,7 +13,7 @@ import Button from '@/ui/components/base/Button'
 import Icon from '@/ui/components/base/Icon'
 import DeleteConfirmation from '@/ui/forms/DeleteConfirmation'
 import TargetCommentForm from '@/ui/forms/TargetProperty/TargetCommentForm'
-import { lastUpdateMessage } from '@/utils/string/lastUpdateMessage'
+import { lastUpdateMessage } from '@/utils/string/formatLastUpdateMessage'
 
 interface OneCommentProps {
   comment: InterfaceComment

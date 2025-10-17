@@ -5,7 +5,7 @@ import type { InputProps } from '@headlessui/react'
 import FieldWrapper from '@raw/wrappers/Field'
 import type { FormSizes, FormTheme } from '@ui/base/shared/formTheme'
 
-import { formatCPF } from '@/utils/string/formatCPF'
+import { formatCPF } from '@/utils/string/format/formatCPF'
 
 import InputRaw from '../../../_raw/Input'
 

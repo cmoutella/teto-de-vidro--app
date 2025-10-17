@@ -11,7 +11,7 @@ import type { TargetPropertyInterface } from '@/types/targetProperty'
 import Button from '@/ui/components/base/Button'
 import { Loading } from '@/ui/components/base/Loading'
 import EmptyState from '@/ui/components/EmptyState'
-import { lastUpdateMessage } from '@/utils/string/lastUpdateMessage'
+import { lastUpdateMessage } from '@/utils/string/formatLastUpdateMessage'
 
 interface NextMoveDashboardProps {
   hunts: InterfaceHunt[]
