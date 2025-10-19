@@ -1,7 +1,7 @@
 import type { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
 
-import { appCokies } from '@/config/cookies'
+import { appCookies } from '@/config/cookies'
 import type { PaginatedData, SuccessResponse } from '@/types/apiPatterns'
 import type { TargetPropertyInterface } from '@/types/targetProperty'
 
@@ -10,7 +10,7 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
 
   if (!baseUrl) throw new Error('Application API url not defined')
 
-  const authCookie = req.cookies.get(appCokies.auth)?.value
+  const authCookie = req.cookies.get(appCookies.auth)?.value
   const tokenFromCookie = authCookie ? JSON.parse(authCookie).token : undefined
 
   const authorization =

@@ -6,7 +6,7 @@
 import { cookies } from 'next/headers'
 import { NextResponse, type NextRequest } from 'next/server'
 
-import { appCokies } from '@/config/cookies'
+import { appCookies } from '@/config/cookies'
 import type { SuccessResponse } from '@/types/apiPatterns'
 import type { InterfaceUser } from '@/types/user'
 import { getAppAuth } from '@/utils/auth/getAppAuth'
@@ -23,7 +23,7 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
       throw new Error('Erro de autorização')
     } else {
       const reqCookies = cookies()
-      reqCookies.set(appCokies.app, JSON.stringify(auth), {
+      reqCookies.set(appCookies.app, JSON.stringify(auth), {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
         sameSite: process.env.NODE_ENV === 'production' ? 'strict' : 'lax',
