@@ -1,7 +1,7 @@
 import { cookies } from 'next/headers'
 import { NextResponse } from 'next/server'
 
-import { appCokies } from '@/config/cookies'
+import { appCookies } from '@/config/cookies'
 import type { SuccessResponse } from '@/types/apiPatterns'
 
 /**
@@ -46,7 +46,7 @@ export async function POST() {
     const { data } = response as SuccessResponse<{ token: string }>
 
     const reqCookies = cookies()
-    reqCookies.set(appCokies.app, JSON.stringify({ token: data.token }), {
+    reqCookies.set(appCookies.app, JSON.stringify({ token: data.token }), {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: process.env.NODE_ENV === 'production' ? 'strict' : 'lax',

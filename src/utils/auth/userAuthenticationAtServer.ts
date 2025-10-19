@@ -1,7 +1,7 @@
 import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
 
-import { appCokies } from '@/config/cookies'
+import { appCookies } from '@/config/cookies'
 import { cookie } from '@/services/cookies'
 import type { AuthData } from '@/types/apiResponses'
 
@@ -25,7 +25,7 @@ export async function isUserAuthenticated({
   const reqCookies = await cookies()
 
   const cookieService = cookie()
-  const authCookie = cookieService.server.get(appCokies.auth, reqCookies)
+  const authCookie = cookieService.server.get(appCookies.auth, reqCookies)
 
   if (!authCookie && shouldNoCookieRedirect) {
     redirect(noCookieRedirect)

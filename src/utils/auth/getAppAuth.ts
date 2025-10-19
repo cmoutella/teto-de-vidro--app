@@ -1,12 +1,12 @@
 import { cookies } from 'next/headers'
 
-import { appCokies } from '@/config/cookies'
+import { appCookies } from '@/config/cookies'
 import { authenticateApp } from '@/requests/server/app/authenticateApp'
 
 export async function getAppAuth(): Promise<{ token: string } | undefined> {
   const reqCookies = await cookies()
 
-  const gotCookie = reqCookies.get(appCokies.app)
+  const gotCookie = reqCookies.get(appCookies.app)
   if (gotCookie) {
     const cookieData = JSON.parse(gotCookie.value)
     return cookieData

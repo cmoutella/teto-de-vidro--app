@@ -1,14 +1,14 @@
 import { cookies } from 'next/headers'
 import { NextResponse } from 'next/server'
 
-import { appCokies } from '@/config/cookies'
+import { appCookies } from '@/config/cookies'
 import type { AuthData } from '@/types/apiResponses'
 import { isTokenValid } from '@/utils/auth/token'
 
 export async function GET() {
   const reqCookies = cookies()
 
-  const authenticatedUser = reqCookies.get(appCokies.auth)
+  const authenticatedUser = reqCookies.get(appCookies.auth)
 
   if (!authenticatedUser) {
     return NextResponse.json({}, { status: 404 })

@@ -2,7 +2,7 @@ import PrivateHomeView from '@pages/home/privateHome'
 import PublicHomeView from '@pages/home/publicHome'
 import { cookies } from 'next/headers'
 
-import { appCokies } from '@/config/cookies'
+import { appCookies } from '@/config/cookies'
 import { getAllHuntsByUser } from '@/requests/client/hunt/getAllHuntsByUser'
 import { cookie } from '@/services/cookies'
 import type { AuthData } from '@/types/apiResponses'
@@ -12,7 +12,7 @@ export default async function Home() {
   const reqCookies = await cookies()
 
   const cookieService = cookie()
-  const authCookie = cookieService.server.get(appCokies.auth, reqCookies)
+  const authCookie = cookieService.server.get(appCookies.auth, reqCookies)
 
   if (!authCookie) {
     return <PublicHomeView />

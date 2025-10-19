@@ -1,6 +1,6 @@
 import type { OptionsType } from 'cookies-next/lib/types'
 
-export const appCokies = {
+export const appCookies = {
   auth: '@TdV:session',
   app: '@TdV:app'
 }
