@@ -1,7 +1,10 @@
 import type { SuccessResponse } from '@/types/apiPatterns'
 import type { InterfaceHunt } from '@/types/hunt'
 
-export type CreateHuntRequestProps = Omit<InterfaceHunt, 'id' | 'targets' | 'isActive'>
+export type CreateHuntRequestProps = Omit<
+  InterfaceHunt,
+  'id' | 'targets' | 'isActive' | 'huntUsers'
+>
 
 type CreateHuntRequest = (_bodyData: CreateHuntRequestProps) => Promise<InterfaceHunt | undefined>
 

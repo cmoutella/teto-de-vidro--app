@@ -5,7 +5,7 @@ import cx from 'classnames'
 
 import { useHuntContext } from '@/providers/HuntProvider'
 import { useUIContext } from '@/providers/UIProvider'
-import { removeAmenityFromTarget } from '@/requests/targetProperty/removeAmenity'
+import { removeAmenityFromTarget } from '@/requests/client/targetProperty/removeAmenity'
 import type { TargetAmenity, TargetPropertyInterface } from '@/types/targetProperty'
 import DeleteConfirmation from '@/ui/forms/DeleteConfirmation'
 

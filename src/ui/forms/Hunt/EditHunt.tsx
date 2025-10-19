@@ -2,7 +2,6 @@
 import { useEffect, useState } from 'react'
 
 import { useSessionContext } from '@providers/AuthProvider'
-import type { CreateHuntRequestProps } from '@requests/hunt/create'
 import SubmitButton from '@ui/base/form/buttons/SubmitButton'
 import Input from '@ui/base/form/inputs/Input'
 import InputPartialDate from '@ui/base/form/inputs/InputPartialDate'
@@ -14,7 +13,8 @@ import { isFuture } from 'date-fns/isFuture'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
 
-import { editHunt } from '@/requests/hunt/edit'
+import type { CreateHuntRequestProps } from '@/requests/client/hunt/create'
+import { editHunt } from '@/requests/client/hunt/edit'
 import type { InterfaceHunt } from '@/types/hunt'
 
 interface EditHuntFormProps {

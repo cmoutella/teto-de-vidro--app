@@ -5,7 +5,7 @@ import DashboardCard from '@ui/DashboardCard'
 import cx from 'classnames'
 import { useRouter } from 'next/navigation'
 
-import { getAllTargetPropertiesfromHunt } from '@/requests/targetProperty/getAllTargetProperties'
+import { getAllTargetPropertiesfromHunt } from '@/requests/client/targetProperty/getAllTargetProperties'
 import type { CONTRACT_TYPE, InterfaceHunt } from '@/types/hunt'
 import type { TargetPropertyInterface } from '@/types/targetProperty'
 import Button from '@/ui/components/base/Button'

@@ -1,9 +1,9 @@
 import PrivateHomeView from '@pages/home/privateHome'
 import PublicHomeView from '@pages/home/publicHome'
-import { getAllHuntsByUser } from '@requests/hunt/getAllHuntsByUser'
 import { cookies } from 'next/headers'
 
 import { appCokies } from '@/config/cookies'
+import { getAllHuntsByUser } from '@/requests/client/hunt/getAllHuntsByUser'
 import { cookie } from '@/services/cookies'
 import type { AuthData } from '@/types/apiResponses'
 import { isTokenValid } from '@/utils/auth/token'

@@ -1,10 +1,10 @@
 import HuntView from '@pages/hunt/oneHunt'
-import { getHuntById } from '@requests/hunt/getById'
 import type { RequestCookie } from 'next/dist/compiled/@edge-runtime/cookies'
 import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
 
 import { appCokies } from '@/config/cookies'
+import { getHuntById } from '@/requests/client/hunt/getById'
 import { cookie } from '@/services/cookies'
 import type { AuthData } from '@/types/apiResponses'
 

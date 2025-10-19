@@ -5,7 +5,7 @@ import { toast } from 'react-hot-toast'
 import cx from 'classnames'
 
 import { useUIContext } from '@/providers/UIProvider'
-import { editTargetProperty } from '@/requests/targetProperty/edit'
+import { editTargetProperty } from '@/requests/client/targetProperty/edit'
 import type { TargetComment } from '@/types/comment'
 import type { PropertyHuntingStage, TargetPropertyInterface } from '@/types/targetProperty'
 import ScheduledVisitForm from '@/ui/forms/TargetProperty/ScheduledVisit'

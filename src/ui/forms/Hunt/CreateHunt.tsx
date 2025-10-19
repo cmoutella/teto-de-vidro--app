@@ -1,7 +1,5 @@
 'use client'
 import { useSessionContext } from '@providers/AuthProvider'
-import type { CreateHuntRequestProps } from '@requests/hunt/create'
-import { createHunt } from '@requests/hunt/create'
 import SubmitButton from '@ui/base/form/buttons/SubmitButton'
 import Input from '@ui/base/form/inputs/Input'
 import InputPartialDate from '@ui/base/form/inputs/InputPartialDate'
@@ -11,6 +9,9 @@ import { addDays, isToday } from 'date-fns'
 import { isFuture } from 'date-fns/isFuture'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
+
+import type { CreateHuntRequestProps } from '@/requests/client/hunt/create'
+import { createHunt } from '@/requests/client/hunt/create'
 
 interface CreateHuntFormProps {
   onSuccess: (_id: string) => void
@@ -56,7 +57,7 @@ const CreateHuntForm = ({ onSuccess, onFail }: CreateHuntFormProps) => {
 
   const { user } = useSessionContext()
 
-  async function handleSubmit(values: Omit<CreateHuntRequestProps, 'creatorId'>) {
+  async function handleSubmit(values: Omit<CreateHuntRequestProps, 'creatorId' | 'huntUsers'>) {
     if (!formik.isValid || !user) return
 
     const data: CreateHuntRequestProps = {

@@ -8,7 +8,7 @@ import type { FormSizes, FormTheme } from '@ui/base/shared/formTheme'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
 
-import { editTargetProperty } from '@/requests/targetProperty/edit'
+import { editTargetProperty } from '@/requests/client/targetProperty/edit'
 import type { TargetPropertyInterface } from '@/types/targetProperty'
 import { Checkbox } from '@/ui/components/base/form/Checkbox'
 

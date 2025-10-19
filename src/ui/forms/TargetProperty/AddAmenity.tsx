@@ -9,7 +9,7 @@ import type { FormSizes, FormTheme } from '@ui/base/shared/formTheme'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
 
-import { addAmenityToTarget } from '@/requests/targetProperty/addAmenity'
+import { addAmenityToTarget } from '@/requests/client/targetProperty/addAmenity'
 import type { AmenityData } from '@/types/hunt'
 import type { TargetPropertyInterface } from '@/types/targetProperty'
 import type { RawRadioOption } from '@/ui/components/base/_raw/RadioGroup'
