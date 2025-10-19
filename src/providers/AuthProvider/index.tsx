@@ -1,10 +1,12 @@
 'use client'
 import { createContext, useContext, useEffect, useMemo, useState } from 'react'
 
-import { authLogin } from '@requests/auth/login'
+import { useRouter } from 'next/navigation'
 
-import { getUserPermissionsRequest } from '@/requests/user/getUserPermissionsRequest'
-import { getUserFn, validateAuthentication } from '@/services/auth'
+import { authLogin } from '@/requests/client/auth/login'
+import { validateAuthentication } from '@/requests/client/auth/validateAuth'
+import { getUserPermissionsRequest } from '@/requests/client/user/getUserPermissionsRequest'
+import { getUserFn } from '@/services/auth'
 import storage from '@/services/storage'
 import type { AuthData } from '@/types/apiResponses'
 import type { SessionUser } from '@/types/user'
@@ -43,11 +45,17 @@ export const SessionProvider = ({ children }: { children: React.ReactNode }) => 
   const [user, setUser] = useState<SessionUser>(DEFAULT_VALUES.user)
   const [tryData, setTryData] = useState<boolean>(true)
 
+  const router = useRouter()
+
   const authStorage = storage()
 
+  async function init() {
+    await authenticate()
+  }
+
   useEffect(() => {
-    if (user && !user.permissions && tryData) {
-      updatePermissions()
+    if (!user && tryData) {
+      init()
     }
     setTryData(false)
   }, [user, tryData])
@@ -57,8 +65,8 @@ export const SessionProvider = ({ children }: { children: React.ReactNode }) => 
 
     if (!auth) return
 
-    await validateAuthentication(auth).then(async (res) => {
-      const permissions = await getPermissions(res.id)
+    await validateAuthentication().then(async () => {
+      const permissions = await getPermissions(auth.user.id)
       const data = { ...user, permissions } as SessionUser
 
       setUser(data)
@@ -69,19 +77,17 @@ export const SessionProvider = ({ children }: { children: React.ReactNode }) => 
   const logout = () => {
     setUser(undefined)
     authStorage.clearToken()
+    router.push('/')
   }
 
   const authenticate = () => {
     if (user) return
 
     validateAuthentication()
-      .then(async (res) => {
-        const permissions = await getPermissions(res.id)
-
-        const data = { ...res, permissions } as SessionUser
-
-        setUser(data)
-        window.location.reload()
+      .then((res) => {
+        if (!user) {
+          setUser(res)
+        }
       })
       .catch((_err) => {
         // showToast({
@@ -89,7 +95,7 @@ export const SessionProvider = ({ children }: { children: React.ReactNode }) => 
         //   message: "Não foi possivel realizar o login tente mais tarde",
         // });
         setTimeout(() => {
-          window.location.replace('/login')
+          router.push('/login')
         }, 3000)
       })
   }
