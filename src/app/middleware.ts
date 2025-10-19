@@ -3,8 +3,12 @@ import { NextResponse } from 'next/server'
 export function middleware() {
   const res = NextResponse.next()
 
+  console.log('## MIDDLEWARE')
+
+  const origins = process.env.ALLOW_ORIGINS as string
+
+  res.headers.append('Access-Control-Allow-Origin', origins ?? '')
   res.headers.append('Access-Control-Allow-Credentials', 'true')
-  res.headers.append('Access-Control-Allow-Origin', '*')
   res.headers.append('Access-Control-Allow-Methods', 'GET,DELETE,PATCH,POST,PUT')
   res.headers.append(
     'Access-Control-Allow-Headers',
