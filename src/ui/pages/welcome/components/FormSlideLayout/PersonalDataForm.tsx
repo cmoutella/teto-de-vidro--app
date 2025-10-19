@@ -7,7 +7,7 @@ import { useFormik } from 'formik'
 import { redirect } from 'next/navigation'
 import * as Yup from 'yup'
 
-import { updateUserRequest } from '@/requests/client/user/initialUpdateUser'
+import { initialUserUpdateRequest } from '@/requests/client/user/initialUpdateUser'
 import type { InterfaceUser } from '@/types/user'
 import Button from '@/ui/components/base/Button'
 import PersonalDataWelcomeForm from '@/ui/forms/Welcome/PersonalData'
@@ -78,7 +78,7 @@ export function PersonalDataForm({ user, onNext }: FormSlideLayoutProps) {
       birthDate: new Date(values.birthDate).toISOString()
     }
 
-    const res = await updateUserRequest(user.id, data)
+    const res = await initialUserUpdateRequest(user.id, data)
 
     if (!res) {
       onPersonalDataFail()

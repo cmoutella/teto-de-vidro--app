@@ -6,8 +6,8 @@ import { useFormik } from 'formik'
 import { redirect } from 'next/navigation'
 import * as Yup from 'yup'
 
-import { updateUserRequest } from '@/requests/user/updateUser'
-import type { InterfaceUser } from '@/types/user'
+import type { ChangePassword } from '@/requests/client/user/changePassword'
+import { changePassword } from '@/requests/client/user/changePassword'
 import Button from '@/ui/components/base/Button'
 import UpdatePasswordWelcomeForm from '@/ui/forms/Welcome/UpdatePassword'
 
@@ -77,14 +77,14 @@ export function NewPasswordForm({ user, onNext }: FormSlideLayoutProps) {
     onNext()
   }
 
-  async function handleUpdatePasswordSubmit(values: Partial<InterfaceUser>) {
+  async function handleUpdatePasswordSubmit(values: ChangePassword) {
     if (!updatePasswordFormik.isValid || !user) return
 
-    const data: Partial<InterfaceUser> = {
+    const data: ChangePassword = {
       ...values
     }
 
-    const res = await updateUserRequest(user.id, data)
+    const res = await changePassword(user.id, data)
 
     if (!res) {
       onUpdatePasswordFail()
@@ -93,10 +93,9 @@ export function NewPasswordForm({ user, onNext }: FormSlideLayoutProps) {
 
     onUpdatePasswordSuccess()
   }
+
   useEffect(() => {
     updatePasswordFormik.validateForm().then((errors) => {
-      console.log('Password errors', errors)
-      console.log('Test validation', passwordRulesErrors)
       updatePasswordFormik.setErrors(errors)
       setNewPasswordValid(
         !errors.password &&
@@ -105,6 +104,7 @@ export function NewPasswordForm({ user, onNext }: FormSlideLayoutProps) {
           updatePasswordFormik.values.passwordConfirmation !== ''
       )
     })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [updatePasswordFormik.values])
 
   return (

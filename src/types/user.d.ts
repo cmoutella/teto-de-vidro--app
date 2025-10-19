@@ -20,6 +20,7 @@ export interface InterfaceUser {
   email: string
   lastLogin: string
   permissions?: UserPermissions
+  welcomeCompleted?: boolean
 }
 
 export type SessionUser = Omit<InterfaceUser, 'password'> | undefined

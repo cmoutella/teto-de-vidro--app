@@ -2,6 +2,10 @@
 
 import { useCallback, useState } from 'react'
 
+import { useRouter } from 'next/navigation'
+
+import { updateUserRequest } from '@/requests/client/user/updateUser'
+
 import slide1Illustration from './assets/slide-1.png'
 import slide2Illustration from './assets/slide-2.png'
 import slide3Illustration from './assets/slide-3.png'
@@ -56,7 +60,7 @@ export function WelcomeView({ user }: WelcomeViewProps) {
       name: 'form',
       slides: [
         <PersonalDataForm key="welcome-personal-data-form" user={user} onNext={onNext} />,
-        <NewPasswordForm key="welcome-new-password" user={user} onNext={onNext} />
+        <NewPasswordForm key="welcome-new-password" user={user} onNext={onComplete} />
       ]
     }
   ]
@@ -70,8 +74,15 @@ export function WelcomeView({ user }: WelcomeViewProps) {
     setCurrentSlide(currentSlide + 1)
   }
 
+  const router = useRouter()
+  async function onComplete() {
+    await updateUserRequest(user.id, { welcomeCompleted: true })
+    router.push('/login')
+  }
+
   const Slide = useCallback(
     () => slideGroups[currentSlideGroup].slides[currentSlide],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [currentSlideGroup, currentSlide]
   )
 

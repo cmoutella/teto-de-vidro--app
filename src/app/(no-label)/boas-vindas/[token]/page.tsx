@@ -57,7 +57,6 @@ const WelcomePage = async ({ params }: { params: { token: string } }) => {
   const invitation = await validateInvitationToken()
 
   if (!invitation) {
-    // TODO: friendly message
     redirect('/')
   }
   if (invitation.welcomeCompleted) {

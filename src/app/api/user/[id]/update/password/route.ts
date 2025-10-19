@@ -3,27 +3,39 @@
  * @returns UserPermissions
  */
 
+import { cookies } from 'next/headers'
 import { NextResponse, type NextRequest } from 'next/server'
 
-import { authenticateApp } from '@/requests/server/app/authenticateApp'
+import { appCokies } from '@/config/cookies'
 import type { SuccessResponse } from '@/types/apiPatterns'
 import type { InterfaceUser } from '@/types/user'
+import { getAppAuth } from '@/utils/auth/getAppAuth'
 
 export async function PUT(req: NextRequest, { params }: { params: { id: string } }) {
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_API_URL
+  const baseUrl = process.env.BACKEND_API
 
   if (!baseUrl) throw new Error('Application API url not defined')
 
   try {
-    const auth = await authenticateApp()
+    const auth = await getAppAuth()
 
-    if (!auth) {
+    if (!auth || !auth.token) {
       throw new Error('Erro de autorização')
+    } else {
+      const reqCookies = cookies()
+      reqCookies.set(appCokies.app, JSON.stringify(auth), {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: process.env.NODE_ENV === 'production' ? 'strict' : 'lax',
+        path: '/',
+        maxAge: 60 * 60 * 24 * 3 // 3 dia,
+        // domain: process.env.NODE_ENV !== 'production' ? 'localhost' : 'tetodevidroo.com.br'
+      })
     }
 
     const body = await req.json()
 
-    const res = await fetch(`${baseUrl}/users/${params.id}/initial-update`, {
+    const response = await fetch(`${baseUrl}/users/${params.id}/new-password`, {
       method: 'PUT',
       mode: 'cors',
       headers: {
@@ -33,22 +45,22 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
       body: JSON.stringify(body)
     })
 
-    if (res.status === 401) {
+    if (response.status === 401) {
       throw new Error('Erro de autorização')
-    } else if (res.status >= 500) {
+    } else if (response.status >= 500) {
       throw new Error('Erro interno no servidor')
-    } else if (res.status >= 400) {
+    } else if (response.status >= 400) {
       throw new Error('Não foi possível buscar agora')
     }
 
-    const response = await res.json()
+    const responseData = await response.json()
 
-    if (response.error) {
-      console.error(`# Initial Setup Req - ERROR - ${response.error}`)
+    if (responseData.error) {
+      console.error(`# Initial Setup Req - ERROR - ${responseData.error}`)
       throw new Error('Não foi possivel atualizar os dados agora')
     }
 
-    const { data } = response as SuccessResponse<InterfaceUser>
+    const { data } = responseData as SuccessResponse<InterfaceUser>
 
     return NextResponse.json(
       { message: 'Serviço chamado com sucesso', data: data },

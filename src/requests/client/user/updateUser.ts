@@ -6,13 +6,13 @@ export type UpdateUserRequest = (
   _data: Partial<InterfaceUser>
 ) => Promise<InterfaceUser | undefined>
 
-export const initialUserUpdateRequest: UpdateUserRequest = async (id, newData) => {
+export const updateUserRequest: UpdateUserRequest = async (id, newData) => {
   const baseUrl = process.env.NEXT_PUBLIC_APPLICATION_URL
 
   if (!baseUrl) throw new Error('Application API url not defined')
 
   try {
-    const response = await fetch(`${baseUrl}/api/user/${id}/update/initial-setup`, {
+    const response = await fetch(`${baseUrl}/api/user/${id}/update`, {
       method: 'PUT',
       mode: 'cors',
       credentials: 'include',
@@ -21,6 +21,8 @@ export const initialUserUpdateRequest: UpdateUserRequest = async (id, newData) =
       },
       body: JSON.stringify(newData)
     })
+
+    console.log('response update', response)
 
     const user = await response.json()
 
