@@ -10,6 +10,7 @@ export interface InterfaceUser {
   id: string
   name: string
   familyName: string
+  cpf: string
   accessLevel: string
   role: UserRole
   password: string

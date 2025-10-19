@@ -2,6 +2,7 @@ import { redirect } from 'next/navigation'
 
 import type { SuccessResponse } from '@/types/apiPatterns'
 import { WelcomeView } from '@/ui/pages/welcome'
+import { getAppAuth } from '@/utils/auth/getAppAuth'
 
 type Validation = {
   invitationId: string
@@ -20,10 +21,13 @@ const WelcomePage = async ({ params }: { params: { token: string } }) => {
   }
 
   async function validateInvitationToken() {
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_API_URL
-    const appToken = process.env.NEXT_PUBLIC_BASE_APP_KEY
+    const baseUrl = process.env.BACKEND_API
 
     if (!baseUrl) throw new Error('Application API url not defined')
+
+    const appAuth = await getAppAuth()
+
+    if (!appAuth || !appAuth.token) throw new Error('Application auth failed')
 
     const validationUrl = `${baseUrl}/users/validate-invite/${token}`
 
@@ -31,9 +35,10 @@ const WelcomePage = async ({ params }: { params: { token: string } }) => {
       const user = await fetch(validationUrl, {
         method: 'GET',
         mode: 'cors',
+        credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${appToken}`
+          'x-api-key': appAuth.token
         }
       }).then((res) => res.json())
 

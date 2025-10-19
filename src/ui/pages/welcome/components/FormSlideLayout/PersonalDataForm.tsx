@@ -7,7 +7,7 @@ import { useFormik } from 'formik'
 import { redirect } from 'next/navigation'
 import * as Yup from 'yup'
 
-import { updateUserRequest } from '@/requests/user/initialUpdateUser'
+import { updateUserRequest } from '@/requests/client/user/initialUpdateUser'
 import type { InterfaceUser } from '@/types/user'
 import Button from '@/ui/components/base/Button'
 import PersonalDataWelcomeForm from '@/ui/forms/Welcome/PersonalData'
