@@ -17,7 +17,7 @@ export async function validateAuthentication() {
 
     const data = await response.json()
 
-    return data.user as InterfaceUser
+    return data.user as Omit<InterfaceUser, 'password'>
   } catch {
     return
   }
