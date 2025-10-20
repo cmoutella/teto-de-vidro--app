@@ -3,9 +3,7 @@ import type { AdScrapedData } from '@/types/scraper'
 
 export type ScraperRequestProps = { url: string }
 
-type ScraperRequest = (_bodyData: ScraperRequestProps) => Promise<AdScrapedData | undefined>
-
-export const scraper: ScraperRequest = async (bodyData) => {
+export const scraper = async (bodyData: ScraperRequestProps) => {
   const baseUrl = process.env.NEXT_PUBLIC_APPLICATION_URL
 
   if (!baseUrl) throw new Error('Application APP url not defined')
