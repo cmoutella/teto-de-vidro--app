@@ -1,3 +1,4 @@
+import { addDays } from 'date-fns'
 import { cookies } from 'next/headers'
 import { NextResponse } from 'next/server'
 
@@ -45,8 +46,10 @@ export async function POST() {
 
     const { data } = response as SuccessResponse<{ token: string }>
 
+    const cookieData = { token: data.token, expireAt: addDays(new Date(), 3).toISOString() }
+
     const reqCookies = cookies()
-    reqCookies.set(appCookies.app, JSON.stringify({ token: data.token }), {
+    reqCookies.set(appCookies.app, JSON.stringify(cookieData), {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: process.env.NODE_ENV === 'production' ? 'strict' : 'lax',
@@ -56,7 +59,7 @@ export async function POST() {
     })
 
     return NextResponse.json(
-      { message: 'Applicação autenticada com sucesso', token: data.token },
+      { message: 'Applicação autenticada com sucesso', cookieData },
       { status: 200 }
     )
   } catch (err) {

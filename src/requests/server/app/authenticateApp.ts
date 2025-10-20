@@ -18,7 +18,7 @@ export const authenticateApp = async () => {
       throw Error('Não foi possivel completar atualizar suas credenciais')
     }
 
-    return { token: auth.token }
+    return auth.cookieData
   } catch (_err) {
     console.error('ERR @ Authenticate App')
     return undefined

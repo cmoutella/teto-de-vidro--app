@@ -45,8 +45,6 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
       body: JSON.stringify(body)
     })
 
-    console.log('update server response', response.status)
-
     if (response.status === 401) {
       throw new Error('Erro de autorização')
     } else if (response.status >= 500) {
