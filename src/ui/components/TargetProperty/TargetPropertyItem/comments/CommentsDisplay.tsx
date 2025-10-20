@@ -81,8 +81,8 @@ export function CommentsDisplay({ targetId }: CommentsDisplayProps) {
         commentLabel={labels[Math.floor(Math.random() * labels.length)]}
         onSuccess={onSuccess}
         onFail={onFail}
-        submit={async (data: TargetComment) =>
-          await addCommentToTarget(targetId as never, data, user?.id as never)
+        submit={async (data: Omit<TargetComment, 'author'>) =>
+          await addCommentToTarget(targetId as never, data)
         }
       />
     )
