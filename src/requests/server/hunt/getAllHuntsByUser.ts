@@ -5,7 +5,7 @@ type GetAllHuntsByUserRequest = (
   _userId: string,
   _page: number,
   _perPage: number,
-  _options?: { token?: string }
+  _options?: { userToken?: string; appToken?: string }
 ) => Promise<PaginatedData<InterfaceHunt> | undefined>
 
 export const getAllHuntsByUser: GetAllHuntsByUserRequest = async (
@@ -19,15 +19,19 @@ export const getAllHuntsByUser: GetAllHuntsByUserRequest = async (
   if (!baseUrl) throw new Error('Application APP url not defined')
 
   try {
-    const res = await fetch(`${baseUrl}/api/hunt/get/by-user`, {
+    const request = fetch(`${baseUrl}/api/hunt/get/by-user`, {
       method: 'POST',
       mode: 'cors',
+      credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
-        ...(options?.token ? { Authorization: `Bearer ${options.token}` } : {})
+        ...(options?.userToken ? { Authorization: `Bearer ${options.userToken}` } : {}),
+        ...(options?.appToken ? { 'x-api-key': options.appToken } : {})
       },
       body: JSON.stringify({ userId, page, perPage })
-    }).then((res) => res.json())
+    })
+
+    const res = await request.then((res) => res.json())
 
     if (res.error) {
       throw Error('Não foi possível encontrar a informação solicitada')
