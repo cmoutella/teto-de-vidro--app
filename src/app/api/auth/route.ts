@@ -57,7 +57,7 @@ export async function POST(req: Request) {
       secure: process.env.NODE_ENV === 'production',
       sameSite: process.env.NODE_ENV === 'production' ? 'strict' : 'lax',
       path: '/',
-      maxAge: 60 * 60 * 24 * 15 // 3 dia,
+      maxAge: 60 * 60 * 24 * 15 // 15 dias,
       // domain: process.env.NODE_ENV !== 'production' ? 'localhost' : 'tetodevidroo.com.br'
     })
 

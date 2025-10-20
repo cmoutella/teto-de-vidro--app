@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 
 import storage from '@/services/storage'
-import type { AuthData } from '@/types/apiResponses'
+import type { UserAuthData } from '@/types/apiResponses'
 import type { SessionUser } from '@/types/user'
 import { isTokenValid } from '@/utils/auth/token'
 
@@ -10,7 +10,7 @@ export interface UserResponse {
 }
 
 export function getUserFn(): SessionUser {
-  const currAuth: AuthData = storage().getToken()
+  const currAuth: UserAuthData = storage().getToken()
   if (!currAuth || !currAuth.user) return undefined
 
   const authIsValid = isTokenValid(currAuth.expireAt)

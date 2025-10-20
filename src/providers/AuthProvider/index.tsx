@@ -8,13 +8,13 @@ import { validateAuthentication } from '@/requests/client/auth/validateAuth'
 import { getUserPermissionsRequest } from '@/requests/client/user/getUserPermissionsRequest'
 import { getUserFn } from '@/services/auth'
 import storage from '@/services/storage'
-import type { AuthData } from '@/types/apiResponses'
+import type { UserAuthData } from '@/types/apiResponses'
 import type { SessionUser } from '@/types/user'
 
 interface SessionContext {
   user?: SessionUser
   isLogged: boolean
-  authenticate: (_token: AuthData) => void
+  authenticate: (_token: UserAuthData) => void
   updatePermissions: () => Promise<void>
   login: (_username: string, _password: string) => void
   logout: () => void

@@ -1,3 +1,5 @@
+import type { AppAuthData } from '@/types/apiResponses'
+
 export const authenticateApp = async () => {
   const baseUrl = process.env.NEXT_PUBLIC_APPLICATION_URL
 
@@ -18,7 +20,7 @@ export const authenticateApp = async () => {
       throw Error('Não foi possivel completar atualizar suas credenciais')
     }
 
-    return auth.cookieData
+    return auth.cookieData as AppAuthData
   } catch (_err) {
     console.error('ERR @ Authenticate App')
     return undefined

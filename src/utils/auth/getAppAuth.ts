@@ -2,10 +2,11 @@ import { cookies } from 'next/headers'
 
 import { appCookies } from '@/config/cookies'
 import { authenticateApp } from '@/requests/server/app/authenticateApp'
+import type { AppAuthData } from '@/types/apiResponses'
 
 import { isTokenValid } from './token'
 
-export async function getAppAuth(): Promise<{ token: string } | undefined> {
+export async function getAppAuth(): Promise<AppAuthData | undefined> {
   const rCookies = await cookies()
 
   const gotCookie = rCookies.get(appCookies.app)

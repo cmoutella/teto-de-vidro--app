@@ -2,7 +2,7 @@ import { cookies } from 'next/headers'
 import { NextResponse } from 'next/server'
 
 import { appCookies } from '@/config/cookies'
-import type { AuthData } from '@/types/apiResponses'
+import type { UserAuthData } from '@/types/apiResponses'
 import { isTokenValid } from '@/utils/auth/token'
 
 export async function GET() {
@@ -14,7 +14,7 @@ export async function GET() {
     return NextResponse.json({}, { status: 404 })
   }
 
-  const authCookie = JSON.parse(authenticatedUser.value) as AuthData
+  const authCookie = JSON.parse(authenticatedUser.value) as UserAuthData
 
   const authIsValid = isTokenValid(authCookie.expireAt)
 
