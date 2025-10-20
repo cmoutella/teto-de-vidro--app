@@ -1,4 +1,3 @@
-import type { SuccessResponse } from '@/types/apiPatterns'
 import type { TargetPropertyInterface } from '@/types/targetProperty'
 
 type RemoveAmenityFromTargetRequest = (
@@ -24,15 +23,9 @@ export const removeAmenityFromTarget: RemoveAmenityFromTargetRequest = async (
           'Content-Type': 'application/json'
         }
       }
-    ).then((res) => res.json())
+    )
 
-    if (res.error) {
-      throw Error('Não foi possível encontrar a informação solicitada')
-    }
-
-    const { data } = res as SuccessResponse<{ success: boolean }>
-
-    return data
+    return { success: res.status === 200 }
   } catch (_err) {
     return undefined
   }
