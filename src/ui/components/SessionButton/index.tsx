@@ -10,7 +10,7 @@ import Button from '../base/Button'
 import { btnBorderRadius, btnSize } from '../base/shared/buttonTheme'
 
 interface SessionButtonProps extends Omit<ButtonProps, 'borderRadius' | 'label' | 'uiType'> {
-  user: Omit<InterfaceUser, 'password'> | null
+  user?: Omit<InterfaceUser, 'password'>
 }
 
 const SessionButton = ({ size = 'medium', fullWidth, user }: SessionButtonProps) => {

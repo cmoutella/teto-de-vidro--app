@@ -9,7 +9,7 @@ const PublicBasePage = ({
   user
 }: {
   children: ReactNode
-  user: Omit<InterfaceUser, 'password'> | null
+  user?: Omit<InterfaceUser, 'password'>
 }) => {
   return (
     <div className="w-full">

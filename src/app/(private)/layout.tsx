@@ -1,13 +1,18 @@
 import type { ReactNode } from 'react'
 
 import PrivateBasePage from '@template/PrivateBasePage'
+import { redirect } from 'next/navigation'
 
 import { isUserAuthenticated } from '@/utils/auth/userAuthenticationAtServer'
 
 async function PrivateLayout({ children }: { children: ReactNode }) {
-  const userLoggedIn = await isUserAuthenticated({})
+  const userAuthData = await isUserAuthenticated()
 
-  return <PrivateBasePage user={userLoggedIn}>{children}</PrivateBasePage>
+  if (!userAuthData) {
+    redirect('/')
+  }
+
+  return <PrivateBasePage user={userAuthData.user}>{children}</PrivateBasePage>
 }
 
 export default PrivateLayout
