@@ -5,37 +5,30 @@ import { cookies } from 'next/headers'
 import { appCookies } from '@/config/cookies'
 import { authenticateApp } from '@/requests/server/app/authenticateApp'
 import { getAllHuntsByUser } from '@/requests/server/hunt/getAllHuntsByUser'
-import type { AppAuthData, UserAuthData } from '@/types/apiResponses'
-import { isTokenValid } from '@/utils/auth/token'
+import type { AppAuthData } from '@/types/apiResponses'
+import { isUserAuthenticated } from '@/utils/auth/userAuthenticationAtServer'
 
 export default async function Home() {
-  const reqCookies = await cookies()
+  const reqCookies = cookies()
 
   let appAuthToken
 
-  const userAuthCookie = reqCookies.get(appCookies.auth)
+  const userAuthData = isUserAuthenticated({ shouldNoCookieRedirect: false })
   const appAuthCookie = reqCookies.get(appCookies.app)
 
   if (!appAuthCookie) {
     appAuthToken = await authenticateApp()
   }
-  if (!userAuthCookie) {
+  if (!userAuthData) {
     return <PublicHomeView />
   }
 
-  const userCookieData: UserAuthData = JSON.parse(userAuthCookie.value)
   const appCookieData: AppAuthData = appAuthCookie ? JSON.parse(appAuthCookie.value) : appAuthToken
 
-  const authValid = isTokenValid(userCookieData.expireAt)
-
-  if (!authValid) {
-    return <PublicHomeView />
-  }
-
-  const response = await getAllHuntsByUser(userCookieData.user.id, 1, 1, {
-    userToken: userCookieData.token,
+  const response = await getAllHuntsByUser(userAuthData.user.id, 1, 1, {
+    userToken: userAuthData.token,
     appToken: appCookieData.token
   })
 
-  return <PrivateHomeView user={userCookieData.user} hunts={response?.list ?? []} />
+  return <PrivateHomeView user={userAuthData.user} hunts={response?.list ?? []} />
 }
