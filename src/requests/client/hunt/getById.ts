@@ -3,7 +3,7 @@ import type { InterfaceHunt } from '@/types/hunt'
 
 type GetHuntByIdRequest = (
   _huntId: string,
-  _options?: { token?: string }
+  _options?: { userToken?: string; appToken?: string }
 ) => Promise<InterfaceHunt | undefined>
 
 export const getHuntById: GetHuntByIdRequest = async (huntId, options) => {
@@ -12,14 +12,14 @@ export const getHuntById: GetHuntByIdRequest = async (huntId, options) => {
   if (!baseUrl) throw new Error('Application APP url not defined')
 
   try {
-    const res = await fetch(`${baseUrl}/api/hunt/get`, {
-      method: 'POST',
+    const res = await fetch(`${baseUrl}/api/hunt/get/${huntId}`, {
+      method: 'GET',
       mode: 'cors',
       headers: {
         'Content-Type': 'application/json',
-        ...(options?.token ? { Authorization: `Bearer ${options.token}` } : {})
-      },
-      body: JSON.stringify({ id: huntId })
+        ...(options?.userToken ? { Authorization: `Bearer ${options.userToken}` } : {}),
+        ...(options?.appToken ? { 'x-api-key': options.appToken } : {})
+      }
     }).then((res) => res.json())
 
     if (res.error) {

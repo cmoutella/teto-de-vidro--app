@@ -1,22 +1,35 @@
 import HuntView from '@pages/hunt/oneHunt'
-import type { RequestCookie } from 'next/dist/compiled/@edge-runtime/cookies'
 import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
 
 import { appCookies } from '@/config/cookies'
 import { getHuntById } from '@/requests/client/hunt/getById'
-import { cookie } from '@/services/cookies'
-import type { UserAuthData } from '@/types/apiResponses'
+import { authenticateApp } from '@/requests/server/app/authenticateApp'
+import type { AppAuthData } from '@/types/apiResponses'
+import { isUserAuthenticated } from '@/utils/auth/userAuthenticationAtServer'
 
 const HuntPage = async ({ params }: { params: { id: string } }) => {
   const reqCookies = await cookies()
 
-  const cookieService = cookie()
-  const authCookie = cookieService.server.get(appCookies.auth, reqCookies)
+  const userAuthData = isUserAuthenticated()
 
-  const data: UserAuthData = JSON.parse((authCookie as RequestCookie).value)
+  if (!userAuthData) {
+    redirect('/')
+  }
 
-  const hunt = await getHuntById(params.id, { token: data.token })
+  let appAuthToken
+  const appAuthCookie = reqCookies.get(appCookies.app)
+
+  if (!appAuthCookie) {
+    appAuthToken = await authenticateApp()
+  }
+
+  const appCookieData: AppAuthData = appAuthCookie ? JSON.parse(appAuthCookie.value) : appAuthToken
+
+  const hunt = await getHuntById(params.id, {
+    userToken: userAuthData.token,
+    appToken: appCookieData.token
+  })
 
   if (!hunt) {
     redirect('/')

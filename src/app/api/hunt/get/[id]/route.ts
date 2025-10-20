@@ -3,29 +3,21 @@ import type { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
 
 import { appCookies } from '@/config/cookies'
-import type { PaginatedData, SuccessResponse } from '@/types/apiPatterns'
+import type { SuccessResponse } from '@/types/apiPatterns'
 import type { UserAuthData } from '@/types/apiResponses'
 import type { InterfaceHunt } from '@/types/hunt'
 import { getAppAuth } from '@/utils/auth/getAppAuth'
 import { isTokenValid } from '@/utils/auth/token'
 
 /**
- * GET HUNT BY USER
- * @returns hunt[]
+ * GET HUNT BY ID
+ * @returns hunt
  */
 
-export async function POST(req: NextRequest) {
+export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
   const baseUrl = process.env.BACKEND_API
 
   if (!baseUrl) throw new Error('Application API url not defined')
-
-  const body = await req.json()
-  if (!body.userId) {
-    return NextResponse.json(
-      { error: 'Dados insuficiêntes para buscar pelas hunts' },
-      { status: 400 }
-    )
-  }
 
   let appAuth = req.headers.get('x-api-key')
   let userAuth = req.headers.get('authorization')
@@ -68,10 +60,9 @@ export async function POST(req: NextRequest) {
       throw new Error('Erro de autorização')
     }
 
-    const res = await fetch(`${baseUrl}/hunt/search/user?page=${body.page}&limit=${body.perPage}`, {
+    const res = await fetch(`${baseUrl}/hunt/${params.id}`, {
       method: 'GET',
       mode: 'cors',
-      credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
         'x-api-key': appAuth,
@@ -90,10 +81,10 @@ export async function POST(req: NextRequest) {
     const response = await res.json()
 
     if (response.error) {
-      throw new Error('Não foi possivel buscar as hunts do usuário')
+      throw new Error('Não foi possivel criar agora')
     }
 
-    const { data } = response as SuccessResponse<PaginatedData<InterfaceHunt>>
+    const { data } = response as SuccessResponse<InterfaceHunt>
 
     return NextResponse.json(
       { message: 'Serviço chamado com sucesso', data: data },
