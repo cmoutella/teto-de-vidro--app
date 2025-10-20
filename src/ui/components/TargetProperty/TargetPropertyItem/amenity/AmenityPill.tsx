@@ -5,7 +5,7 @@ import cx from 'classnames'
 
 import { useHuntContext } from '@/providers/HuntProvider'
 import { useUIContext } from '@/providers/UIProvider'
-import { removeAmenityFromTarget } from '@/requests/client/targetProperty/removeAmenity'
+import { removeAmenityFromTarget } from '@/requests/client/targetProperty/amenities/removeAmenity'
 import type { TargetAmenity, TargetPropertyInterface } from '@/types/targetProperty'
 import DeleteConfirmation from '@/ui/forms/DeleteConfirmation'
 
@@ -41,18 +41,19 @@ export function AmenityPill({ amenity, targetId }: AmenityPillProps) {
     setShowIcon(false)
 
     function handleFail() {
-      toast.error('Algo deu errado')
+      toast.error('Não foi possível remover o item')
       modal.close()
     }
 
     function handleSuccess() {
       modal.close()
-
       fetchProperties()
     }
 
     async function confirm() {
-      await removeAmenityFromTarget(targetId as never, amenity.identifier)
+      const confirmed = await removeAmenityFromTarget(targetId as never, amenity.identifier)
+
+      return !!confirmed?.success
     }
 
     modal.open(

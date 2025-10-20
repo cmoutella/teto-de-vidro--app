@@ -2,29 +2,36 @@
 
 import type { ChangeEvent } from 'react'
 
-import { useSessionContext } from '@providers/AuthProvider'
 import SubmitButton from '@ui/base/form/buttons/SubmitButton'
 import Input from '@ui/base/form/inputs/Input'
 import type { FormSizes, FormTheme } from '@ui/base/shared/formTheme'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
 
-import { addAmenityToTarget } from '@/requests/client/targetProperty/addAmenity'
-import type { AmenityData } from '@/types/hunt'
+import { addAmenityToTarget } from '@/requests/client/targetProperty/amenities/addAmenity'
+import type { AmenityData, AmenityOf } from '@/types/hunt'
 import type { TargetPropertyInterface } from '@/types/targetProperty'
+import type { SessionUser } from '@/types/user'
 import type { RawRadioOption } from '@/ui/components/base/_raw/RadioGroup'
 import { RadioGroup } from '@/ui/components/base/form/RadioGroup'
 
 interface AddAmenityToTargetProps {
-  onSuccess: (_h: Partial<TargetPropertyInterface>) => void
+  onSuccess: () => void
   onFail: () => void
   targetId: Pick<TargetPropertyInterface, 'id'>
+  user: SessionUser
 }
 
 const formThemeSize: FormSizes = 'lg'
 const themePallete: FormTheme = 'light'
 
-const AddAmenityToTargetForm = ({ onSuccess, onFail, targetId }: AddAmenityToTargetProps) => {
+const amenityRelationOptions: { id: string; label: string; value: AmenityOf | undefined }[] = [
+  { id: 'property', label: 'Imóvel', value: 'property' },
+  { id: 'lot', label: 'Condomínio', value: 'lot' },
+  { id: 'outro', label: 'Outro tema', value: undefined }
+]
+
+const AddAmenityToTargetForm = ({ onSuccess, onFail, targetId, user }: AddAmenityToTargetProps) => {
   const validationSchema = Yup.object({
     label: Yup.string().required('Título é obrigatório')
   })
@@ -33,7 +40,7 @@ const AddAmenityToTargetForm = ({ onSuccess, onFail, targetId }: AddAmenityToTar
     initialValues: {
       identifier: '',
       label: '',
-      amenityOf: 'property',
+      amenityOf: amenityRelationOptions[0].value,
       newAmenityTopic: ''
     },
     validationSchema,
@@ -41,8 +48,6 @@ const AddAmenityToTargetForm = ({ onSuccess, onFail, targetId }: AddAmenityToTar
     validateOnChange: false,
     onSubmit: handleSubmit
   })
-
-  const { user } = useSessionContext()
 
   async function handleSubmit(values: AmenityData & { newAmenityTopic: string }) {
     if (!formik.isValid || !user) return
@@ -54,7 +59,7 @@ const AddAmenityToTargetForm = ({ onSuccess, onFail, targetId }: AddAmenityToTar
       return
     }
 
-    onSuccess(res)
+    onSuccess()
   }
 
   const handleBlur = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -84,10 +89,15 @@ const AddAmenityToTargetForm = ({ onSuccess, onFail, targetId }: AddAmenityToTar
             label="Está relacionado a:"
             name="amenityOf"
             onChange={onRelativeToChange}
+            current={
+              amenityRelationOptions.find(
+                (item) => item.value === formik.values.amenityOf
+              ) as RawRadioOption
+            }
             options={[
               { id: 'property', label: 'Imóvel', value: 'property' },
               { id: 'lot', label: 'Condomínio', value: 'lot' },
-              { id: 'outro', label: 'Outro tema', value: undefined }
+              { id: 'outro', label: 'Outro tema', value: 'initial' }
             ]}
           />
         </span>

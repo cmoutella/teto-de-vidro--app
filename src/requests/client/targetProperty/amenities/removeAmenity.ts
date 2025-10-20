@@ -15,14 +15,16 @@ export const removeAmenityFromTarget: RemoveAmenityFromTargetRequest = async (
   if (!baseUrl) throw new Error('Application APP url not defined')
 
   try {
-    const res = await fetch(`${baseUrl}/api/target-property/amenity/remove`, {
-      method: 'POST',
-      mode: 'cors',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ targetId, amenityId })
-    }).then((res) => res.json())
+    const res = await fetch(
+      `${baseUrl}/api/target-property/${targetId}/amenity/remove?amenity=${amenityId}`,
+      {
+        method: 'DELETE',
+        mode: 'cors',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }
+    ).then((res) => res.json())
 
     if (res.error) {
       throw Error('Não foi possível encontrar a informação solicitada')

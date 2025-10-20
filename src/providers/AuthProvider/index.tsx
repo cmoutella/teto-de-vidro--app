@@ -1,8 +1,6 @@
 'use client'
 import { createContext, useContext, useEffect, useState } from 'react'
 
-import { useRouter } from 'next/navigation'
-
 import { authLogin } from '@/requests/client/auth/login'
 import { authLogout } from '@/requests/client/auth/logout'
 import { validateAuthentication } from '@/requests/client/auth/validateAuth'
@@ -47,8 +45,6 @@ export const SessionProvider = ({
 }) => {
   const [user, setUser] = useState<SessionUser>(currUser)
   const [tryData, setTryData] = useState<boolean>(true)
-
-  const router = useRouter()
 
   async function init() {
     await authenticate()

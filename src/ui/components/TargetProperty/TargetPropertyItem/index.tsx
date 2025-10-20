@@ -31,9 +31,7 @@ export default function TargetPropertyItem({ target, hunt }: TargetPropertyItemP
   const [isOpen, setIsOpen] = useState<boolean>(false)
 
   const { modal } = useUIContext()
-  const { fetchProperties } = useHuntContext()
-
-  const { removeTargetProperty } = useHuntContext()
+  const { fetchProperties, removeTargetProperty } = useHuntContext()
 
   function openEditModal() {
     function handleFail(feedback: string) {
@@ -60,11 +58,12 @@ export default function TargetPropertyItem({ target, hunt }: TargetPropertyItemP
 
   function openDeleteConfirmation(targetId: string) {
     function handleFail() {
-      toast.error('Algo deu errado')
+      toast.error('Não foi possível remover o alvo')
       modal.close()
     }
 
     function handleSuccess() {
+      toast.success('Alvo removido com sucesso!')
       modal.close()
     }
 

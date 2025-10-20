@@ -30,7 +30,7 @@ interface HuntContext {
   page: PageConfig
   properties: TargetPropertyInterface[]
   fetchProperties: () => void
-  removeTargetProperty: (_t: string) => void
+  removeTargetProperty: (_t: string) => Promise<boolean>
   permissions: HuntPermissions
   targetsLeft: number
 }
@@ -52,7 +52,9 @@ const DEFAULT_VALUES: HuntContext = {
   },
   properties: [],
   fetchProperties: () => {},
-  removeTargetProperty: (_t: string) => {},
+  removeTargetProperty: async (_t: string) => {
+    return false
+  },
   permissions: {
     maxTargets: 0
   },
@@ -145,11 +147,10 @@ export const HuntProvider = ({
     const res = await deleteTargetProperty(id)
 
     if (res) {
-      toast.success('Alvo removido com sucesso!')
       await getProperties()
-    } else {
-      toast.error('Não foi possível remover o alvo')
     }
+
+    return !!res
   }
 
   function handleNextPage() {

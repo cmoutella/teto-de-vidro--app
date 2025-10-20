@@ -19,7 +19,6 @@ export const addAmenityToTarget: RemoveAmenityFromTargetRequest = async (
   if (!baseUrl) throw new Error('Application APP url not defined')
 
   const payload = {
-    targetId: targetId,
     amenity: {
       ...amenityData,
       reportedBy: userId ? 'user' : 'ad',
@@ -28,7 +27,7 @@ export const addAmenityToTarget: RemoveAmenityFromTargetRequest = async (
   }
 
   try {
-    const res = await fetch(`${baseUrl}/api/target-property/amenity/add`, {
+    const res = await fetch(`${baseUrl}/api/target-property/${targetId}/amenity/add`, {
       method: 'POST',
       mode: 'cors',
       headers: {
