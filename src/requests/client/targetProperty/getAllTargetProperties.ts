@@ -10,21 +10,23 @@ type GetAllTargetPropertiesFromHuntRequest = (
 export const getAllTargetPropertiesfromHunt: GetAllTargetPropertiesFromHuntRequest = async (
   huntId,
   page,
-  perPage
+  perPage = 6
 ) => {
   const baseUrl = process.env.NEXT_PUBLIC_APPLICATION_URL
 
   if (!baseUrl) throw new Error('Application APP url not defined')
 
   try {
-    const res = await fetch(`${baseUrl}/api/target-property/get/by-hunt`, {
-      method: 'POST',
-      mode: 'cors',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ huntId, page, perPage })
-    }).then((res) => res.json())
+    const res = await fetch(
+      `${baseUrl}/api/target-property/get/by-hunt/?hunt=${huntId}&page=${page}&limit=${perPage}`,
+      {
+        method: 'GET',
+        mode: 'cors',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }
+    ).then((res) => res.json())
 
     if (res.error) {
       throw Error('Não foi possível encontrar a informação solicitada')
