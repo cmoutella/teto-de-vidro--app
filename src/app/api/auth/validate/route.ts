@@ -11,7 +11,7 @@ export async function GET() {
   const authenticatedUser = reqCookies.get(appCookies.auth)
 
   if (!authenticatedUser) {
-    return NextResponse.json({}, { status: 404 })
+    return NextResponse.json({ user: undefined }, { status: 200 })
   }
 
   const authCookie = JSON.parse(authenticatedUser.value) as UserAuthData
@@ -19,7 +19,7 @@ export async function GET() {
   const authIsValid = isTokenValid(authCookie.expireAt)
 
   if (!authIsValid) {
-    return NextResponse.json({}, { status: 404 })
+    return NextResponse.json({ user: undefined }, { status: 200 })
   }
 
   return NextResponse.json({ user: authCookie.user }, { status: 200 })

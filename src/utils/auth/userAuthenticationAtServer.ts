@@ -27,12 +27,16 @@ export function isUserAuthenticated(props?: UserAuthenticatedOptions) {
   }
 
   if (!authCookie) {
-    return null
+    return
   }
 
   const data: UserAuthData = JSON.parse(authCookie.value)
 
   const authValid = isTokenValid(data.expireAt)
 
-  return authValid ? data : null
+  if (!authValid) {
+    return
+  }
+
+  return data
 }

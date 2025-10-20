@@ -4,7 +4,7 @@ import { redirect } from 'next/navigation'
 import { isUserAuthenticated } from '@/utils/auth/userAuthenticationAtServer'
 
 const LoginPage = async () => {
-  const userAuthData = await isUserAuthenticated()
+  const userAuthData = await isUserAuthenticated({ shouldNoCookieRedirect: false })
 
   if (userAuthData) {
     redirect('/')

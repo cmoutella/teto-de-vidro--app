@@ -1,9 +1,10 @@
 'use client'
+
 import cx from 'classnames'
 import { useRouter } from 'next/navigation'
 
+import { useSessionContext } from '@/providers/AuthProvider'
 import type { InterfaceUser } from '@/types/user'
-import { logout } from '@/utils/auth/logout'
 
 import type { ButtonProps } from '../base/Button'
 import Button from '../base/Button'
@@ -16,9 +17,10 @@ interface SessionButtonProps extends Omit<ButtonProps, 'borderRadius' | 'label' 
 const SessionButton = ({ size = 'medium', fullWidth, user }: SessionButtonProps) => {
   const router = useRouter()
 
+  const { logout } = useSessionContext()
+
   function handleLogout() {
     logout()
-    window.location.reload()
   }
 
   const handleClick = () => {
