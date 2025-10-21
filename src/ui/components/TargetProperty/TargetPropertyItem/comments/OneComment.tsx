@@ -45,7 +45,7 @@ export function OneComment({ comment, isMyComment, updateCommentList }: OneComme
         currentComment={comment}
         onSuccess={onSuccess}
         onFail={onFail}
-        submit={async (data: TargetComment) =>
+        submit={async (data: Omit<TargetComment, 'author'>) =>
           await editComment(comment.id, { ...comment, ...data })
         }
       />
@@ -54,10 +54,12 @@ export function OneComment({ comment, isMyComment, updateCommentList }: OneComme
 
   function openDeleteConfirmation() {
     function handleFail() {
+      toast.error('Não foi possível apager seu comentário')
       modal.close()
     }
 
     function handleSuccess() {
+      toast.success('Comentário apagado')
       modal.close()
     }
 
@@ -65,17 +67,18 @@ export function OneComment({ comment, isMyComment, updateCommentList }: OneComme
       const res = await deleteComment(comment.id)
 
       if (res) {
-        toast.success('Comentário apagado')
         await updateCommentList()
-      } else {
-        toast.error('Algo deu errado')
       }
+
+      return res
     }
 
     modal.open(
       'small',
       <DeleteConfirmation
-        confirm={async () => await removeComment()}
+        confirm={async () => {
+          return await removeComment()
+        }}
         close={handleSuccess}
         onFail={handleFail}
       />

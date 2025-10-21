@@ -19,7 +19,7 @@ export const addCommentToTarget: AddCommentToTargetRequest = async (targetId, co
   }
 
   try {
-    const res = await fetch(`${baseUrl}/api/target-property/${targetId}/comment/add`, {
+    const res = await fetch(`${baseUrl}/api/target-property/${targetId}/comments/add`, {
       method: 'POST',
       mode: 'cors',
       headers: {

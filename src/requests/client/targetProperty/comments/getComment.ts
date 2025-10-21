@@ -17,9 +17,9 @@ export const getTargetComments: GetTargetCommentsRequest = async (
 
   if (!baseUrl) throw new Error('Application APP url not defined')
 
-  const fetchUrl = new URL(`${baseUrl}/api/target-property/${targetId}/comment/get`)
-  fetchUrl.searchParams.set('page', String(page))
-  fetchUrl.searchParams.set('limit', String(limit))
+  const fetchUrl = new URL(
+    `${baseUrl}/api/target-property/${targetId}/comments?page=${page}&limit=${limit}`
+  )
 
   try {
     const res = await fetch(fetchUrl, {

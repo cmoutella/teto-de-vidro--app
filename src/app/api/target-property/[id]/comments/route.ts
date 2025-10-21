@@ -8,9 +8,13 @@ import type { TargetPropertyInterface } from '@/types/targetProperty'
 import { getAppAuth } from '@/utils/auth/getAppAuth'
 import { isUserAuthenticated } from '@/utils/auth/userAuthenticationAtServer'
 
-export async function DELETE(req: NextRequest, { params }: { params: { id: string } }) {
+export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
   const baseUrl = process.env.BACKEND_API
   if (!baseUrl) throw new Error('Application API url not defined')
+
+  const searchParams = req.nextUrl.searchParams
+  const page = searchParams.get('page')
+  const limit = searchParams.get('limit')
 
   const userAuth = isUserAuthenticated()
   const reqCookies = cookies()
@@ -35,15 +39,18 @@ export async function DELETE(req: NextRequest, { params }: { params: { id: strin
       })
     }
 
-    const res = await fetch(`${baseUrl}/comment/${params.id}`, {
-      method: 'DELETE',
-      mode: 'cors',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': appAuth.token,
-        Authorization: `Bearer ${userAuth.token}`
+    const res = await fetch(
+      `${baseUrl}/target-property/${params.id}/comments?page=${page}&limit=${limit}`,
+      {
+        method: 'GET',
+        mode: 'cors',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-api-key': appAuth.token,
+          Authorization: `Bearer ${userAuth.token}`
+        }
       }
-    })
+    )
 
     if (res.status === 401) {
       throw new Error('Erro de autorização')

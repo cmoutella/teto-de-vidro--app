@@ -2,7 +2,7 @@ import type { TargetPropertyInterface } from '@/types/targetProperty'
 
 export type EditHuntRequestProps = Omit<TargetPropertyInterface, 'id' | 'targets'>
 
-type DeleteCommentRequest = (_id: string) => Promise<boolean | undefined>
+type DeleteCommentRequest = (_id: string) => Promise<boolean>
 
 export const deleteComment: DeleteCommentRequest = async (id) => {
   const baseUrl = process.env.NEXT_PUBLIC_APPLICATION_URL
@@ -18,12 +18,8 @@ export const deleteComment: DeleteCommentRequest = async (id) => {
       }
     })
 
-    if (!res || res.error) {
-      throw Error('Não foi possível apagar agora, tente novamente mais tarde')
-    }
-
     return res.status === 200
   } catch (_err) {
-    return undefined
+    return false
   }
 }
