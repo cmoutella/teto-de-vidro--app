@@ -13,7 +13,7 @@ import type { InterfaceHunt } from '@/types/hunt'
 export async function POST(req: NextRequest) {
   const body = await req.json()
 
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_API_URL
+  const baseUrl = process.env.BACKEND_API
 
   if (!baseUrl) throw new Error('Application API url not defined')
 

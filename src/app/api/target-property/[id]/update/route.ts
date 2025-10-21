@@ -9,7 +9,7 @@ import { getAppAuth } from '@/utils/auth/getAppAuth'
 import { isUserAuthenticated } from '@/utils/auth/userAuthenticationAtServer'
 
 export async function PUT(req: NextRequest, { params }: { params: { id: string } }) {
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_API_URL
+  const baseUrl = process.env.BACKEND_API
   if (!baseUrl) throw new Error('Application API url not defined')
 
   const body = await req.json()

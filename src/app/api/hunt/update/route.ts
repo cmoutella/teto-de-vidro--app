@@ -20,7 +20,7 @@ export async function PUT(req: NextRequest) {
     )
   }
 
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_API_URL
+  const baseUrl = process.env.BACKEND_API
 
   if (!baseUrl) throw new Error('Application API url not defined')
 
