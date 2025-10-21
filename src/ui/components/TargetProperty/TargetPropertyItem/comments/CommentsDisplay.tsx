@@ -5,8 +5,8 @@ import cx from 'classnames'
 
 import { useSessionContext } from '@/providers/AuthProvider'
 import { useUIContext } from '@/providers/UIProvider'
-import { addCommentToTarget } from '@/requests/targetProperty/comments/addComment'
-import { getTargetComments } from '@/requests/targetProperty/comments/getComment'
+import { addCommentToTarget } from '@/requests/client/targetProperty/comments/addComment'
+import { getTargetComments } from '@/requests/client/targetProperty/comments/getComment'
 import type { InterfaceComment, TargetComment } from '@/types/comment'
 import Button from '@/ui/components/base/Button'
 import Icon from '@/ui/components/base/Icon'
@@ -81,8 +81,8 @@ export function CommentsDisplay({ targetId }: CommentsDisplayProps) {
         commentLabel={labels[Math.floor(Math.random() * labels.length)]}
         onSuccess={onSuccess}
         onFail={onFail}
-        submit={async (data: TargetComment) =>
-          await addCommentToTarget(targetId as never, data, user?.id as never)
+        submit={async (data: Omit<TargetComment, 'author'>) =>
+          await addCommentToTarget(targetId as never, data)
         }
       />
     )

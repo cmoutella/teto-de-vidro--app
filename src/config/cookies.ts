@@ -1,7 +1,8 @@
 import type { OptionsType } from 'cookies-next/lib/types'
 
-export const appCokies = {
-  auth: '@tetoDeVidro:token'
+export const appCookies = {
+  auth: '@TdV:session',
+  app: '@TdV:app'
 }
 
 export const authCookieOptions: OptionsType = {

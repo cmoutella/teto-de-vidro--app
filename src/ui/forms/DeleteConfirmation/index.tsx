@@ -5,13 +5,17 @@ import Button from '@/ui/components/base/Button'
 interface ScheduledVisitFormProps {
   close: () => void
   onFail: () => void
-  confirm: () => Promise<void>
+  confirm: () => Promise<boolean>
 }
 
 const DeleteConfirmation = ({ close, onFail, confirm }: ScheduledVisitFormProps) => {
   const submit = async () => {
     try {
-      await confirm()
+      const deleteItemConfirmed = await confirm()
+
+      if (!deleteItemConfirmed) {
+        throw new Error('Não foi possível apagar agora')
+      }
 
       close()
     } catch (_err) {

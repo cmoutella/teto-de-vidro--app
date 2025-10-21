@@ -19,6 +19,7 @@ interface InputProps extends InputHeadlessProps {
   children: ReactNode
   siblingHeight?: boolean
   actionButton?: ReactNode
+  labelStyle?: string
 }
 
 const FieldWrapper = ({
@@ -28,14 +29,15 @@ const FieldWrapper = ({
   children,
   errorMessage,
   siblingHeight = false,
-  actionButton
+  actionButton,
+  labelStyle
 }: InputProps) => {
   return (
     <FieldHeadless className="flex flex-col gap-3 w-full h-full justify-between">
       {(label || description) && (
         <span>
           {label && (
-            <LabelHeadless className={cx(formTheme[theme].label, 'uppercase max-w-36')}>
+            <LabelHeadless className={cx(formTheme[theme].label, labelStyle, 'uppercase max-w-36')}>
               {label}
             </LabelHeadless>
           )}

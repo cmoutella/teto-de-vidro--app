@@ -33,6 +33,15 @@ const config: Config = {
             '900': '#303F40',
             '1000': '#1B2626'
           }
+        },
+        highlight: {
+          brand: '#94F6DD',
+          blue: '#94ECF6',
+          pink: '#EE94F6',
+          green: '#A6F694',
+          yellow: '#F4F694',
+          purple: '#94B0F6',
+          orange: '#F6B194'
         }
       },
       backgroundImage: {

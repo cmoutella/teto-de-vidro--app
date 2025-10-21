@@ -1,9 +1,8 @@
 import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
 
-import { appCokies } from '@/config/cookies'
-import { cookie } from '@/services/cookies'
-import type { AuthData } from '@/types/apiResponses'
+import { appCookies } from '@/config/cookies'
+import type { UserAuthData } from '@/types/apiResponses'
 
 import { isTokenValid } from './token'
 
@@ -18,26 +17,26 @@ interface UserAuthenticatedOptions {
   noCookieRedirect?: string
 }
 
-export async function isUserAuthenticated({
-  shouldNoCookieRedirect = true,
-  noCookieRedirect = '/'
-}: UserAuthenticatedOptions) {
-  const reqCookies = await cookies()
+export function isUserAuthenticated(props?: UserAuthenticatedOptions) {
+  const reqCookies = cookies()
 
-  const cookieService = cookie()
-  const authCookie = cookieService.server.get(appCokies.auth, reqCookies)
+  const authCookie = reqCookies.get(appCookies.auth)
 
-  if (!authCookie && shouldNoCookieRedirect) {
-    redirect(noCookieRedirect)
+  if (!authCookie && (props?.shouldNoCookieRedirect ?? true)) {
+    redirect(props?.noCookieRedirect ?? '/')
   }
 
   if (!authCookie) {
-    return null
+    return
   }
 
-  const data: AuthData = JSON.parse(authCookie.value)
+  const data: UserAuthData = JSON.parse(authCookie.value)
 
   const authValid = isTokenValid(data.expireAt)
 
-  return authValid ? data.user : null
+  if (!authValid) {
+    return
+  }
+
+  return data
 }

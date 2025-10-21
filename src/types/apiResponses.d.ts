@@ -6,8 +6,13 @@ export interface UserAuthResponse {
   user: Omit<InterfaceUser, 'password'>
 }
 
-export interface AuthData {
+export interface UserAuthData {
   token: string
   expireAt: string
   user: Omit<InterfaceUser, 'password' | 'permissions'>
+}
+
+export interface AppAuthData {
+  token: string
+  expireAt: string
 }

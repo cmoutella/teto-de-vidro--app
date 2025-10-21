@@ -1,15 +1,15 @@
 import type { ReactNode } from 'react'
 
-import PrivateNavbar from '@ui/Navbar/PrivateNavbar'
-
 import type { InterfaceUser } from '@/types/user'
+
+import PrivateNavbar from '../Navbar/PrivateNavbar'
 
 const PrivateBasePage = ({
   children,
   user
 }: {
   children: ReactNode
-  user: Omit<InterfaceUser, 'password'> | null
+  user?: Omit<InterfaceUser, 'password'>
 }) => {
   return (
     <div className="w-full">

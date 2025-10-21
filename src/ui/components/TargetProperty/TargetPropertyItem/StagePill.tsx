@@ -5,7 +5,7 @@ import { toast } from 'react-hot-toast'
 import cx from 'classnames'
 
 import { useUIContext } from '@/providers/UIProvider'
-import { editTargetProperty } from '@/requests/targetProperty/edit'
+import { updateTargetProperty } from '@/requests/client/targetProperty/update'
 import type { TargetComment } from '@/types/comment'
 import type { PropertyHuntingStage, TargetPropertyInterface } from '@/types/targetProperty'
 import ScheduledVisitForm from '@/ui/forms/TargetProperty/ScheduledVisit'
@@ -142,7 +142,7 @@ export function StagePill({ stage, targetId }: StagePillProps) {
     comment?: TargetComment
   ) {
     try {
-      const res = await editTargetProperty(
+      const res = await updateTargetProperty(
         targetId,
         { huntingStage: newStage, ...otherData },
         comment

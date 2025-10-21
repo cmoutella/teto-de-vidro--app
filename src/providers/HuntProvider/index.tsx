@@ -2,10 +2,10 @@
 import { createContext, useContext, useEffect, useMemo, useState } from 'react'
 import { toast } from 'react-hot-toast'
 
-import { getHuntById } from '@/requests/hunt/getById'
-import { deleteTargetProperty } from '@/requests/targetProperty/delete'
-import { getAllTargetPropertiesfromHunt } from '@/requests/targetProperty/getAllTargetProperties'
-import { getUserPermissionsRequest } from '@/requests/user/getUserPermissionsRequest'
+import { getHuntById } from '@/requests/client/hunt/getById'
+import { deleteTargetProperty } from '@/requests/client/targetProperty/delete'
+import { getAllTargetPropertiesfromHunt } from '@/requests/client/targetProperty/getAllTargetProperties'
+import { getUserPermissionsRequest } from '@/requests/client/user/getUserPermissionsRequest'
 import type { HuntPermissions, InterfaceHunt } from '@/types/hunt'
 import type { TargetPropertyInterface } from '@/types/targetProperty'
 import { DEFAULT_HUNT_LIST_PER_PAGE } from '@/ui/pages/hunt/consts/perPage'
@@ -30,7 +30,7 @@ interface HuntContext {
   page: PageConfig
   properties: TargetPropertyInterface[]
   fetchProperties: () => void
-  removeTargetProperty: (_t: string) => void
+  removeTargetProperty: (_t: string) => Promise<boolean>
   permissions: HuntPermissions
   targetsLeft: number
 }
@@ -52,7 +52,9 @@ const DEFAULT_VALUES: HuntContext = {
   },
   properties: [],
   fetchProperties: () => {},
-  removeTargetProperty: (_t: string) => {},
+  removeTargetProperty: async (_t: string) => {
+    return false
+  },
   permissions: {
     maxTargets: 0
   },
@@ -145,11 +147,10 @@ export const HuntProvider = ({
     const res = await deleteTargetProperty(id)
 
     if (res) {
-      toast.success('Alvo removido com sucesso!')
       await getProperties()
-    } else {
-      toast.error('Não foi possível remover o alvo')
     }
+
+    return !!res
   }
 
   function handleNextPage() {

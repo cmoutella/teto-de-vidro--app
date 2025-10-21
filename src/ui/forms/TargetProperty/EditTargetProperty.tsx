@@ -8,8 +8,8 @@ import { useFormik } from 'formik'
 import * as Yup from 'yup'
 
 import { useUIContext } from '@/providers/UIProvider'
-import type { CreateTargetPropertyRequestProps } from '@/requests/targetProperty/create'
-import { editTargetProperty } from '@/requests/targetProperty/edit'
+import type { CreateTargetPropertyRequestProps } from '@/requests/client/targetProperty/create'
+import { updateTargetProperty } from '@/requests/client/targetProperty/update'
 import type { AddressKeys } from '@/services/cep'
 import { CEPService } from '@/services/cep'
 import type { InterfaceHunt } from '@/types/hunt'
@@ -111,7 +111,7 @@ const EditTargetPropertyForm = ({
       ...values
     }
 
-    const res = await editTargetProperty(currentData.id, data)
+    const res = await updateTargetProperty(currentData.id, data)
 
     if (res && res.code === 'ALREADY_EXISTS') {
       onFail('Já tem um imóvel com esse endereço')
@@ -132,7 +132,7 @@ const EditTargetPropertyForm = ({
       return
     }
 
-    onSuccess(res.data.id)
+    onSuccess(res.data.id as string)
   }
 
   async function completeFieldsByCEP(e: React.FocusEvent<HTMLInputElement>) {

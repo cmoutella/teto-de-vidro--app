@@ -1,7 +1,7 @@
 import type { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
 
-import { appCokies } from '@/config/cookies'
+import { appCookies } from '@/config/cookies'
 import type { SuccessResponse } from '@/types/apiPatterns'
 import type { InterfaceHunt } from '@/types/hunt'
 
@@ -13,11 +13,11 @@ import type { InterfaceHunt } from '@/types/hunt'
 export async function POST(req: NextRequest) {
   const body = await req.json()
 
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_API_URL
+  const baseUrl = process.env.BACKEND_API
 
   if (!baseUrl) throw new Error('Application API url not defined')
 
-  const authCookie = req.cookies.get(appCokies.auth)?.value
+  const authCookie = req.cookies.get(appCookies.auth)?.value
   const tokenFromCookie = authCookie ? JSON.parse(authCookie).token : undefined
 
   const authorization =

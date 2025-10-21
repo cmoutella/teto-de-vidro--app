@@ -6,14 +6,14 @@ import cx from 'classnames'
 import { differenceInMinutes } from 'date-fns/differenceInMinutes'
 
 import { useUIContext } from '@/providers/UIProvider'
-import { deleteComment } from '@/requests/comments/delete'
-import { editComment } from '@/requests/comments/edit'
+import { deleteComment } from '@/requests/client/comments/delete'
+import { editComment } from '@/requests/client/comments/edit'
 import type { InterfaceComment, TargetComment } from '@/types/comment'
 import Button from '@/ui/components/base/Button'
 import Icon from '@/ui/components/base/Icon'
 import DeleteConfirmation from '@/ui/forms/DeleteConfirmation'
 import TargetCommentForm from '@/ui/forms/TargetProperty/TargetCommentForm'
-import { lastUpdateMessage } from '@/utils/string/lastUpdateMessage'
+import { lastUpdateMessage } from '@/utils/string/formatLastUpdateMessage'
 
 interface OneCommentProps {
   comment: InterfaceComment
@@ -45,7 +45,7 @@ export function OneComment({ comment, isMyComment, updateCommentList }: OneComme
         currentComment={comment}
         onSuccess={onSuccess}
         onFail={onFail}
-        submit={async (data: TargetComment) =>
+        submit={async (data: Omit<TargetComment, 'author'>) =>
           await editComment(comment.id, { ...comment, ...data })
         }
       />
@@ -54,10 +54,12 @@ export function OneComment({ comment, isMyComment, updateCommentList }: OneComme
 
   function openDeleteConfirmation() {
     function handleFail() {
+      toast.error('Não foi possível apager seu comentário')
       modal.close()
     }
 
     function handleSuccess() {
+      toast.success('Comentário apagado')
       modal.close()
     }
 
@@ -65,17 +67,18 @@ export function OneComment({ comment, isMyComment, updateCommentList }: OneComme
       const res = await deleteComment(comment.id)
 
       if (res) {
-        toast.success('Comentário apagado')
         await updateCommentList()
-      } else {
-        toast.error('Algo deu errado')
       }
+
+      return res
     }
 
     modal.open(
       'small',
       <DeleteConfirmation
-        confirm={async () => await removeComment()}
+        confirm={async () => {
+          return await removeComment()
+        }}
         close={handleSuccess}
         onFail={handleFail}
       />
