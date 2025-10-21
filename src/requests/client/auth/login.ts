@@ -12,9 +12,30 @@ export const authLogin: LoginRequest = async (email, password) => {
   if (!baseUrl) throw new Error('Application APP url not defined')
 
   const credentials = { email: email, password: password }
+  const originUrl = window.location.search
+
+  const search: Record<string, string> = {}
+
+  if (originUrl) {
+    const searchParams = originUrl.slice(1).split('&')
+
+    searchParams.map((item) => {
+      const [attr, value] = item.split('=')
+
+      search[attr] = value
+    })
+  }
+
+  const requestUrl = new URL(`${baseUrl}/api/auth`)
+
+  if (search && !!search['welcome-completed']) {
+    const isFromWelcome = search['welcome-completed']
+
+    requestUrl.searchParams.set('welcome-completed', isFromWelcome)
+  }
 
   try {
-    const auth = await fetch(`${baseUrl}/api/auth`, {
+    const auth = await fetch(requestUrl, {
       method: 'POST',
       mode: 'cors',
       headers: {

@@ -1,4 +1,5 @@
 import { cookies } from 'next/headers'
+import type { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
 
 import { appCookies } from '@/config/cookies'
@@ -6,7 +7,7 @@ import type { SuccessResponse } from '@/types/apiPatterns'
 import type { UserAuthResponse } from '@/types/apiResponses'
 import { getAppAuth } from '@/utils/auth/getAppAuth'
 
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
   const body = await req.json()
   const reqCookies = cookies()
 
@@ -15,9 +16,6 @@ export async function POST(req: Request) {
   }
   const baseUrl = process.env.BACKEND_API
   if (!baseUrl) throw new Error('Application API url not defined')
-
-  const loginUrl = `${baseUrl}/auth/login`
-  const credentials = { email: body.email, password: body.password }
 
   try {
     const appAuth = await getAppAuth()
@@ -33,6 +31,16 @@ export async function POST(req: Request) {
         maxAge: 60 * 60 * 24 * 3 // 3 dia,
         // domain: process.env.NODE_ENV !== 'production' ? 'localhost' : 'tetodevidroo.com.br'
       })
+    }
+
+    const loginUrl = new URL(`${baseUrl}/auth/login`)
+    const credentials = { email: body.email, password: body.password }
+
+    const searchParams = req.nextUrl.searchParams
+    const isFromWelcome = searchParams.get('welcome-completed')
+
+    if (isFromWelcome && isFromWelcome === 'true') {
+      loginUrl.searchParams.set('welcome-completed', isFromWelcome)
     }
 
     const auth = await fetch(loginUrl, {
