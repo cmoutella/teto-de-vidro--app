@@ -1,9 +1,12 @@
+import { cookies } from 'next/headers'
 import type { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
 
 import { appCookies } from '@/config/cookies'
 import type { SuccessResponse } from '@/types/apiPatterns'
 import type { InterfaceHunt } from '@/types/hunt'
+import { getAppAuth } from '@/utils/auth/getAppAuth'
+import { isUserAuthenticated } from '@/utils/auth/userAuthenticationAtServer'
 
 /**
  * CREATE TARGET PROPERTY
@@ -13,23 +16,40 @@ import type { InterfaceHunt } from '@/types/hunt'
 export async function POST(req: NextRequest) {
   const body = await req.json()
 
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_API_URL
+  const baseUrl = process.env.BACKEND_API
 
   if (!baseUrl) throw new Error('Application API url not defined')
 
-  const authCookie = req.cookies.get(appCookies.auth)?.value
-  const tokenFromCookie = authCookie ? JSON.parse(authCookie).token : undefined
-
-  const authorization =
-    req.headers.get('authorization') ?? (tokenFromCookie && `Bearer ${tokenFromCookie}`)
+  const userAuth = isUserAuthenticated()
+  const reqCookies = cookies()
 
   try {
+    if (!userAuth) {
+      throw new Error('Usuário não autenticado')
+    }
+
+    const appAuth = await getAppAuth()
+
+    if (!appAuth || !appAuth.token) {
+      throw new Error('Application auth failed')
+    } else {
+      reqCookies.set(appCookies.app, JSON.stringify(appAuth), {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: process.env.NODE_ENV === 'production' ? 'strict' : 'lax',
+        path: '/',
+        maxAge: 60 * 60 * 24 * 3 // 3 dia,
+        // domain: process.env.NODE_ENV !== 'production' ? 'localhost' : 'tetodevidroo.com.br'
+      })
+    }
+
     const res = await fetch(`${baseUrl}/target-property`, {
       method: 'POST',
       mode: 'cors',
       headers: {
         'Content-Type': 'application/json',
-        ...(authorization ? { Authorization: authorization } : {})
+        'x-api-key': appAuth.token,
+        Authorization: `Bearer ${userAuth.token}`
       },
       body: JSON.stringify(body)
     })
