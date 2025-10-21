@@ -102,10 +102,10 @@ export function PersonalDataForm({ user, onNext }: FormSlideLayoutProps) {
   }, [personalDataFormik.values])
 
   return (
-    <div className="w-full h-full bg-brand-primary-600 flex justify-center items-center pt-10 pb-3">
+    <div className="w-full h-full bg-brand-primary-600 flex justify-center items-center pt-10 pb-5">
       <div className="w-full h-full md:max-w-[800px] lg:max-w-[1000px] md:max-h-[600px] md:bg-white md:rounded-3xl flex flex-col justify-between md:justify-center items-center">
         <div className="flex flex-col md:flex-row justify-start md:justify-between items-center h-full w-full">
-          <div className="md:px-4 md:py-8 md:ml-4 md:w-1/2 text-white md:text-brand-gray-800 mb-6">
+          <div className="md:px-4 md:py-8 md:ml-4 md:w-1/2 text-white md:text-brand-gray-800 mb-6 px-4">
             <h1 className="text-xl lg:text-2xl flex flex-col text-center mb-6 md:mb-10 font-semibold tracking-wide text-white md:text-brand-primary-700">
               {`Estamos quase lá, ${user.name}`}
             </h1>

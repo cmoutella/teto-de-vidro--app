@@ -89,7 +89,10 @@ const UpdatePasswordWelcomeForm = ({
           <div className="w-full">
             {pErrors.map((pError, i) => {
               return (
-                <p key={`password-error-${i}`} className="w-full text-xs text-red-500">
+                <p
+                  key={`password-error-${i}`}
+                  className="w-full text-xs text-red-300 md:text-red-500"
+                >
                   {pError}
                 </p>
               )
@@ -114,7 +117,10 @@ const UpdatePasswordWelcomeForm = ({
           <div className="w-full">
             {cErrors.map((cError, i) => {
               return (
-                <p key={`password-error-${i}`} className="w-full text-xs text-red-500">
+                <p
+                  key={`password-error-${i}`}
+                  className="w-full text-xs text-red-300 md:text-red-500"
+                >
                   {cError}
                 </p>
               )

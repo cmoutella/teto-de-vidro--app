@@ -9,7 +9,10 @@ import * as Yup from 'yup'
 import type { ChangePassword } from '@/requests/client/user/changePassword'
 import { changePassword } from '@/requests/client/user/changePassword'
 import Button from '@/ui/components/base/Button'
+import OptimizedImage from '@/ui/components/base/image'
 import UpdatePasswordWelcomeForm from '@/ui/forms/Welcome/UpdatePassword'
+
+import lockIllustration from '../../assets/slide-new-password.png'
 
 interface FormSlideLayoutProps {
   user: { name: string; id: string }
@@ -108,17 +111,29 @@ export function NewPasswordForm({ user, onNext }: FormSlideLayoutProps) {
   }, [updatePasswordFormik.values])
 
   return (
-    <div className="w-full h-full bg-brand-primary-600 flex justify-center items-center pt-10 pb-3">
+    <div className="w-full h-full bg-brand-primary-600 flex justify-center items-center pt-10 pb-5 px-2">
       <div className="w-full h-full md:max-w-[800px] lg:max-w-[1000px] md:max-h-[600px] md:bg-white md:rounded-3xl flex flex-col justify-between md:justify-center items-center">
         <div className="flex flex-col md:flex-row justify-start md:justify-between items-center h-full w-full">
-          <div className="md:px-4 md:py-8 md:ml-4 md:w-1/2 text-white md:text-brand-gray-800 mb-6 h-full md:mt-32">
+          <div className="md:px-4 md:py-8 md:ml-4 md:w-1/2 text-white md:text-brand-gray-800 mb-2 md:mb-6 max-h-[60%] md:h-full md:mt-32 px-4">
             <h1 className="text-xl lg:text-2xl flex flex-col text-center mb-6 md:mb-10 font-semibold tracking-wide text-white md:text-brand-primary-700">
               Agora para concluir
             </h1>
             <p className="text-sm lg:text-base text-center">
               Crie uma senha segura para proteger o acesso à sua conta
             </p>
-            {/* TODO: colocar uma imagem aqui  */}
+            <div className="w-full max-h-[40%] flex flex-wrap justify-center mt-4 md:mt-6">
+              <OptimizedImage
+                className="hidden md:block max-w-[330px] md:max-w-full rounded-full md:rounded-none"
+                images={{
+                  desktop: {
+                    src: lockIllustration,
+                    width: 330
+                  }
+                }}
+                alt="Um cadeado estilizado"
+                priority={true}
+              />
+            </div>
           </div>
           <div className="md:h-auto w-full md:w-1/2 px-3 py-4 md:px-8 md:py-8 bg-brand-primary-600 md:bg-white rounded-t-2xl text-white md:text-brand-gray-900 flex flex-col justify-center items-center">
             <div className="flex flex-col justify-between items-center gap-6 md:gap-14 w-full max-w-[330px] md:max-w-[400px] md:h-full">
