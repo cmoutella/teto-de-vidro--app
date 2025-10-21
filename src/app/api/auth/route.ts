@@ -14,28 +14,27 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: 'E-mail ou senha estão ausentes' }, { status: 400 })
   }
   const baseUrl = process.env.BACKEND_API
-
   if (!baseUrl) throw new Error('Application API url not defined')
-
-  const appAuth = await getAppAuth()
-
-  if (!appAuth || !appAuth.token) {
-    throw new Error('Application auth failed')
-  } else {
-    reqCookies.set(appCookies.app, JSON.stringify(appAuth), {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: process.env.NODE_ENV === 'production' ? 'strict' : 'lax',
-      path: '/',
-      maxAge: 60 * 60 * 24 * 3 // 3 dia,
-      // domain: process.env.NODE_ENV !== 'production' ? 'localhost' : 'tetodevidroo.com.br'
-    })
-  }
 
   const loginUrl = `${baseUrl}/auth/login`
   const credentials = { email: body.email, password: body.password }
 
   try {
+    const appAuth = await getAppAuth()
+
+    if (!appAuth || !appAuth.token) {
+      throw new Error('Application auth failed')
+    } else {
+      reqCookies.set(appCookies.app, JSON.stringify(appAuth), {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: process.env.NODE_ENV === 'production' ? 'strict' : 'lax',
+        path: '/',
+        maxAge: 60 * 60 * 24 * 3 // 3 dia,
+        // domain: process.env.NODE_ENV !== 'production' ? 'localhost' : 'tetodevidroo.com.br'
+      })
+    }
+
     const auth = await fetch(loginUrl, {
       method: 'POST',
       mode: 'cors',
