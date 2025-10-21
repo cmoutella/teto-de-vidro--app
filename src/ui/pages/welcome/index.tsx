@@ -4,6 +4,7 @@ import { useCallback, useState } from 'react'
 
 import { useRouter } from 'next/navigation'
 
+import { authLogin } from '@/requests/client/auth/login'
 import { updateUserRequest } from '@/requests/client/user/updateUser'
 
 import slide1Illustration from './assets/slide-1.png'
@@ -14,7 +15,7 @@ import { PersonalDataForm } from './components/FormSlideLayout/PersonalDataForm'
 import { PresentationSlideLayout } from './components/PresentationSlideLayout'
 
 interface WelcomeViewProps {
-  user: { name: string; id: string }
+  user: { name: string; id: string; email: string }
 }
 
 export function WelcomeView({ user }: WelcomeViewProps) {
@@ -75,9 +76,24 @@ export function WelcomeView({ user }: WelcomeViewProps) {
   }
 
   const router = useRouter()
-  async function onComplete() {
-    await updateUserRequest(user.id, { welcomeCompleted: true })
-    router.push('/login')
+  async function onComplete(newPassword: string) {
+    try {
+      const auth = await authLogin(user.email, newPassword)
+
+      if (!auth || !auth.user) {
+        throw new Error()
+      }
+
+      const update = await updateUserRequest(user.id, { welcomeCompleted: true })
+
+      if (!update) {
+        throw new Error()
+      }
+
+      router.replace('/')
+    } catch {
+      router.push('/login?welcome-completed=true')
+    }
   }
 
   const Slide = useCallback(

@@ -27,8 +27,6 @@ export const changePassword: UpdatePasswordRequest = async (id, newData) => {
       body: JSON.stringify(newData)
     })
 
-    console.log('response', response)
-
     const user = await response.json()
 
     if (user.error) {

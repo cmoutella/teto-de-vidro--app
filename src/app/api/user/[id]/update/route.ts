@@ -10,6 +10,7 @@ import { appCookies } from '@/config/cookies'
 import type { SuccessResponse } from '@/types/apiPatterns'
 import type { InterfaceUser } from '@/types/user'
 import { getAppAuth } from '@/utils/auth/getAppAuth'
+import { isUserAuthenticated } from '@/utils/auth/userAuthenticationAtServer'
 
 export async function PUT(req: NextRequest, { params }: { params: { id: string } }) {
   const baseUrl = process.env.BACKEND_API
@@ -17,6 +18,12 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
   if (!baseUrl) throw new Error('Application API url not defined')
 
   try {
+    const userAuth = isUserAuthenticated()
+
+    if (!userAuth) {
+      throw new Error('Erro de autorização')
+    }
+
     const auth = await getAppAuth()
 
     if (!auth || !auth.token) {
@@ -40,7 +47,8 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
       mode: 'cors',
       headers: {
         'Content-Type': 'application/json',
-        'x-api-key': auth.token
+        'x-api-key': auth.token,
+        Authorization: `Bearer ${userAuth.token}`
       },
       body: JSON.stringify(body)
     })

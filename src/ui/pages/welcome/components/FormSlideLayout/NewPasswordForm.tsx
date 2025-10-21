@@ -13,7 +13,7 @@ import UpdatePasswordWelcomeForm from '@/ui/forms/Welcome/UpdatePassword'
 
 interface FormSlideLayoutProps {
   user: { name: string; id: string }
-  onNext: () => void
+  onNext: (_password: string) => void
 }
 
 export function NewPasswordForm({ user, onNext }: FormSlideLayoutProps) {
@@ -74,7 +74,7 @@ export function NewPasswordForm({ user, onNext }: FormSlideLayoutProps) {
   }
 
   function onUpdatePasswordSuccess() {
-    onNext()
+    onNext(updatePasswordFormik.values.password)
   }
 
   async function handleUpdatePasswordSubmit(values: ChangePassword) {
