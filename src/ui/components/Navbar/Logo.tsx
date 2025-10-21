@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation'
 import brandLogo from '@/assets/logo/logo-tdv.png'
 
 import OptimizedImage from '../base/image'
+import { BrandName } from './BrandName'
 
 export function NavLogo() {
   const router = useRouter()
@@ -27,8 +28,8 @@ export function NavLogo() {
         alt="Logotipo da Teto de Vidro"
         priority={true}
       />
-      <span className="hidden sm:block font-medium text-base text-brand-primary-900">
-        Teto de Vidro
+      <span className="hidden sm:block">
+        <BrandName />
       </span>
     </div>
   )
