@@ -1,6 +1,5 @@
 import brandLogo from '@/assets/logo/logo-type-tdv.png'
-
-import OptimizedImage from '../base/image'
+import OptimizedImage from '@/ui/components/base/image'
 
 export function BrandName() {
   return (

@@ -2,8 +2,8 @@
 import { useRouter } from 'next/navigation'
 
 import brandLogo from '@/assets/logo/logo-tdv.png'
+import OptimizedImage from '@/ui/components/base/image'
 
-import OptimizedImage from '../base/image'
 import { BrandName } from './BrandName'
 
 export function NavLogo() {

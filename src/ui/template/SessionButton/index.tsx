@@ -5,10 +5,9 @@ import { useRouter } from 'next/navigation'
 
 import { useSessionContext } from '@/providers/AuthProvider'
 import type { InterfaceUser } from '@/types/user'
-
-import type { ButtonProps } from '../base/Button'
-import Button from '../base/Button'
-import { btnBorderRadius, btnSize } from '../base/shared/buttonTheme'
+import type { ButtonProps } from '@/ui/components/base/Button'
+import Button from '@/ui/components/base/Button'
+import { btnBorderRadius, btnSize } from '@/ui/components/base/shared/buttonTheme'
 
 interface SessionButtonProps extends Omit<ButtonProps, 'borderRadius' | 'label' | 'uiType'> {
   user?: Omit<InterfaceUser, 'password'>
