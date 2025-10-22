@@ -13,6 +13,8 @@ import { Loading } from '@/ui/components/base/Loading'
 import EmptyState from '@/ui/components/EmptyState'
 import { lastUpdateMessage } from '@/utils/string/formatLastUpdateMessage'
 
+import movingTruckImg from '../../assets/moving-truck.png'
+
 interface NextMoveDashboardProps {
   hunts: InterfaceHunt[]
 }
@@ -40,7 +42,8 @@ const NextMoveDashboard = ({ hunts }: NextMoveDashboardProps) => {
     return (
       <DashboardCard>
         <EmptyState
-          description="Você ainda não está de olho em nenhum imóvel"
+          description="Comece a organizar a sua próxima mudança"
+          image={{ src: movingTruckImg, alt: 'Um caminhão de mudanças com algumas caixas' }}
           action={{
             label: 'Começar agora!',
             do: () => router.push('/hunt/criar')
