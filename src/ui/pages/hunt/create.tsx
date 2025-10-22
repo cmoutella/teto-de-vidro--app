@@ -2,9 +2,14 @@
 
 import { useRouter } from 'next/navigation'
 
+import type { InterfacePublicUser } from '@/types/user'
 import CreateHuntForm from '@/ui/forms/Hunt/CreateHunt'
 
-const CreateHuntView = () => {
+interface CreateHuntViewProps {
+  user: InterfacePublicUser
+}
+
+const CreateHuntView = ({ user }: CreateHuntViewProps) => {
   const router = useRouter()
 
   const handleSuccess = async (id: string) => {
@@ -18,6 +23,7 @@ const CreateHuntView = () => {
       </div>
       <div className="container px-20">
         <CreateHuntForm
+          user={user}
           onSuccess={(createdId: string) => handleSuccess(createdId)}
           onFail={() => {}}
         />

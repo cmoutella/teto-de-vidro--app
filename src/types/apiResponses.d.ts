@@ -1,15 +1,15 @@
-import type { InterfaceUser } from './user'
+import type { InterfacePublicUser } from './user'
 
 export interface UserAuthResponse {
   token: string
   expireAt: string
-  user: Omit<InterfaceUser, 'password'>
+  user: InterfacePublicUser
 }
 
 export interface UserAuthData {
   token: string
   expireAt: string
-  user: Omit<InterfaceUser, 'password' | 'permissions'>
+  user: InterfacePublicUser
 }
 
 export interface AppAuthData {

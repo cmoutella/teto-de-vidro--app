@@ -5,6 +5,8 @@ import DashboardCard from '@ui/DashboardCard'
 import cx from 'classnames'
 import { useRouter } from 'next/navigation'
 
+import movingTruckImg from '@/assets/images/moving-truck.png'
+import approvedPropertyImg from '@/assets/images/property-approved.png'
 import { getAllTargetPropertiesfromHunt } from '@/requests/client/targetProperty/getAllTargetProperties'
 import type { CONTRACT_TYPE, InterfaceHunt } from '@/types/hunt'
 import type { TargetPropertyInterface } from '@/types/targetProperty'
@@ -12,8 +14,6 @@ import Button from '@/ui/components/base/Button'
 import { Loading } from '@/ui/components/base/Loading'
 import EmptyState from '@/ui/components/EmptyState'
 import { lastUpdateMessage } from '@/utils/string/formatLastUpdateMessage'
-
-import movingTruckImg from '../../assets/moving-truck.png'
 
 interface NextMoveDashboardProps {
   hunts: InterfaceHunt[]
@@ -58,7 +58,8 @@ const NextMoveDashboard = ({ hunts }: NextMoveDashboardProps) => {
     return (
       <DashboardCard>
         <EmptyState
-          description="Inclua os imóveis que você gostou e torne essa busca mais fácil!"
+          description="Já está de olho em algum imóvel? Traga sua organização pra cá!"
+          image={{ src: approvedPropertyImg, alt: 'Uma casa agradável com um símbolo de aprovado' }}
           action={{
             label: 'Começar agora!',
             do: () => router.push(`hunt/${hunts[0].id}`)

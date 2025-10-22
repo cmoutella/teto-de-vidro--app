@@ -8,6 +8,7 @@ import TargetPropertyList from '@ui/TargetProperty/TargetPropertyList'
 import { HuntProvider, useHuntContext } from '@/providers/HuntProvider'
 import { useUIContext } from '@/providers/UIProvider'
 import type { InterfaceHunt } from '@/types/hunt'
+import type { InterfacePublicUser } from '@/types/user'
 import EditHuntForm from '@/ui/forms/Hunt/EditHunt'
 import CreateTargetPropertyForm from '@/ui/forms/TargetProperty/CreateTargetProperty'
 
@@ -15,9 +16,18 @@ import { HuntParticipants } from './components/HuntParticipants'
 
 interface HuntViewProps {
   hunt: InterfaceHunt
+  user: InterfacePublicUser
 }
 
-const HuntView = () => {
+function OneHuntView({ hunt }: HuntViewProps) {
+  return (
+    <HuntProvider initialHuntData={hunt}>
+      <HuntView />
+    </HuntProvider>
+  )
+}
+
+function HuntView() {
   const { hunt, targetsLeft, update } = useHuntContext()
   const { modal } = useUIContext()
 
@@ -99,17 +109,9 @@ const HuntView = () => {
             </div>
           </div>
         </div>
-        <TargetPropertyList />
+        <TargetPropertyList ctaEmptyListAction={handleCreateTargetProperty} />
       </div>
     </div>
-  )
-}
-
-function OneHuntView({ hunt }: HuntViewProps) {
-  return (
-    <HuntProvider initialHuntData={hunt}>
-      <HuntView />
-    </HuntProvider>
   )
 }
 

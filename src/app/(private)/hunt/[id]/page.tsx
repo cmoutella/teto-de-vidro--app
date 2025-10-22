@@ -35,7 +35,7 @@ const HuntPage = async ({ params }: { params: { id: string } }) => {
     redirect('/')
   }
 
-  return <HuntView hunt={hunt} />
+  return <HuntView hunt={hunt} user={userAuthData.user} />
 }
 
 export default HuntPage

@@ -1,14 +1,29 @@
+import approvedPropertyImg from '@/assets/images/property-approved.png'
 import { useHuntContext } from '@/providers/HuntProvider'
 import type { InterfaceHunt } from '@/types/hunt'
 
+import EmptyState from '../../EmptyState'
 import { Pagination } from '../../Pagination'
 import TargetPropertyItem from '../TargetPropertyItem'
 
-function TargetPropertyList() {
+interface TargetPropertyListProps {
+  ctaEmptyListAction: () => void
+}
+
+function TargetPropertyList({ ctaEmptyListAction }: TargetPropertyListProps) {
   const { hunt, properties, page } = useHuntContext()
 
   if (properties.length <= 0) {
-    return <>Ainda não tem nenhum imóvel</>
+    return (
+      <EmptyState
+        description="Tem algum imóvel que você gostou? Inclua ele na sua lista!"
+        image={{ src: approvedPropertyImg, alt: 'Uma casa agradável com um símbolo de aprovado' }}
+        action={{
+          label: 'Começar agora!',
+          do: ctaEmptyListAction
+        }}
+      />
+    )
   }
 
   return (

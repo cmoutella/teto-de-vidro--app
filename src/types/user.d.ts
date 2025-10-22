@@ -23,4 +23,6 @@ export interface InterfaceUser {
   welcomeCompleted?: boolean
 }
 
-export type SessionUser = Omit<InterfaceUser, 'password'> | undefined
+export type InterfacePublicUser = Omit<InterfaceUser, 'password'>
+
+export type SessionUser = InterfacePublicUser | undefined

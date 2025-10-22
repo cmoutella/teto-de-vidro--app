@@ -10,7 +10,7 @@ const CreateHuntPage = () => {
     redirect('/')
   }
 
-  return <CreateHuntView />
+  return <CreateHuntView user={userAuthData.user} />
 }
 
 export default CreateHuntPage
