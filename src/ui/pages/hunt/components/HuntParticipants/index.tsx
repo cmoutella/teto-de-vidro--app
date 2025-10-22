@@ -4,6 +4,7 @@ import { toast } from 'react-hot-toast'
 
 import cx from 'classnames'
 
+import { featureAvailable } from '@/config/features'
 import { useSessionContext } from '@/providers/AuthProvider'
 import { useHuntContext } from '@/providers/HuntProvider'
 import { useUIContext } from '@/providers/UIProvider'
@@ -66,6 +67,8 @@ export function HuntParticipants({ huntUsers }: HuntParticipantsProps) {
     }
   }
 
+  const canInvite = featureAvailable('invites', user)
+
   return (
     <div className="flex justify-start items-end gap-3">
       {participants.length >= 1 && (
@@ -81,7 +84,7 @@ export function HuntParticipants({ huntUsers }: HuntParticipantsProps) {
           })}
         </div>
       )}
-      {(user?.permissions?.invitationsLimit ?? 0) >= 1 && (
+      {canInvite && (user?.permissions?.invitationsLimit ?? 0) >= 1 && (
         <Button
           label="Convide alguém"
           onClick={handleInviteModal}
