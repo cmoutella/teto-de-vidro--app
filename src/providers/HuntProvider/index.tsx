@@ -29,6 +29,7 @@ interface HuntContext {
   hunt?: InterfaceHunt
   page: PageConfig
   properties: TargetPropertyInterface[]
+  propertiesLoading: boolean
   fetchProperties: () => void
   removeTargetProperty: (_t: string) => Promise<boolean>
   permissions: HuntPermissions
@@ -51,6 +52,7 @@ const DEFAULT_VALUES: HuntContext = {
     lastPage: () => {}
   },
   properties: [],
+  propertiesLoading: true,
   fetchProperties: () => {},
   removeTargetProperty: async (_t: string) => {
     return false
@@ -85,6 +87,9 @@ export const HuntProvider = ({
   const [perPage, setPerPage] = useState<number>(DEFAULT_VALUES.page.perPage)
   const [totalItems, setTotalItems] = useState<number>(0)
   const [properties, setProperties] = useState<TargetPropertyInterface[]>(DEFAULT_VALUES.properties)
+  const [propertiesLoading, setPropertiesLoading] = useState<boolean>(
+    DEFAULT_VALUES.propertiesLoading
+  )
   const [permissions, setPermissions] = useState<HuntPermissions>(DEFAULT_VALUES.permissions)
 
   const targetAvailableLimit = useMemo(() => {
@@ -128,11 +133,13 @@ export const HuntProvider = ({
   }
 
   async function getProperties() {
+    setPropertiesLoading(true)
     const data = await getAllTargetPropertiesfromHunt((hunt as InterfaceHunt).id, page, perPage)
 
     if (!data) {
       toast.error('Não foi possível trazer o alvos da busca')
     }
+
     if (!data || data?.list.length <= 0) {
       setTotalPages(0)
       setTotalItems(0)
@@ -141,6 +148,7 @@ export const HuntProvider = ({
       setTotalPages(data.totalPages)
       setTotalItems(data.totalItems)
     }
+    setPropertiesLoading(false)
   }
 
   async function removeTargetProperty(id: string) {
@@ -177,6 +185,7 @@ export const HuntProvider = ({
       isLastPage: page === totalPages
     },
     properties,
+    propertiesLoading,
     permissions,
     targetsLeft: targetAvailableLimit,
     fetchProperties: getProperties,
