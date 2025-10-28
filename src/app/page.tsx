@@ -16,18 +16,18 @@ export default async function Home() {
   const userAuthData = isUserAuthenticated({ shouldNoCookieRedirect: false })
   const appAuthCookie = reqCookies.get(appCookies.app)
 
-  if (!appAuthCookie) {
-    appAuthToken = await authenticateApp()
-  }
   if (!userAuthData) {
     return <PublicHomeView />
   }
 
-  const appCookieData: AppAuthData = appAuthCookie ? JSON.parse(appAuthCookie.value) : appAuthToken
+  if (!appAuthCookie) {
+    appAuthToken = await authenticateApp()
+  }
+  const appData: AppAuthData = appAuthCookie ? JSON.parse(appAuthCookie.value) : appAuthToken
 
   const response = await getAllHuntsByUser(userAuthData.user.id, 1, 1, {
     userToken: userAuthData.token,
-    appToken: appCookieData.token
+    appToken: appData.token
   })
 
   return <PrivateHomeView user={userAuthData.user} hunts={response?.list ?? []} />

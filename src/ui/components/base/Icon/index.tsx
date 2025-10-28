@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react'
+import type { ElementType, ReactNode } from 'react'
 
 import cx from 'classnames'
 
@@ -206,7 +206,7 @@ const Icon = ({ icon, className, mode = 'outline', size = 'sm', onClick }: IconP
   }
 
   const IconElement = () => {
-    const IconSVG = icons[mode][icon]
+    const IconSVG = icons[mode][icon] as ElementType
     return (
       <IconSVG
         className={cx('min-h-4 min-w-4 text-inherit', iconSize[size], className)}
