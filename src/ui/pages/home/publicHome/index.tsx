@@ -11,7 +11,7 @@ import { HowToSection } from './sections/05_how-to'
 
 const PublicHomeView = () => {
   return (
-    <PublicBasePage user={null}>
+    <PublicBasePage>
       <HeroSection />
       <MarketGapSection />
       <SolutionSection />

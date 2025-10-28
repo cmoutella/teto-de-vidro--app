@@ -55,6 +55,7 @@ export const SessionProvider = ({
       init()
       setTryData(false)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user])
 
   const login = async (email: string, password: string) => {

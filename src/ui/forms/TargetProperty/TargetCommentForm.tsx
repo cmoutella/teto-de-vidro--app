@@ -111,6 +111,7 @@ const TargetCommentForm = ({
       (formik.values.topic === 'other' && formik.values.otherTopic !== '')
 
     setSubmitEnabled(comment && hasTopic && !actionInProgress)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formik])
 
   return (

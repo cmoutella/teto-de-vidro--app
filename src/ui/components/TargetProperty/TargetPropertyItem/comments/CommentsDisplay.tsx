@@ -31,6 +31,7 @@ export function CommentsDisplay({ targetId }: CommentsDisplayProps) {
 
   useEffect(() => {
     getComments()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page])
 
   async function getComments() {
@@ -113,38 +114,40 @@ export function CommentsDisplay({ targetId }: CommentsDisplayProps) {
           />
         </div>
       </div>
-      <div className="w-full flex flex-wrap gap-x-2 gap-y-3 sm:gap-y-2">
-        <div className="w-full flex flex-col items-start gap-y-1">
-          {comments.length >= 1 &&
-            comments.map((comm) => {
-              return (
-                <div
-                  key={comm.id}
-                  className={cx('w-3/4', {
-                    'self-end': user?.id === comm.author
-                  })}
-                >
-                  <OneComment
-                    comment={comm}
-                    isMyComment={user?.id === comm.author}
-                    updateCommentList={getComments}
-                  />
-                </div>
-              )
-            })}
+      {!isLoading && (
+        <div className="w-full flex flex-wrap gap-x-2 gap-y-3 sm:gap-y-2">
+          <div className="w-full flex flex-col items-start gap-y-1">
+            {comments.length >= 1 &&
+              comments.map((comm) => {
+                return (
+                  <div
+                    key={comm.id}
+                    className={cx('w-3/4', {
+                      'self-end': user?.id === comm.author
+                    })}
+                  >
+                    <OneComment
+                      comment={comm}
+                      isMyComment={user?.id === comm.author}
+                      updateCommentList={getComments}
+                    />
+                  </div>
+                )
+              })}
+          </div>
+          {comments.length >= 1 && (
+            <Pagination
+              currentPage={page}
+              maxPage={maxPage}
+              toPage={(p) => setPage(p)}
+              isFirstPage={page === 1}
+              isLastPage={page === maxPage}
+              nextPage={() => setPage(page + 1)}
+              prevPage={() => setPage(page - 1)}
+            />
+          )}
         </div>
-        {comments.length >= 1 && (
-          <Pagination
-            currentPage={page}
-            maxPage={maxPage}
-            toPage={(p) => setPage(p)}
-            isFirstPage={page === 1}
-            isLastPage={page === maxPage}
-            nextPage={() => setPage(page + 1)}
-            prevPage={() => setPage(page - 1)}
-          />
-        )}
-      </div>
+      )}
     </div>
   )
 }
