@@ -9,6 +9,7 @@ type Validation = {
   welcomeCompleted: false
   user: {
     name: string
+    email: string
     id: string
   }
 }
