@@ -22,9 +22,9 @@ export const scraper = async (bodyData: ScraperRequestProps) => {
       throw Error('O serviço scraper não está disponível')
     }
 
-    const { data } = res as SuccessResponse<AdScrapedData>
+    const { data } = res.data as SuccessResponse<AdScrapedData>
 
-    return data.data
+    return data as AdScrapedData
   } catch (_err) {
     return undefined
   }
