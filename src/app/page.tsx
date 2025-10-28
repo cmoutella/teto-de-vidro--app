@@ -14,12 +14,12 @@ export default async function Home() {
   let appAuthToken
 
   const userAuthData = isUserAuthenticated({ shouldNoCookieRedirect: false })
-  const appAuthCookie = reqCookies.get(appCookies.app)
 
   if (!userAuthData) {
     return <PublicHomeView />
   }
 
+  const appAuthCookie = reqCookies.get(appCookies.app)
   if (!appAuthCookie) {
     appAuthToken = await authenticateApp()
   }
