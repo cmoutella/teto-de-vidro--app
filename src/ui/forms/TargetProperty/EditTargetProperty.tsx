@@ -81,7 +81,7 @@ const EditTargetPropertyForm = ({
       size: currentData.size ?? 0,
       rooms: currentData.rooms ?? 1,
       bathrooms: currentData.bathrooms ?? 1,
-      parkingSpots: currentData.parking ?? 0,
+      parking: currentData.parking ?? 0,
       iptu: currentData.iptu ?? 0,
       condoPricing: currentData.condoPricing ?? 0,
       sellPrice: currentData.sellPrice ?? 0,
@@ -205,7 +205,7 @@ const EditTargetPropertyForm = ({
                   <p>Endereço principal</p>
                   <Checkbox
                     label="Sem número"
-                    checked={formik.values.noLotNumber}
+                    checked={formik.values.noLotNumber as never}
                     name="noLotNumber"
                     onChange={(stateChanged) => {
                       formik.setFieldValue('noLotNumber', stateChanged)
@@ -216,7 +216,7 @@ const EditTargetPropertyForm = ({
                   <CEPField
                     size={formThemeSize}
                     theme={themePallete}
-                    value={formik.values.postalCode}
+                    value={formik.values.postalCode as never}
                     onChange={(value: string) => formik.setFieldValue('postalCode', value)}
                     onBlur={completeFieldsByCEP}
                     error={formik.errors.postalCode}
@@ -296,7 +296,7 @@ const EditTargetPropertyForm = ({
                   <p>Complemento</p>
                   <Checkbox
                     label="Sem complemento"
-                    checked={formik.values.noComplement}
+                    checked={formik.values.noComplement as never}
                     name="noComplement"
                     onChange={(stateChanged) => {
                       formik.setFieldValue('noComplement', stateChanged)
@@ -371,11 +371,11 @@ const EditTargetPropertyForm = ({
                 <span className="col-span-6 md:col-span-3">
                   <Input
                     label="Vagas de Garagem"
-                    name="parkingSpots"
+                    name="parking"
                     type="number"
                     themeSize={formThemeSize}
                     theme={themePallete}
-                    value={formik.values.parkingSpots}
+                    value={formik.values.parking}
                     onChange={formik.handleChange}
                   />
                 </span>
@@ -398,7 +398,7 @@ const EditTargetPropertyForm = ({
                     size={formThemeSize}
                     theme={themePallete}
                     placeholder={`Aluguel`}
-                    value={formik.values.rentPrice}
+                    value={formik.values.rentPrice as never}
                     onChange={(value: number) => formik.setFieldValue('rentPrice', value)}
                     currencySymbol="R$"
                     siblingHeight={true}
@@ -411,7 +411,7 @@ const EditTargetPropertyForm = ({
                     size={formThemeSize}
                     theme={themePallete}
                     placeholder={`Preço de venda`}
-                    value={formik.values.sellPrice}
+                    value={formik.values.sellPrice as never}
                     onChange={(value: number) => formik.setFieldValue('sellPrice', value)}
                     currencySymbol="R$"
                     siblingHeight={true}
@@ -424,7 +424,7 @@ const EditTargetPropertyForm = ({
                     size={formThemeSize}
                     theme={themePallete}
                     placeholder={`Valor do condomínio`}
-                    value={formik.values.condoPricing}
+                    value={formik.values.condoPricing as never}
                     onChange={(value: number) => formik.setFieldValue('condoPricing', value)}
                     currencySymbol="R$"
                     siblingHeight={true}
@@ -438,7 +438,7 @@ const EditTargetPropertyForm = ({
                     size={formThemeSize}
                     theme={themePallete}
                     placeholder={`Valor do IPTU por mês`}
-                    value={formik.values.iptu}
+                    value={formik.values.iptu as never}
                     onChange={(value: number) => formik.setFieldValue('iptu', value)}
                     currencySymbol="R$"
                   />

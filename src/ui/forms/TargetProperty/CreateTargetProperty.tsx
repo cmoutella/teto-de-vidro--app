@@ -92,7 +92,7 @@ const CreateTargetPropertyForm = ({
       size: 0,
       rooms: 1,
       bathrooms: 1,
-      parkingSpots: 0,
+      parking: 0,
       iptu: 0,
       sellPrice: 0,
       rentPrice: 0,
@@ -269,7 +269,7 @@ const CreateTargetPropertyForm = ({
                   <p>Endereço principal</p>
                   <Checkbox
                     label="Sem número"
-                    checked={formik.values.noLotNumber}
+                    checked={formik.values.noLotNumber as never}
                     name="noLotNumber"
                     onChange={async (stateChanged) => {
                       await formik.setFieldValue('noLotNumber', stateChanged)
@@ -280,7 +280,7 @@ const CreateTargetPropertyForm = ({
                   <CEPField
                     size={formThemeSize}
                     theme={themePallete}
-                    value={formik.values.postalCode}
+                    value={formik.values.postalCode as never}
                     onChange={async (value: string) =>
                       await formik.setFieldValue('postalCode', value)
                     }
@@ -362,7 +362,7 @@ const CreateTargetPropertyForm = ({
                   <p>Complemento</p>
                   <Checkbox
                     label="Sem complemento"
-                    checked={formik.values.noComplement}
+                    checked={formik.values.noComplement as never}
                     name="noComplement"
                     onChange={async (stateChanged) => {
                       await formik.setFieldValue('noComplement', stateChanged)
@@ -439,12 +439,12 @@ const CreateTargetPropertyForm = ({
                 <span className="col-span-6 md:col-span-3">
                   <Input
                     label="Vagas de Garagem"
-                    name="parkingSpots"
+                    name="parking"
                     type="number"
                     themeSize={formThemeSize}
                     theme={themePallete}
                     siblingHeight={true}
-                    value={formik.values.parkingSpots}
+                    value={formik.values.parking}
                     onChange={formik.handleChange}
                   />
                 </span>
@@ -467,7 +467,7 @@ const CreateTargetPropertyForm = ({
                     size={formThemeSize}
                     theme={themePallete}
                     placeholder={`Aluguel`}
-                    value={formik.values.rentPrice}
+                    value={formik.values.rentPrice as never}
                     onChange={async (value: number) =>
                       await formik.setFieldValue('rentPrice', value)
                     }
@@ -482,7 +482,7 @@ const CreateTargetPropertyForm = ({
                     size={formThemeSize}
                     theme={themePallete}
                     placeholder={`Preço de venda`}
-                    value={formik.values.sellPrice}
+                    value={formik.values.sellPrice as never}
                     onChange={async (value: number) =>
                       await formik.setFieldValue('sellPrice', value)
                     }
@@ -497,7 +497,7 @@ const CreateTargetPropertyForm = ({
                     size={formThemeSize}
                     theme={themePallete}
                     placeholder={`Valor do condomínio`}
-                    value={formik.values.condoPricing}
+                    value={formik.values.condoPricing as never}
                     onChange={async (value: number) =>
                       await formik.setFieldValue('condoPricing', value)
                     }
@@ -513,7 +513,7 @@ const CreateTargetPropertyForm = ({
                     size={formThemeSize}
                     theme={themePallete}
                     placeholder={`Valor do IPTU por mês`}
-                    value={formik.values.iptu}
+                    value={formik.values.iptu as never}
                     onChange={async (value: number) => await formik.setFieldValue('iptu', value)}
                     currencySymbol="R$"
                   />

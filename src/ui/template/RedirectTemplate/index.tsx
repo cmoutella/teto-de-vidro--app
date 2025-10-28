@@ -1,4 +1,4 @@
-import PublicNavbar from '@ui/Navbar/PublicNavbar'
+import PublicNavbar from '../Navbar/PublicNavbar'
 
 interface RedirectTemplateProps {
   description: string
@@ -7,7 +7,7 @@ interface RedirectTemplateProps {
 const RedirectTemplate = ({ description }: RedirectTemplateProps) => {
   return (
     <div className="w-full min-h-full">
-      <PublicNavbar user={null} />
+      <PublicNavbar />
       <div>
         <h2>Você está sendo redirecionado</h2>
 
