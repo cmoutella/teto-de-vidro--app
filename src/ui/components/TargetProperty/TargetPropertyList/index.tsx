@@ -15,7 +15,7 @@ function TargetPropertyList({ ctaEmptyListAction }: TargetPropertyListProps) {
 
   if (propertiesLoading) {
     return (
-      <div className="w-full flex flex-col justify-center items-center gap-2">
+      <div className="w-full container flex flex-col justify-center items-center gap-2">
         <div className="w-full h-32 rounded-md p-4 pb-5 sm:px-4 bg-brand-primary-200 border border-brand-primary-300 animate-pulse">
           <div className="w-3/4 md:w-2/3 h-8 rounded-sm bg-brand-primary-500 opacity-70"></div>
         </div>
