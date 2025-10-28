@@ -27,7 +27,7 @@ export async function POST() {
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ email: app, password: key })
+      body: JSON.stringify({ app: app, key: key })
     })
 
     if (res.status === 401) {
