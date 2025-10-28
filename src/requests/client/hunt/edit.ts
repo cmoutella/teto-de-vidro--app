@@ -1,7 +1,7 @@
 import type { SuccessResponse } from '@/types/apiPatterns'
 import type { InterfaceHunt } from '@/types/hunt'
 
-export type EditHuntRequestProps = Omit<InterfaceHunt, 'id' | 'targets'>
+export type EditHuntRequestProps = Omit<Partial<InterfaceHunt>, 'id' | 'targets'>
 
 type EditHuntRequest = (
   _id: string,

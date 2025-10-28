@@ -1,7 +1,3 @@
-import type { TargetPropertyInterface } from '@/types/targetProperty'
-
-export type EditHuntRequestProps = Omit<TargetPropertyInterface, 'id' | 'targets'>
-
 type DeleteTargetRequest = (_id: string) => Promise<boolean>
 
 export const deleteTargetProperty: DeleteTargetRequest = async (id) => {

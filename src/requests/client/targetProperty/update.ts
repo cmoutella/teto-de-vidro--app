@@ -13,7 +13,7 @@ export type UpdateTargetResponse = {
 type UpdateTargetRequest = (
   _id: string,
   _targetData: UpdateTargetRequestProps,
-  _comment?: TargetComment
+  _comment?: Omit<TargetComment, 'author'>
 ) => Promise<UpdateTargetResponse | undefined>
 
 export const updateTargetProperty: UpdateTargetRequest = async (id, targetData, commentData) => {

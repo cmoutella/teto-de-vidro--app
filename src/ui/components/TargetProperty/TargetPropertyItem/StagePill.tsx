@@ -129,7 +129,7 @@ export function StagePill({ stage, targetId }: StagePillProps) {
         onSuccess={modal.close}
         onFail={modal.close}
         enableEmptyComment={true}
-        submit={async (data: TargetComment) =>
+        submit={async (data: Omit<TargetComment, 'author'>) =>
           (await updateStage(newStage, otherData, data)) as never
         }
       />
@@ -139,7 +139,7 @@ export function StagePill({ stage, targetId }: StagePillProps) {
   async function updateStage(
     newStage: PropertyHuntingStage,
     otherData?: Partial<TargetPropertyInterface>,
-    comment?: TargetComment
+    comment?: Omit<TargetComment, 'author'>
   ) {
     try {
       const res = await updateTargetProperty(
