@@ -51,10 +51,7 @@ export async function POST(req: NextRequest) {
         'x-api-key': appAuth.token
       },
       body: JSON.stringify(credentials)
-    }).then((res) => {
-      console.log('auth', res.status)
-      return res.json()
-    })
+    }).then((res) => res.json())
 
     if (auth.error) {
       throw Error('Não foi possivel completar atualizar suas credenciais')
