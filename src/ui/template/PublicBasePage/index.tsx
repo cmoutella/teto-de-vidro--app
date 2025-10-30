@@ -2,6 +2,7 @@ import type { ReactNode } from 'react'
 
 import type { InterfaceUser } from '@/types/user'
 
+import PublicFooter from '../Footer'
 import PublicNavbar from '../Navbar/PublicNavbar'
 
 const PublicBasePage = ({
@@ -15,6 +16,7 @@ const PublicBasePage = ({
     <div className="w-full">
       <PublicNavbar user={user} />
       <div className="w-full overflow-x-hidden">{children}</div>
+      <PublicFooter />
     </div>
   )
 }
