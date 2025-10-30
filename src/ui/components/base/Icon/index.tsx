@@ -4,6 +4,7 @@ import cx from 'classnames'
 
 import OfficeMicro from '@/assets/icons/micro/building-library.svg'
 import CheckMicro from '@/assets/icons/micro/check.svg'
+import ChevronDoubleRightMicro from '@/assets/icons/micro/chevron-double-right.svg'
 import ChevronDownMicro from '@/assets/icons/micro/chevron-down.svg'
 import ChevronLeftMicro from '@/assets/icons/micro/chevron-left.svg'
 import ChevronRightMicro from '@/assets/icons/micro/chevron-right.svg'
@@ -20,6 +21,7 @@ import TrashMicro from '@/assets/icons/micro/trash.svg'
 import XMicro from '@/assets/icons/micro/x.svg'
 import OfficeMini from '@/assets/icons/mini/building-library.svg'
 import CheckMini from '@/assets/icons/mini/check.svg'
+import ChevronDoubleRightMini from '@/assets/icons/mini/chevron-double-right.svg'
 import ChevronDownMini from '@/assets/icons/mini/chevron-down.svg'
 import ChevronLeftMini from '@/assets/icons/mini/chevron-left.svg'
 import ChevronRightMini from '@/assets/icons/mini/chevron-right.svg'
@@ -36,6 +38,7 @@ import TrashMini from '@/assets/icons/mini/trash.svg'
 import XMini from '@/assets/icons/mini/x.svg'
 import OfficeOutline from '@/assets/icons/outline/building-library.svg'
 import CheckOutline from '@/assets/icons/outline/check.svg'
+import ChevronDoubleRightOutline from '@/assets/icons/outline/chevron-double-right.svg'
 import ChevronDownOutline from '@/assets/icons/outline/chevron-down.svg'
 import ChevronLeftOutline from '@/assets/icons/outline/chevron-left.svg'
 import ChevronRightOutline from '@/assets/icons/outline/chevron-right.svg'
@@ -52,6 +55,7 @@ import TrashOutline from '@/assets/icons/outline/trash.svg'
 import XOutline from '@/assets/icons/outline/x.svg'
 import OfficeSolid from '@/assets/icons/solid/building-library.svg'
 import CheckSolid from '@/assets/icons/solid/check.svg'
+import ChevronDoubleRightSolid from '@/assets/icons/solid/chevron-double-right.svg'
 import ChevronDownSolid from '@/assets/icons/solid/chevron-down.svg'
 import ChevronLeftSolid from '@/assets/icons/solid/chevron-left.svg'
 import ChevronRightSolid from '@/assets/icons/solid/chevron-right.svg'
@@ -75,6 +79,7 @@ type AvailableIcon =
   | 'chevron-up'
   | 'chevron-left'
   | 'chevron-right'
+  | 'chevron-double-right'
   | 'eye'
   | 'eye-slash'
   | 'minus'
@@ -115,6 +120,7 @@ const Icon = ({ icon, className, mode = 'outline', size = 'sm', onClick }: IconP
     'chevron-down': ChevronDownSolid,
     'chevron-left': ChevronLeftSolid,
     'chevron-right': ChevronRightSolid,
+    'chevron-double-right': ChevronDoubleRightSolid,
     eye: EyeSolid,
     'eye-slash': EyeSlashSolid,
     recycle: RecycleSolid,
@@ -137,6 +143,7 @@ const Icon = ({ icon, className, mode = 'outline', size = 'sm', onClick }: IconP
     'chevron-down': ChevronDownOutline,
     'chevron-left': ChevronLeftOutline,
     'chevron-right': ChevronRightOutline,
+    'chevron-double-right': ChevronDoubleRightOutline,
     eye: EyeOutline,
     'eye-slash': EyeSlashOutline,
     recycle: RecycleOutline,
@@ -159,6 +166,7 @@ const Icon = ({ icon, className, mode = 'outline', size = 'sm', onClick }: IconP
     'chevron-down': ChevronDownMini,
     'chevron-left': ChevronLeftMini,
     'chevron-right': ChevronRightMini,
+    'chevron-double-right': ChevronDoubleRightMini,
     eye: EyeMini,
     'eye-slash': EyeSlashMini,
     recycle: RecycleMini,
@@ -181,6 +189,7 @@ const Icon = ({ icon, className, mode = 'outline', size = 'sm', onClick }: IconP
     'chevron-down': ChevronDownMicro,
     'chevron-left': ChevronLeftMicro,
     'chevron-right': ChevronRightMicro,
+    'chevron-double-right': ChevronDoubleRightMicro,
     eye: EyeMicro,
     'eye-slash': EyeSlashMicro,
     recycle: RecycleMicro,

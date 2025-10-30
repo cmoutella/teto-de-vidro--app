@@ -11,14 +11,11 @@ export function HeroSection() {
         <div>
           <h1 className="text-center sm:text-start font-medium text-xl sm:text-3xl lg:text-4xl flex flex-col mb-5 sm:mb-10">
             <span className="sm:mb-2">
-              Viemos pra{' '}
-              <span className="text-2xl sm:text-[36px] lg:text-[40px] font-semibold">
-                descomplicar
-              </span>
+              Viemos pra <span className="text-2xl sm:text-[36px] font-semibold">descomplicar</span>
             </span>
             <span>sua busca por imóvel</span>
           </h1>
-          <h2 className="text-center sm:text-start text-sm sm:text-xl lg:text-[26px] flex flex-col font-medium">
+          <h2 className="text-center sm:text-start text-sm sm:text-xl lg:text-[22px] flex flex-col font-medium md:font-normal">
             <span className="sm:mb-1">Chega de planilhas e anotações perdidas.</span>
             <span>Acompanhe cada imóvel de perto.</span>
           </h2>
