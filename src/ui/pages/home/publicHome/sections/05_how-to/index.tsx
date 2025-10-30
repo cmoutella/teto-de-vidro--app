@@ -2,8 +2,8 @@ export function HowToSection() {
   return (
     <section className="w-full flex justify-center px-4 md:px-10 py-10 md:py-20">
       <div className="container text-center max-w-[700px]">
-        <h3 className="text-xl md:text-3xl mb-8 md:mb-14">Como fazer parte</h3>
-        <div className="flex flex-col gap-5 text-sm md:text-xl">
+        <h3 className="text-xl md:text-[26px] mb-8 md:mb-10 font-medium">Como fazer parte</h3>
+        <div className="flex flex-col gap-5 text-sm md:text-base">
           <p>Hoje não estamos com o cadastro aberto.</p>
           <p>
             Somos uma iniciativa jovem e sem patrocínio, e queremos oferecer um serviço estável e de

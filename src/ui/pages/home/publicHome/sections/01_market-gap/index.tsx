@@ -6,7 +6,7 @@ export function MarketGapSection() {
   return (
     <section className="w-full flex justify-center py-10 lg:py-16">
       <div className="containerpx-2 sm:px-4">
-        <h3 className="text-center text-xl sm:text-3xl lg:text-4xl mb-6 sm:mb-14 px-3">
+        <h3 className="text-center text-xl sm:text-3xl mb-6 sm:mb-14 px-3">
           Cansou de se perder na busca pelo imóvel ideal?
         </h3>
         <div className="flex flex-col sm:flex-row items-center justify-center gap-8 sm:gap-14 lg:gap-20 px-4">
@@ -23,7 +23,7 @@ export function MarketGapSection() {
             }}
             alt="Uma pessoa com expressão confusa diante de uma tela de computador e um celular"
           />
-          <ul className="text-base sm:text-lg flex flex-col gap-3 px-2">
+          <ul className="text-base flex flex-col gap-3 px-2">
             <li>
               - <span className="font-semibold">Mensagens perdidas</span> no whatsapp
             </li>

@@ -22,12 +22,12 @@ const CONTENT = [
 export function SolutionSection() {
   return (
     <section className="w-full flex justify-center bg-brand-primary-600 py-10 sm:py-14 lg:py-20 text-white px-7 sm:px-14 md:px-20">
-      <div className="container lg:px-10">
+      <div className="container max-w-[1240px] lg:px-10">
         <h3 className="text-xl md:text-xl tracking-[0.15em] mb-10 md:mb-14 w-full">
           A facilidade que faltava
         </h3>
-        <div className="flex flex-col items-center lg:flex-row gap-4 sm:gap-6 lg:gap-10">
-          <div className="lg:w-1/2">
+        <div className="flex flex-col items-center md:flex-row md:justify-between gap-4 sm:gap-6 lg:gap-10">
+          <div className="lg:w-1/2 max-w-md">
             {CONTENT.map((ctnt, i) => {
               return (
                 <div key={`solution-description-${i}`} className="mb-10 sm:mb-12">
