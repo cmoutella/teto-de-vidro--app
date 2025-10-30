@@ -23,6 +23,10 @@ interface UIContext {
     open: (_s: ModalSize, _c: ReactNode) => void
     close: () => void
   }
+  scroll: {
+    block: () => void
+    allow: () => void
+  }
 }
 
 interface UIModal extends Pick<ModalProps, 'isOpen' | 'size'> {
@@ -37,7 +41,11 @@ const DEFAULT_VALUES = {
     off: () => {},
     state: false
   },
-  modal: { open: () => {}, close: () => {} }
+  modal: { open: () => {}, close: () => {} },
+  scroll: {
+    block: () => {},
+    allow: () => {}
+  }
 }
 
 const UIContext = createContext<UIContext>(DEFAULT_VALUES)
@@ -87,12 +95,25 @@ export const UIProvider = ({ children }: { children: React.ReactNode }) => {
     setLoadingScreen(false)
   }
 
+  const blockScroll = () => {
+    const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth
+    document.body.style.overflow = 'hidden'
+    document.body.style.paddingRight = `${scrollbarWidth}px`
+  }
+
+  const allowScroll = () => {
+    document.body.style.overflowY = 'unset' // ou 'auto'
+    document.body.style.paddingRight = ''
+  }
+
   const initModal = (size: ModalSize, content: ReactNode) => {
     setModal({ content, isOpen: true, size })
+    blockScroll()
   }
 
   const endModal = () => {
     setModal(null)
+    allowScroll()
   }
 
   const value = {
@@ -106,6 +127,10 @@ export const UIProvider = ({ children }: { children: React.ReactNode }) => {
     modal: {
       open: initModal,
       close: endModal
+    },
+    scroll: {
+      block: blockScroll,
+      allow: allowScroll
     }
   }
 

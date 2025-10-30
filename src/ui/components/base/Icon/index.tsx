@@ -11,6 +11,7 @@ import ChevronRightMicro from '@/assets/icons/micro/chevron-right.svg'
 import ChevronUpMicro from '@/assets/icons/micro/chevron-up.svg'
 import EyeSlashMicro from '@/assets/icons/micro/eye-slash.svg'
 import EyeMicro from '@/assets/icons/micro/eye.svg'
+import MenuMicro from '@/assets/icons/micro/menu.svg'
 import MinusCircleMicro from '@/assets/icons/micro/minus-circle.svg'
 import MinusMicro from '@/assets/icons/micro/minus.svg'
 import PencilMicro from '@/assets/icons/micro/pencil.svg'
@@ -19,6 +20,7 @@ import PlusMicro from '@/assets/icons/micro/plus.svg'
 import RecycleMicro from '@/assets/icons/micro/recycle.svg'
 import TrashMicro from '@/assets/icons/micro/trash.svg'
 import XMicro from '@/assets/icons/micro/x.svg'
+import ArrowRightInMini from '@/assets/icons/mini/arrow-right-in.svg'
 import OfficeMini from '@/assets/icons/mini/building-library.svg'
 import CheckMini from '@/assets/icons/mini/check.svg'
 import ChevronDoubleRightMini from '@/assets/icons/mini/chevron-double-right.svg'
@@ -28,6 +30,7 @@ import ChevronRightMini from '@/assets/icons/mini/chevron-right.svg'
 import ChevronUpMini from '@/assets/icons/mini/chevron-up.svg'
 import EyeSlashMini from '@/assets/icons/mini/eye-slash.svg'
 import EyeMini from '@/assets/icons/mini/eye.svg'
+import MenuMini from '@/assets/icons/mini/menu.svg'
 import MinusCircleMini from '@/assets/icons/mini/minus-circle.svg'
 import MinusMini from '@/assets/icons/mini/minus.svg'
 import PencilMini from '@/assets/icons/mini/pencil.svg'
@@ -36,6 +39,7 @@ import PlusMini from '@/assets/icons/mini/plus.svg'
 import RecycleMini from '@/assets/icons/mini/recycle.svg'
 import TrashMini from '@/assets/icons/mini/trash.svg'
 import XMini from '@/assets/icons/mini/x.svg'
+import ArrowRightInOutline from '@/assets/icons/outline/arrow-right-in.svg'
 import OfficeOutline from '@/assets/icons/outline/building-library.svg'
 import CheckOutline from '@/assets/icons/outline/check.svg'
 import ChevronDoubleRightOutline from '@/assets/icons/outline/chevron-double-right.svg'
@@ -45,6 +49,7 @@ import ChevronRightOutline from '@/assets/icons/outline/chevron-right.svg'
 import ChevronUpOutline from '@/assets/icons/outline/chevron-up.svg'
 import EyeSlashOutline from '@/assets/icons/outline/eye-slash.svg'
 import EyeOutline from '@/assets/icons/outline/eye.svg'
+import MenuOutline from '@/assets/icons/outline/menu.svg'
 import MinusCircleOutline from '@/assets/icons/outline/minus-circle.svg'
 import MinusOutline from '@/assets/icons/outline/minus.svg'
 import PencilOutline from '@/assets/icons/outline/pencil.svg'
@@ -53,6 +58,7 @@ import PlusOutline from '@/assets/icons/outline/plus.svg'
 import RecycleOutline from '@/assets/icons/outline/recycle.svg'
 import TrashOutline from '@/assets/icons/outline/trash.svg'
 import XOutline from '@/assets/icons/outline/x.svg'
+import ArrowRightInSolid from '@/assets/icons/solid/arrow-right-in.svg'
 import OfficeSolid from '@/assets/icons/solid/building-library.svg'
 import CheckSolid from '@/assets/icons/solid/check.svg'
 import ChevronDoubleRightSolid from '@/assets/icons/solid/chevron-double-right.svg'
@@ -62,6 +68,7 @@ import ChevronRightSolid from '@/assets/icons/solid/chevron-right.svg'
 import ChevronUpSolid from '@/assets/icons/solid/chevron-up.svg'
 import EyeSlashSolid from '@/assets/icons/solid/eye-slash.svg'
 import EyeSolid from '@/assets/icons/solid/eye.svg'
+import MenuSolid from '@/assets/icons/solid/menu.svg'
 import MinusCircleSolid from '@/assets/icons/solid/minus-circle.svg'
 import MinusSolid from '@/assets/icons/solid/minus.svg'
 import PencilSolid from '@/assets/icons/solid/pencil.svg'
@@ -74,6 +81,7 @@ import XSolid from '@/assets/icons/solid/x.svg'
 type IconMode = 'solid' | 'outline' | 'mini' | 'micro'
 
 type AvailableIcon =
+  | 'arrow-right-in'
   | 'check'
   | 'chevron-down'
   | 'chevron-up'
@@ -82,6 +90,7 @@ type AvailableIcon =
   | 'chevron-double-right'
   | 'eye'
   | 'eye-slash'
+  | 'menu'
   | 'minus'
   | 'minus-circle'
   | 'office'
@@ -109,7 +118,9 @@ const Icon = ({ icon, className, mode = 'outline', size = 'sm', onClick }: IconP
    * SOLID ICONS
    */
   const solidIcons: ModeIconCollection = {
+    'arrow-right-in': ArrowRightInSolid,
     check: CheckSolid,
+    menu: MenuSolid,
     minus: MinusSolid,
     'minus-circle': MinusCircleSolid,
     office: OfficeSolid,
@@ -132,7 +143,9 @@ const Icon = ({ icon, className, mode = 'outline', size = 'sm', onClick }: IconP
    * OUTLINE ICONS
    */
   const outlineIcons: ModeIconCollection = {
+    'arrow-right-in': ArrowRightInOutline,
     check: CheckOutline,
+    menu: MenuOutline,
     minus: MinusOutline,
     'minus-circle': MinusCircleOutline,
     office: OfficeOutline,
@@ -155,7 +168,9 @@ const Icon = ({ icon, className, mode = 'outline', size = 'sm', onClick }: IconP
    * MINI ICONS
    */
   const miniIcons: ModeIconCollection = {
+    'arrow-right-in': ArrowRightInMini,
     check: CheckMini,
+    menu: MenuMini,
     minus: MinusMini,
     'minus-circle': MinusCircleMini,
     office: OfficeMini,
@@ -178,7 +193,9 @@ const Icon = ({ icon, className, mode = 'outline', size = 'sm', onClick }: IconP
    * MICRO ICONS
    */
   const microIcons: ModeIconCollection = {
+    'arrow-right-in': ArrowRightInMini,
     check: CheckMicro,
+    menu: MenuMicro,
     minus: MinusMicro,
     'minus-circle': MinusCircleMicro,
     office: OfficeMicro,
@@ -205,13 +222,13 @@ const Icon = ({ icon, className, mode = 'outline', size = 'sm', onClick }: IconP
   }
 
   const iconSize: { [_key in IconSize]: string } = {
-    '2xs': 'h-4 w-4',
-    xs: 'h-5 w-5',
-    sm: 'h-6 w-6',
-    md: 'h-7 w-7',
-    lg: 'h-8 w-8',
-    xl: 'h-9 w-9',
-    '2xl': 'h-10 w-10'
+    '2xs': '!h-4 !w-4',
+    xs: '!h-5 !w-5',
+    sm: '!h-6 !w-6',
+    md: '!h-7 !w-7',
+    lg: '!h-8 !w-8',
+    xl: '!h-9 !w-9',
+    '2xl': '!h-10 !w-10'
   }
 
   const IconElement = () => {
