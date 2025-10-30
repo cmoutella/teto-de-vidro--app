@@ -20,6 +20,7 @@ import PlusMicro from '@/assets/icons/micro/plus.svg'
 import RecycleMicro from '@/assets/icons/micro/recycle.svg'
 import TrashMicro from '@/assets/icons/micro/trash.svg'
 import XMicro from '@/assets/icons/micro/x.svg'
+import ArrowRightInMini from '@/assets/icons/mini/arrow-right-in.svg'
 import OfficeMini from '@/assets/icons/mini/building-library.svg'
 import CheckMini from '@/assets/icons/mini/check.svg'
 import ChevronDoubleRightMini from '@/assets/icons/mini/chevron-double-right.svg'
@@ -38,6 +39,7 @@ import PlusMini from '@/assets/icons/mini/plus.svg'
 import RecycleMini from '@/assets/icons/mini/recycle.svg'
 import TrashMini from '@/assets/icons/mini/trash.svg'
 import XMini from '@/assets/icons/mini/x.svg'
+import ArrowRightInOutline from '@/assets/icons/outline/arrow-right-in.svg'
 import OfficeOutline from '@/assets/icons/outline/building-library.svg'
 import CheckOutline from '@/assets/icons/outline/check.svg'
 import ChevronDoubleRightOutline from '@/assets/icons/outline/chevron-double-right.svg'
@@ -56,6 +58,7 @@ import PlusOutline from '@/assets/icons/outline/plus.svg'
 import RecycleOutline from '@/assets/icons/outline/recycle.svg'
 import TrashOutline from '@/assets/icons/outline/trash.svg'
 import XOutline from '@/assets/icons/outline/x.svg'
+import ArrowRightInSolid from '@/assets/icons/solid/arrow-right-in.svg'
 import OfficeSolid from '@/assets/icons/solid/building-library.svg'
 import CheckSolid from '@/assets/icons/solid/check.svg'
 import ChevronDoubleRightSolid from '@/assets/icons/solid/chevron-double-right.svg'
@@ -78,6 +81,7 @@ import XSolid from '@/assets/icons/solid/x.svg'
 type IconMode = 'solid' | 'outline' | 'mini' | 'micro'
 
 type AvailableIcon =
+  | 'arrow-right-in'
   | 'check'
   | 'chevron-down'
   | 'chevron-up'
@@ -114,6 +118,7 @@ const Icon = ({ icon, className, mode = 'outline', size = 'sm', onClick }: IconP
    * SOLID ICONS
    */
   const solidIcons: ModeIconCollection = {
+    'arrow-right-in': ArrowRightInSolid,
     check: CheckSolid,
     menu: MenuSolid,
     minus: MinusSolid,
@@ -138,6 +143,7 @@ const Icon = ({ icon, className, mode = 'outline', size = 'sm', onClick }: IconP
    * OUTLINE ICONS
    */
   const outlineIcons: ModeIconCollection = {
+    'arrow-right-in': ArrowRightInOutline,
     check: CheckOutline,
     menu: MenuOutline,
     minus: MinusOutline,
@@ -162,6 +168,7 @@ const Icon = ({ icon, className, mode = 'outline', size = 'sm', onClick }: IconP
    * MINI ICONS
    */
   const miniIcons: ModeIconCollection = {
+    'arrow-right-in': ArrowRightInMini,
     check: CheckMini,
     menu: MenuMini,
     minus: MinusMini,
@@ -186,6 +193,7 @@ const Icon = ({ icon, className, mode = 'outline', size = 'sm', onClick }: IconP
    * MICRO ICONS
    */
   const microIcons: ModeIconCollection = {
+    'arrow-right-in': ArrowRightInMini,
     check: CheckMicro,
     menu: MenuMicro,
     minus: MinusMicro,
