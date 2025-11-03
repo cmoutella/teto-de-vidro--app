@@ -20,18 +20,30 @@ export function MobileMenu({ onClose, translateHeight }: MobileMenuProps) {
         <Button
           label={
             <span className="flex items-center justify-center">
-              Fazer login <Icon icon="arrow-right-in" className="ml-2" />
+              <Icon icon="arrow-right-in" className="mr-2" /> Fazer login
             </span>
           }
           className="w-full h-12"
           onClick={() => router.push('/login')}
         />
         <Button
-          label="Como funciona"
+          label={
+            <span className="flex items-center justify-center">
+              <Icon icon="question-mark" className="mr-2" /> Como funciona?
+            </span>
+          }
           className="w-full h-12"
           onClick={() => router.push('/como-funciona')}
         />
-        <Button label={`Fechar menu`} className="w-full h-12" onClick={onClose} />
+        <Button
+          label={
+            <span className="flex items-center justify-center">
+              <Icon icon="x" className="mr-2" /> Fechar menu
+            </span>
+          }
+          className="w-full h-12"
+          onClick={onClose}
+        />
       </div>
       <div className="w-full flex justify-center my-1.5">
         <div className="w-20 h-1 rounded-lg bg-brand-primary-300 opacity-70"></div>

@@ -22,8 +22,6 @@ export const updateUserRequest: UpdateUserRequest = async (id, newData) => {
       body: JSON.stringify(newData)
     })
 
-    console.log('response update', response)
-
     const user = await response.json()
 
     if (user.error) {

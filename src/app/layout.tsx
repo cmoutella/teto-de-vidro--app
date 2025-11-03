@@ -35,13 +35,13 @@ export default function RootLayout({
   }
 
   return (
-    <html lang="pt-BR" className={`w-full`}>
+    <html lang="pt-BR" className={`w-full h-full`}>
       <Head>
         {env === 'development' || env === 'test' || (env === 'production' && shouldIndexContent)}
         <meta name="robots" content="noindex, nofollow, noarchive, nosnippet" />
         <meta name="googlebot" content="noindex, nofollow" />
       </Head>
-      <body className={`w-full ${inter.className}`}>
+      <body className={`w-screen h-screen ${inter.className}`}>
         <AllProviders user={user}>{children}</AllProviders>
       </body>
     </html>
