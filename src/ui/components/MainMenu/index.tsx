@@ -1,1 +1,1 @@
-export { MenuDesktop } from './desktop'
+export { ServerMenuDesktop } from './desktop'

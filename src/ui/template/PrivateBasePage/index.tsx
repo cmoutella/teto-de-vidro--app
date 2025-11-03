@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react'
 
 import type { InterfaceUser } from '@/types/user'
-import { MenuDesktop } from '@/ui/components/MainMenu'
+import { ServerMenuDesktop } from '@/ui/components/MainMenu'
 
 import PrivateNavbar from '../Navbar/PrivateNavbar'
 
@@ -26,7 +26,7 @@ const PrivateBasePage = ({
       <div className="w-full h-screen overflow-x-hidden md:grid md:grid-cols-8">
         <div className="hidden relative h-full md:block md:col-span-1">
           <div className={`fixed h-full ${menuWidth}`}>
-            <MenuDesktop />
+            <ServerMenuDesktop />
           </div>
         </div>
         <div className="w-full md:col-span-7 pb-16 overflow-x-hidden -z-[1]">{children}</div>

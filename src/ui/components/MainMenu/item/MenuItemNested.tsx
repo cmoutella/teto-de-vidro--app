@@ -3,22 +3,25 @@ import clsx from 'clsx'
 import Link from 'next/link'
 
 import Icon from '../../base/Icon'
+import { hoverStyles, menuItemStyles } from '../menu.styles'
 import type { MenuItemNested as MenuItem } from '../menu.types'
 
 interface MenuItemSingleProps {
   item: MenuItem
   toggle: () => void
   isOpen: boolean
+  currPath: string
 }
 
-export function MenuItemNested({ item, toggle, isOpen }: MenuItemSingleProps) {
+export function MenuItemNested({ item, toggle, isOpen, currPath }: MenuItemSingleProps) {
   return (
     <div>
       <button
         onClick={() => toggle()}
         className={clsx(
-          'w-full flex justify-between items-center px-3 py-1.5 rounded border-r border-b border-transparent',
-          'hover:bg-brand-primary-200 hover:border-brand-primary-400 hover:rounded-none hover:rounded-br-lg'
+          'w-full flex justify-between items-center px-3 py-1.5 rounded',
+          hoverStyles,
+          { hidden: !item.visible }
         )}
       >
         <div className="flex items-center space-x-2">
@@ -38,16 +41,13 @@ export function MenuItemNested({ item, toggle, isOpen }: MenuItemSingleProps) {
         </span>
       </button>
       {isOpen && (
-        <ul className="pl-6 mt-1 space-y-1">
+        <ul className="pl-4 mt-1 space-y-1">
           {item.items!.map((sub) => (
             <li key={sub.name}>
               <Link
                 href={sub.path}
-                className={clsx('block px-3 py-1', {
-                  'bg-brand-primary-300 font-medium hover:cursor-default rounded':
-                    location.pathname === sub.path,
-                  'hover:bg-brand-primary-200 border-r border-b border-transparent hover:border-brand-primary-400 hover:rounded-none hover:rounded-br-lg':
-                    location.pathname !== sub.path
+                className={clsx('block px-3 py-1', menuItemStyles(sub.path, currPath), {
+                  hidden: !sub.visible
                 })}
               >
                 {sub.name}
