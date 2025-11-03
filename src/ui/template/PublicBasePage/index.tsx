@@ -13,7 +13,7 @@ const PublicBasePage = ({
   user?: Omit<InterfaceUser, 'password'>
 }) => {
   return (
-    <div className="w-full h-full min-h-screen flex flex-col">
+    <div className="w-full min-h-screen flex flex-col">
       <PublicNavbar user={user} />
       <div className="w-full flex-grow overflow-x-hidden">{children}</div>
       <PublicFooter />

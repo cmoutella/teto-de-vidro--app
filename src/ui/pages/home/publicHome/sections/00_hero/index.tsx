@@ -6,8 +6,8 @@ import heroMobileImage from '../../assets/hero-mobile.png'
 
 export function HeroSection() {
   return (
-    <section className="flex justify-center relative w-full z-0 overflow-hidden h-[calc(100vh-60px)] sm:h-full">
-      <div className="container relative px-2 sm:px-4 lg:px-14 py-12 sm:py-44 z-5">
+    <section className="flex justify-center relative w-full z-0 overflow-hidden h-[calc(100vh-60px)] sm:h-full md:h-auto">
+      <div className="container relative px-2 sm:px-4 lg:px-14 py-12 md:py-44 z-5">
         <div>
           <h1 className="text-center sm:text-start font-medium text-xl sm:text-3xl lg:text-4xl flex flex-col mb-5 sm:mb-10">
             <span className="sm:mb-2">
