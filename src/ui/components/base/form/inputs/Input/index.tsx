@@ -9,6 +9,7 @@ import cx from 'classnames'
 
 export interface InputProps extends InputHeadlessProps {
   label?: string
+  labelStyle?: string
   description?: string
   theme?: FormTheme
   themeSize?: FormSizes
@@ -21,6 +22,7 @@ export interface InputProps extends InputHeadlessProps {
 
 const Input = ({
   label,
+  labelStyle,
   description,
   theme = 'light',
   themeSize = 'md',
@@ -33,6 +35,7 @@ const Input = ({
   return (
     <FieldWrapper
       label={label}
+      labelStyle={labelStyle}
       description={description}
       theme={theme}
       themeSize={themeSize}

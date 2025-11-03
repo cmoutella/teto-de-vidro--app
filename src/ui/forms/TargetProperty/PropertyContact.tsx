@@ -8,12 +8,13 @@ import type { FormSizes, FormTheme } from '@ui/base/shared/formTheme'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
 
-import { editTargetProperty } from '@/requests/targetProperty/edit'
+import type { UpdateTargetResponse } from '@/requests/client/targetProperty/update'
+import { updateTargetProperty } from '@/requests/client/targetProperty/update'
 import type { TargetPropertyInterface } from '@/types/targetProperty'
 import { Checkbox } from '@/ui/components/base/form/Checkbox'
 
 interface PropertyContactFormProps {
-  onSuccess: (_h: Partial<TargetPropertyInterface>) => void
+  onSuccess: (_h: UpdateTargetResponse) => void
   onFail: () => void
   currentData: Partial<TargetPropertyInterface>
 }
@@ -54,7 +55,7 @@ const PropertyContactForm = ({ onSuccess, onFail, currentData }: PropertyContact
   }) {
     if (!formik.isValid || !user) return
 
-    const res = await editTargetProperty(currentData.id as never, values)
+    const res = await updateTargetProperty(currentData.id as never, values)
 
     if (!res) {
       onFail()

@@ -6,7 +6,7 @@ export interface AdScrapedData
   size?: number
   rooms?: number
   bathrooms?: number
-  parkingSpots?: number
+  parking?: number
   floorLevel?: number
   suites?: number
   street?: string

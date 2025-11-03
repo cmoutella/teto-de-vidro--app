@@ -8,13 +8,13 @@ import type { FormikErrors } from 'formik'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
 
-import { inviteUsers } from '@/requests/hunt/inviteUsers'
+import { inviteUsers } from '@/requests/client/hunt/inviteUsers'
 import type { InterfaceHunt } from '@/types/hunt'
 import type { UserInvitationData } from '@/types/invitation'
 import type { SessionUser } from '@/types/user'
 import Button from '@/ui/components/base/Button'
 import Icon from '@/ui/components/base/Icon'
-import { formatEmailInput } from '@/utils/string/formatEmailInput'
+import { formatEmailInput } from '@/utils/string/format/formatEmailInput'
 
 interface InviteUserFormProps {
   onSuccess: (_h: InterfaceHunt) => void

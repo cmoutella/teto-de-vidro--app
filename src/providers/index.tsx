@@ -1,6 +1,7 @@
-/* eslint-disable @typescript-eslint/no-empty-object-type */
 'use client'
 import { createContext, useContext } from 'react'
+
+import type { SessionUser } from '@/types/user'
 
 import { SessionProvider } from './AuthProvider'
 import { UIProvider } from './UIProvider'
@@ -19,11 +20,17 @@ export const useAllContext = () => {
   return context
 }
 
-export const AllProviders = ({ children }: { children: React.ReactNode }) => {
+export const AllProviders = ({
+  children,
+  user
+}: {
+  children: React.ReactNode
+  user?: SessionUser
+}) => {
   return (
     <AllContext.Provider value={{}}>
       <UIProvider>
-        <SessionProvider>{children}</SessionProvider>
+        <SessionProvider currUser={user}>{children}</SessionProvider>
       </UIProvider>
     </AllContext.Provider>
   )

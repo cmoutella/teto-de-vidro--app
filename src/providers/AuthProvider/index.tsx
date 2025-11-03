@@ -1,28 +1,25 @@
 'use client'
-import { createContext, useContext, useEffect, useMemo, useState } from 'react'
+import { createContext, useContext, useEffect, useState } from 'react'
 
-import { authLogin } from '@requests/auth/login'
-
-import { getUserPermissionsRequest } from '@/requests/user/getUserPermissionsRequest'
-import { getUserFn, validateAuthentication } from '@/services/auth'
-import storage from '@/services/storage'
-import type { AuthData } from '@/types/apiResponses'
+import { authLogin } from '@/requests/client/auth/login'
+import { authLogout } from '@/requests/client/auth/logout'
+import { validateAuthentication } from '@/requests/client/auth/validateAuth'
+import { getUserPermissionsRequest } from '@/requests/client/user/getUserPermissionsRequest'
+import type { UserAuthData } from '@/types/apiResponses'
 import type { SessionUser } from '@/types/user'
 
 interface SessionContext {
   user?: SessionUser
-  isLogged: boolean
-  authenticate: (_token: AuthData) => void
+  authenticate: (_token: UserAuthData) => void
   updatePermissions: () => Promise<void>
   login: (_username: string, _password: string) => void
-  logout: () => void
+  logout: () => Promise<void>
 }
 
 const DEFAULT_VALUES = {
-  user: getUserFn(),
-  isLogged: storage().hasToken(),
+  user: undefined,
   login: (_u: string, _p: string) => {},
-  logout: () => {},
+  logout: async () => {},
   authenticate: () => {},
   updatePermissions: async () => {}
 }
@@ -39,59 +36,56 @@ export const useSessionContext = () => {
   return context
 }
 
-export const SessionProvider = ({ children }: { children: React.ReactNode }) => {
-  const [user, setUser] = useState<SessionUser>(DEFAULT_VALUES.user)
+export const SessionProvider = ({
+  children,
+  currUser
+}: {
+  children: React.ReactNode
+  currUser?: SessionUser
+}) => {
+  const [user, setUser] = useState<SessionUser>(currUser)
   const [tryData, setTryData] = useState<boolean>(true)
 
-  const authStorage = storage()
+  async function init() {
+    await authenticate()
+  }
 
   useEffect(() => {
-    if (user && !user.permissions && tryData) {
-      updatePermissions()
+    if (!user && tryData) {
+      init()
+      setTryData(false)
     }
-    setTryData(false)
-  }, [user, tryData])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user])
 
   const login = async (email: string, password: string) => {
     const auth = await authLogin(email, password)
 
     if (!auth) return
 
-    await validateAuthentication(auth).then(async (res) => {
-      const permissions = await getPermissions(res.id)
-      const data = { ...user, permissions } as SessionUser
-
-      setUser(data)
+    await validateAuthentication().then(async (res) => {
+      setUser(res)
       window.location.reload()
     })
   }
 
-  const logout = () => {
-    setUser(undefined)
-    authStorage.clearToken()
+  async function logout() {
+    const exit = await authLogout()
+
+    if (exit) {
+      setUser(undefined)
+      window.location.reload()
+    }
   }
 
   const authenticate = () => {
     if (user) return
 
-    validateAuthentication()
-      .then(async (res) => {
-        const permissions = await getPermissions(res.id)
-
-        const data = { ...res, permissions } as SessionUser
-
-        setUser(data)
-        window.location.reload()
-      })
-      .catch((_err) => {
-        // showToast({
-        //   type: "error",
-        //   message: "Não foi possivel realizar o login tente mais tarde",
-        // });
-        setTimeout(() => {
-          window.location.replace('/login')
-        }, 3000)
-      })
+    validateAuthentication().then((res) => {
+      if (!user) {
+        setUser(res)
+      }
+    })
   }
 
   async function getPermissions(userId: string) {
@@ -111,13 +105,8 @@ export const SessionProvider = ({ children }: { children: React.ReactNode }) => 
     setUser({ ...user, permissions })
   }
 
-  // TODO: esse nao ta rolando, pq?
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const isLogged = useMemo(() => user !== undefined && authStorage.hasToken(), [user])
-
   const value = {
     user,
-    isLogged,
     login,
     logout,
     authenticate,

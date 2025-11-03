@@ -1,12 +1,12 @@
 import { useMemo } from 'react'
 
 export function useAddressString(data: {
-  street: string
-  lotNumber: string
-  block: string
-  propertyNumber: string
-  city: string
-  uf: string
+  street?: string
+  lotNumber?: string
+  block?: string
+  propertyNumber?: string
+  city?: string
+  uf?: string
 }) {
   return useMemo(() => {
     if (!data.street) return 'Complete as informações de endereço'

@@ -7,7 +7,7 @@ const InvitationsInput = () => {
         <p className="text-lg font-medium text-brand-primary-600 w-">
           Convite alguém para colaborar nessa busca
         </p>
-        <Button rounded={true} label="+" uiType="outline" />
+        <Button rounded={true} label="+" className="outline" />
       </div>
 
       <div className="h-0.5 bg-brand-primary-500 my-1 w-full"></div>

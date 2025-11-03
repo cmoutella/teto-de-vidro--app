@@ -8,6 +8,7 @@ import TargetPropertyList from '@ui/TargetProperty/TargetPropertyList'
 import { HuntProvider, useHuntContext } from '@/providers/HuntProvider'
 import { useUIContext } from '@/providers/UIProvider'
 import type { InterfaceHunt } from '@/types/hunt'
+import type { InterfacePublicUser } from '@/types/user'
 import EditHuntForm from '@/ui/forms/Hunt/EditHunt'
 import CreateTargetPropertyForm from '@/ui/forms/TargetProperty/CreateTargetProperty'
 
@@ -15,9 +16,18 @@ import { HuntParticipants } from './components/HuntParticipants'
 
 interface HuntViewProps {
   hunt: InterfaceHunt
+  user: InterfacePublicUser
 }
 
-const HuntView = () => {
+function OneHuntView({ hunt }: HuntViewProps) {
+  return (
+    <HuntProvider initialHuntData={hunt}>
+      <HuntView />
+    </HuntProvider>
+  )
+}
+
+function HuntView() {
   const { hunt, targetsLeft, update } = useHuntContext()
   const { modal } = useUIContext()
 
@@ -69,14 +79,14 @@ const HuntView = () => {
       <div className="w-full flex justify-center flex-col items-center px-3 sm:px-14 py-5 sm:py-10 gap-3">
         <div className="w-full flex justify-center mb-2 sm:mb-6">
           <div className="container">
-            <div className="flex flex-col-reverse sm:flex-row sm:items-start w-full sm:justify-between gap-5">
-              <div className="flex flex-col gap-y-1.5 justify-start items-start">
+            <div className="md:w-full flex flex-col-reverse sm:flex-row sm:items-start w-full sm:justify-between gap-5">
+              <div className="md:w-1/2 flex flex-col gap-y-1.5 justify-start items-start">
                 <div className="flex flex-row items-center justify-start gap-x-2">
                   <h3 className="text-xl sm:text-3xl font-medium text-brand-primary-900">
                     # {(hunt as InterfaceHunt).title}
                   </h3>
                 </div>
-                <HuntParticipants huntUsers={hunt?.huntUsers ?? []} />
+                <HuntParticipants hunt={hunt ?? undefined} />
               </div>
               <div className="flex flex-row items-center justify-end gap-2">
                 <Button
@@ -99,17 +109,9 @@ const HuntView = () => {
             </div>
           </div>
         </div>
-        <TargetPropertyList />
+        <TargetPropertyList ctaEmptyListAction={handleCreateTargetProperty} />
       </div>
     </div>
-  )
-}
-
-function OneHuntView({ hunt }: HuntViewProps) {
-  return (
-    <HuntProvider initialHuntData={hunt}>
-      <HuntView />
-    </HuntProvider>
   )
 }
 

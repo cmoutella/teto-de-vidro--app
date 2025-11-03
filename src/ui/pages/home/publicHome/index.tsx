@@ -2,16 +2,22 @@
 
 import PublicBasePage from '@/ui/template/PublicBasePage'
 
+import { HeroSection } from './sections/00_hero'
+import { MarketGapSection } from './sections/01_market-gap'
+import { SolutionSection } from './sections/02_solution'
+import { FutureSection } from './sections/03_future'
+import { CatchSection } from './sections/04_catch'
+import { HowToSection } from './sections/05_how-to'
+
 const PublicHomeView = () => {
   return (
-    <PublicBasePage user={null}>
-      <div className="w-full p-20 flex justify-center items-center">
-        <div className="container flex flex-col gap-5">
-          <h1>PUBLIC HOME</h1>
-
-          {/* Aqui deverá ter uma home apresentando o produto */}
-        </div>
-      </div>
+    <PublicBasePage>
+      <HeroSection />
+      <MarketGapSection />
+      <SolutionSection />
+      <FutureSection />
+      <CatchSection />
+      <HowToSection />
     </PublicBasePage>
   )
 }

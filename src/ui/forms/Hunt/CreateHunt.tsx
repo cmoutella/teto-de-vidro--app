@@ -1,7 +1,4 @@
 'use client'
-import { useSessionContext } from '@providers/AuthProvider'
-import type { CreateHuntRequestProps } from '@requests/hunt/create'
-import { createHunt } from '@requests/hunt/create'
 import SubmitButton from '@ui/base/form/buttons/SubmitButton'
 import Input from '@ui/base/form/inputs/Input'
 import InputPartialDate from '@ui/base/form/inputs/InputPartialDate'
@@ -12,15 +9,20 @@ import { isFuture } from 'date-fns/isFuture'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
 
+import type { CreateHuntRequestProps } from '@/requests/client/hunt/create'
+import { createHunt } from '@/requests/client/hunt/create'
+import type { InterfacePublicUser } from '@/types/user'
+
 interface CreateHuntFormProps {
   onSuccess: (_id: string) => void
   onFail: () => void
+  user: InterfacePublicUser
 }
 
 const formThemeSize: FormSizes = 'lg'
 const themePallete: FormTheme = 'light'
 
-const CreateHuntForm = ({ onSuccess, onFail }: CreateHuntFormProps) => {
+const CreateHuntForm = ({ onSuccess, onFail, user }: CreateHuntFormProps) => {
   const validationSchema = Yup.object({
     type: Yup.string().required(),
     movingExpected: Yup.string().test(
@@ -54,10 +56,8 @@ const CreateHuntForm = ({ onSuccess, onFail }: CreateHuntFormProps) => {
     onSubmit: handleSubmit
   })
 
-  const { user } = useSessionContext()
-
-  async function handleSubmit(values: Omit<CreateHuntRequestProps, 'creatorId'>) {
-    if (!formik.isValid || !user) return
+  async function handleSubmit(values: Omit<CreateHuntRequestProps, 'creatorId' | 'huntUsers'>) {
+    if (!formik.isValid) return
 
     const data: CreateHuntRequestProps = {
       creatorId: user.id,

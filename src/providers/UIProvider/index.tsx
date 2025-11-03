@@ -1,6 +1,6 @@
 'use client'
 import type { ReactNode } from 'react'
-import { createContext, useContext, useState } from 'react'
+import { createContext, useContext, useEffect, useState } from 'react'
 import { Toaster } from 'react-hot-toast'
 
 import { Loading } from '@/ui/components/base/Loading'
@@ -9,7 +9,11 @@ import Modal from '@/ui/components/base/Modal'
 
 type InterfaceAction = () => void
 
+export type DeviceType = 'mobile' | 'tablet' | 'desktop' | 'large'
+
 interface UIContext {
+  mounted: boolean
+  device: DeviceType
   loading: {
     on: InterfaceAction
     off: InterfaceAction
@@ -19,6 +23,10 @@ interface UIContext {
     open: (_s: ModalSize, _c: ReactNode) => void
     close: () => void
   }
+  scroll: {
+    block: () => void
+    allow: () => void
+  }
 }
 
 interface UIModal extends Pick<ModalProps, 'isOpen' | 'size'> {
@@ -26,12 +34,18 @@ interface UIModal extends Pick<ModalProps, 'isOpen' | 'size'> {
 }
 
 const DEFAULT_VALUES = {
+  mounted: false,
+  device: 'desktop' as DeviceType,
   loading: {
     on: () => {},
     off: () => {},
     state: false
   },
-  modal: { open: () => {}, close: () => {} }
+  modal: { open: () => {}, close: () => {} },
+  scroll: {
+    block: () => {},
+    allow: () => {}
+  }
 }
 
 const UIContext = createContext<UIContext>(DEFAULT_VALUES)
@@ -47,8 +61,32 @@ export const useUIContext = () => {
 }
 
 export const UIProvider = ({ children }: { children: React.ReactNode }) => {
+  const [mounted, setMounted] = useState<boolean>(DEFAULT_VALUES.mounted)
+  const [deviceType, setDeviceType] = useState<DeviceType>(DEFAULT_VALUES.device)
+
   const [loadingScreen, setLoadingScreen] = useState<boolean>(DEFAULT_VALUES.loading.state)
   const [modal, setModal] = useState<UIModal | null>(null)
+
+  useEffect(() => {
+    setMounted(true)
+
+    const updateDevice = (): void => {
+      const width = window.innerWidth
+      if (width <= 768) {
+        setDeviceType('mobile')
+      } else if (width <= 1024) {
+        setDeviceType('tablet')
+      } else if (width <= 1240) {
+        setDeviceType('desktop')
+      } else {
+        setDeviceType('large')
+      }
+    }
+
+    updateDevice()
+    window.addEventListener('resize', updateDevice)
+    return () => window.removeEventListener('resize', updateDevice)
+  }, [])
 
   const showLoadingScreen = () => {
     setLoadingScreen(true)
@@ -57,15 +95,30 @@ export const UIProvider = ({ children }: { children: React.ReactNode }) => {
     setLoadingScreen(false)
   }
 
+  const blockScroll = () => {
+    const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth
+    document.body.style.overflow = 'hidden'
+    document.body.style.paddingRight = `${scrollbarWidth}px`
+  }
+
+  const allowScroll = () => {
+    document.body.style.overflowY = 'unset' // ou 'auto'
+    document.body.style.paddingRight = ''
+  }
+
   const initModal = (size: ModalSize, content: ReactNode) => {
     setModal({ content, isOpen: true, size })
+    blockScroll()
   }
 
   const endModal = () => {
     setModal(null)
+    allowScroll()
   }
 
   const value = {
+    mounted: mounted,
+    device: deviceType,
     loading: {
       on: showLoadingScreen,
       off: hideLoadingScreen,
@@ -74,6 +127,10 @@ export const UIProvider = ({ children }: { children: React.ReactNode }) => {
     modal: {
       open: initModal,
       close: endModal
+    },
+    scroll: {
+      block: blockScroll,
+      allow: allowScroll
     }
   }
 

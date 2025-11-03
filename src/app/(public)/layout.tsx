@@ -1,12 +1,12 @@
 import type { ReactNode } from 'react'
 
 import PublicBasePage from '@/ui/template/PublicBasePage'
-import { isUserAuthenticated } from '@/utils/auth/userAuthenticationAtClient'
+import { isUserAuthenticated } from '@/utils/auth/userAuthenticationAtServer'
 
 async function Layout({ children }: { children: ReactNode }) {
-  const userLoggedIn = await isUserAuthenticated()
+  const userAuthData = await isUserAuthenticated({ shouldNoCookieRedirect: false })
 
-  return <PublicBasePage user={userLoggedIn}>{children}</PublicBasePage>
+  return <PublicBasePage user={userAuthData?.user}>{children}</PublicBasePage>
 }
 
 export default Layout

@@ -1,9 +1,13 @@
+import { cookies } from 'next/headers'
 import type { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
 
-import { appCokies } from '@/config/cookies'
+import { appCookies } from '@/config/cookies'
 import type { PaginatedData, SuccessResponse } from '@/types/apiPatterns'
+import type { UserAuthData } from '@/types/apiResponses'
 import type { InterfaceHunt } from '@/types/hunt'
+import { getAppAuth } from '@/utils/auth/getAppAuth'
+import { isTokenValid } from '@/utils/auth/token'
 
 /**
  * GET HUNT BY USER
@@ -11,8 +15,11 @@ import type { InterfaceHunt } from '@/types/hunt'
  */
 
 export async function POST(req: NextRequest) {
-  const body = await req.json()
+  const baseUrl = process.env.BACKEND_API
 
+  if (!baseUrl) throw new Error('Application API url not defined')
+
+  const body = await req.json()
   if (!body.userId) {
     return NextResponse.json(
       { error: 'Dados insuficiêntes para buscar pelas hunts' },
@@ -20,23 +27,55 @@ export async function POST(req: NextRequest) {
     )
   }
 
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_API_URL
+  let appAuth = req.headers.get('x-api-key')
+  let userAuth = req.headers.get('authorization')
 
-  if (!baseUrl) throw new Error('Application API url not defined')
-
-  const authCookie = req.cookies.get(appCokies.auth)?.value
-  const tokenFromCookie = authCookie ? JSON.parse(authCookie).token : undefined
-
-  const authorization =
-    req.headers.get('authorization') ?? (tokenFromCookie && `Bearer ${tokenFromCookie}`)
+  const reqCookies = cookies()
 
   try {
+    if (!appAuth) {
+      const tryAppAuth = await getAppAuth()
+
+      if (tryAppAuth) {
+        appAuth = tryAppAuth.token
+
+        reqCookies.set(appCookies.app, JSON.stringify(tryAppAuth), {
+          httpOnly: true,
+          secure: process.env.NODE_ENV === 'production',
+          sameSite: process.env.NODE_ENV === 'production' ? 'strict' : 'lax',
+          path: '/',
+          maxAge: 60 * 60 * 24 * 3 // 3 dia,
+          // domain: process.env.NODE_ENV !== 'production' ? 'localhost' : 'tetodevidroo.com.br'
+        })
+      }
+    }
+
+    if (!userAuth) {
+      const tryUserAuth = reqCookies.get(appCookies.auth)
+
+      if (tryUserAuth) {
+        const parsed = JSON.parse(tryUserAuth.value) as UserAuthData
+
+        const valid = isTokenValid(parsed.expireAt)
+
+        if (valid) {
+          userAuth = `Bearer ${parsed.token}`
+        }
+      }
+    }
+
+    if (!appAuth || !userAuth) {
+      throw new Error('Erro de autorização')
+    }
+
     const res = await fetch(`${baseUrl}/hunt/search/user?page=${body.page}&limit=${body.perPage}`, {
       method: 'GET',
       mode: 'cors',
+      credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
-        ...(authorization ? { Authorization: authorization } : {})
+        'x-api-key': appAuth,
+        Authorization: userAuth
       }
     })
 

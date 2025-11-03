@@ -2,6 +2,7 @@ import toast from 'react-hot-toast'
 
 import cx from 'classnames'
 
+import { useSessionContext } from '@/providers/AuthProvider'
 import { useHuntContext } from '@/providers/HuntProvider'
 import { useUIContext } from '@/providers/UIProvider'
 import type { TargetAmenity } from '@/types/targetProperty'
@@ -28,6 +29,8 @@ export function AmenitiesDisplay({ amenities, targetId }: AmenitiesDisplayProps)
   const { modal } = useUIContext()
   const { fetchProperties } = useHuntContext()
 
+  const { user } = useSessionContext()
+
   function openAddAmenityModal() {
     function handleFail() {
       toast.error('Algo deu errado')
@@ -44,6 +47,7 @@ export function AmenitiesDisplay({ amenities, targetId }: AmenitiesDisplayProps)
     modal.open(
       'medium',
       <AddAmenityToTargetForm
+        user={user}
         onSuccess={handleSuccess}
         targetId={targetId as never}
         onFail={handleFail}

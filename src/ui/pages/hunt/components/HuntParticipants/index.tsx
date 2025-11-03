@@ -4,35 +4,41 @@ import { toast } from 'react-hot-toast'
 
 import cx from 'classnames'
 
+import { featureAvailable } from '@/config/features'
 import { useSessionContext } from '@/providers/AuthProvider'
 import { useHuntContext } from '@/providers/HuntProvider'
 import { useUIContext } from '@/providers/UIProvider'
 import type { HuntParticipant, InterfaceHunt } from '@/types/hunt'
 import Button from '@/ui/components/base/Button'
-import { Loading } from '@/ui/components/base/Loading'
 import InviteUserForm from '@/ui/forms/Hunt/InviteUsers'
 
 interface HuntParticipantsProps {
-  huntUsers: HuntParticipant[]
+  hunt?: InterfaceHunt
 }
 
-export function HuntParticipants({ huntUsers }: HuntParticipantsProps) {
+export function HuntParticipants({ hunt }: HuntParticipantsProps) {
   const [ready, setReady] = useState<boolean>(false)
+  const [huntUsers, setHuntUsers] = useState<HuntParticipant[]>([])
 
   useEffect(() => {
-    setReady(true)
-  }, [])
+    if (hunt) {
+      setHuntUsers(hunt.huntUsers)
+      setReady(true)
+    }
+  }, [hunt])
 
   const { user, updatePermissions } = useSessionContext()
-  const { hunt, update } = useHuntContext()
+  const { update } = useHuntContext()
   const { modal } = useUIContext()
 
   const participants = useMemo(() => {
-    return huntUsers.filter((u) => user && u.id !== user.id) ?? []
+    return huntUsers!.filter((u) => user && u.id !== user.id) ?? []
   }, [huntUsers, user])
 
   if (!ready) {
-    return <Loading />
+    return (
+      <div className="w-full bg-brand-gray-600 opacity-50 h-6 rounded-sm animation-pulse"></div>
+    )
   }
 
   function handleInviteModal() {
@@ -66,6 +72,8 @@ export function HuntParticipants({ huntUsers }: HuntParticipantsProps) {
     }
   }
 
+  const canInvite = featureAvailable('invites', user)
+
   return (
     <div className="flex justify-start items-end gap-3">
       {participants.length >= 1 && (
@@ -81,7 +89,7 @@ export function HuntParticipants({ huntUsers }: HuntParticipantsProps) {
           })}
         </div>
       )}
-      {(user?.permissions?.invitationsLimit ?? 0) >= 1 && (
+      {canInvite && (user?.permissions?.invitationsLimit ?? 0) >= 1 && (
         <Button
           label="Convide alguém"
           onClick={handleInviteModal}

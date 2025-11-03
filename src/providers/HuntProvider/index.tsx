@@ -2,10 +2,10 @@
 import { createContext, useContext, useEffect, useMemo, useState } from 'react'
 import { toast } from 'react-hot-toast'
 
-import { getHuntById } from '@/requests/hunt/getById'
-import { deleteTargetProperty } from '@/requests/targetProperty/delete'
-import { getAllTargetPropertiesfromHunt } from '@/requests/targetProperty/getAllTargetProperties'
-import { getUserPermissionsRequest } from '@/requests/user/getUserPermissionsRequest'
+import { getHuntById } from '@/requests/client/hunt/getById'
+import { deleteTargetProperty } from '@/requests/client/targetProperty/delete'
+import { getAllTargetPropertiesfromHunt } from '@/requests/client/targetProperty/getAllTargetProperties'
+import { getUserPermissionsRequest } from '@/requests/client/user/getUserPermissionsRequest'
 import type { HuntPermissions, InterfaceHunt } from '@/types/hunt'
 import type { TargetPropertyInterface } from '@/types/targetProperty'
 import { DEFAULT_HUNT_LIST_PER_PAGE } from '@/ui/pages/hunt/consts/perPage'
@@ -29,8 +29,9 @@ interface HuntContext {
   hunt?: InterfaceHunt
   page: PageConfig
   properties: TargetPropertyInterface[]
+  propertiesLoading: boolean
   fetchProperties: () => void
-  removeTargetProperty: (_t: string) => void
+  removeTargetProperty: (_t: string) => Promise<boolean>
   permissions: HuntPermissions
   targetsLeft: number
 }
@@ -51,8 +52,11 @@ const DEFAULT_VALUES: HuntContext = {
     lastPage: () => {}
   },
   properties: [],
+  propertiesLoading: true,
   fetchProperties: () => {},
-  removeTargetProperty: (_t: string) => {},
+  removeTargetProperty: async (_t: string) => {
+    return false
+  },
   permissions: {
     maxTargets: 0
   },
@@ -83,6 +87,9 @@ export const HuntProvider = ({
   const [perPage, setPerPage] = useState<number>(DEFAULT_VALUES.page.perPage)
   const [totalItems, setTotalItems] = useState<number>(0)
   const [properties, setProperties] = useState<TargetPropertyInterface[]>(DEFAULT_VALUES.properties)
+  const [propertiesLoading, setPropertiesLoading] = useState<boolean>(
+    DEFAULT_VALUES.propertiesLoading
+  )
   const [permissions, setPermissions] = useState<HuntPermissions>(DEFAULT_VALUES.permissions)
 
   const targetAvailableLimit = useMemo(() => {
@@ -126,11 +133,13 @@ export const HuntProvider = ({
   }
 
   async function getProperties() {
+    setPropertiesLoading(true)
     const data = await getAllTargetPropertiesfromHunt((hunt as InterfaceHunt).id, page, perPage)
 
     if (!data) {
       toast.error('Não foi possível trazer o alvos da busca')
     }
+
     if (!data || data?.list.length <= 0) {
       setTotalPages(0)
       setTotalItems(0)
@@ -139,17 +148,17 @@ export const HuntProvider = ({
       setTotalPages(data.totalPages)
       setTotalItems(data.totalItems)
     }
+    setPropertiesLoading(false)
   }
 
   async function removeTargetProperty(id: string) {
     const res = await deleteTargetProperty(id)
 
     if (res) {
-      toast.success('Alvo removido com sucesso!')
       await getProperties()
-    } else {
-      toast.error('Não foi possível remover o alvo')
     }
+
+    return !!res
   }
 
   function handleNextPage() {
@@ -176,6 +185,7 @@ export const HuntProvider = ({
       isLastPage: page === totalPages
     },
     properties,
+    propertiesLoading,
     permissions,
     targetsLeft: targetAvailableLimit,
     fetchProperties: getProperties,

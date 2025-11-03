@@ -12,7 +12,7 @@ import Icon from '@/ui/components/base/Icon'
 const LoginView = () => {
   const [email, setEmail] = useState<string | undefined>(undefined)
   const [password, setPassword] = useState<string | undefined>(undefined)
-  const [passwordVisible, setPasswordVisible] = useState<boolean>(true)
+  const [passwordVisible, setPasswordVisible] = useState<boolean>(false)
 
   const { login } = useSessionContext()
 
@@ -56,8 +56,11 @@ const LoginView = () => {
   return (
     <div className="w-full h-full px-6 py-10 flex justify-center items-center">
       <div className="container">
-        <div className="flex justify-center">
-          <div className="px-6 py-8 pb-6 w-6/12 max-w-xl shadow-md shadow-white">
+        <div className="flex justify-center w-full">
+          <div className="md:px-6 md:pt-8 md:pb-6 w-full md:w-6/12 sm:max-w-xl shadow-md shadow-white">
+            <h2 className="text-2xl text-brand-primary-700 text-center font-medium mt-8 md:mt-10 mb-12 md:mb-20">
+              Faça seu login
+            </h2>
             <form onSubmit={handleSubmit} className="flex flex-col items-center gap-4 w-full">
               <Input
                 label="E-mail"

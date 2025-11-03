@@ -5,7 +5,7 @@ import { toast } from 'react-hot-toast'
 import cx from 'classnames'
 
 import { useUIContext } from '@/providers/UIProvider'
-import { editTargetProperty } from '@/requests/targetProperty/edit'
+import { updateTargetProperty } from '@/requests/client/targetProperty/update'
 import type { TargetComment } from '@/types/comment'
 import type { PropertyHuntingStage, TargetPropertyInterface } from '@/types/targetProperty'
 import ScheduledVisitForm from '@/ui/forms/TargetProperty/ScheduledVisit'
@@ -129,7 +129,7 @@ export function StagePill({ stage, targetId }: StagePillProps) {
         onSuccess={modal.close}
         onFail={modal.close}
         enableEmptyComment={true}
-        submit={async (data: TargetComment) =>
+        submit={async (data: Omit<TargetComment, 'author'>) =>
           (await updateStage(newStage, otherData, data)) as never
         }
       />
@@ -139,10 +139,10 @@ export function StagePill({ stage, targetId }: StagePillProps) {
   async function updateStage(
     newStage: PropertyHuntingStage,
     otherData?: Partial<TargetPropertyInterface>,
-    comment?: TargetComment
+    comment?: Omit<TargetComment, 'author'>
   ) {
     try {
-      const res = await editTargetProperty(
+      const res = await updateTargetProperty(
         targetId,
         { huntingStage: newStage, ...otherData },
         comment

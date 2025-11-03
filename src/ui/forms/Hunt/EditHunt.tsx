@@ -2,7 +2,6 @@
 import { useEffect, useState } from 'react'
 
 import { useSessionContext } from '@providers/AuthProvider'
-import type { CreateHuntRequestProps } from '@requests/hunt/create'
 import SubmitButton from '@ui/base/form/buttons/SubmitButton'
 import Input from '@ui/base/form/inputs/Input'
 import InputPartialDate from '@ui/base/form/inputs/InputPartialDate'
@@ -14,7 +13,8 @@ import { isFuture } from 'date-fns/isFuture'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
 
-import { editHunt } from '@/requests/hunt/edit'
+import type { EditHuntRequestProps } from '@/requests/client/hunt/edit'
+import { editHunt } from '@/requests/client/hunt/edit'
 import type { InterfaceHunt } from '@/types/hunt'
 
 interface EditHuntFormProps {
@@ -58,7 +58,7 @@ const EditHuntForm = ({ onSuccess, onFail, currentData }: EditHuntFormProps) => 
   const formik = useFormik({
     initialValues: {
       title: currentData.title ?? '',
-      type: currentData.type,
+      type: currentData.type ?? 'rent',
       movingExpected: initMovingExpected,
       livingPeople: currentData.livingPeople ?? 1,
       livingPets: currentData.livingPets ?? 0,
@@ -81,10 +81,10 @@ const EditHuntForm = ({ onSuccess, onFail, currentData }: EditHuntFormProps) => 
     setSubmitEnabled(shouldEnable)
   }, [formik])
 
-  async function handleSubmit(values: Omit<CreateHuntRequestProps, 'creatorId'>) {
+  async function handleSubmit(values: Omit<EditHuntRequestProps, 'huntUsers' | 'creatorId'>) {
     if (!formik.isValid || !user) return
 
-    const data: CreateHuntRequestProps = {
+    const data: EditHuntRequestProps = {
       creatorId: user.id,
       ...values
     }
@@ -129,7 +129,7 @@ const EditHuntForm = ({ onSuccess, onFail, currentData }: EditHuntFormProps) => 
             ]}
             themeSize={formThemeSize}
             theme={themePallete}
-            value={formik.values.type}
+            value={formik.values.type as never}
             onChange={formik.handleChange}
           />
         </span>

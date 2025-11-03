@@ -2,7 +2,6 @@
 import type { ChangeEvent } from 'react'
 import { useEffect, useState } from 'react'
 
-import { useSessionContext } from '@providers/AuthProvider'
 import SubmitButton from '@ui/base/form/buttons/SubmitButton'
 import type { FormSizes, FormTheme } from '@ui/base/shared/formTheme'
 import cx from 'classnames'
@@ -21,7 +20,7 @@ interface TargetCommentFormProps {
   commentLabel?: string
   enableEmptyComment?: boolean
   currentComment?: InterfaceComment
-  submit: (_d: TargetComment) => Promise<InterfaceComment | undefined>
+  submit: (_d: Omit<TargetComment, 'author'>) => Promise<InterfaceComment | undefined>
 }
 
 const formThemeSize: FormSizes = 'lg'
@@ -69,19 +68,16 @@ const TargetCommentForm = ({
     onSubmit: handleSubmit
   })
 
-  const { user } = useSessionContext()
-
   async function handleSubmit(values: { comment: string; topic: string; otherTopic: string }) {
-    if (!formik.isValid || !user) return
+    if (!formik.isValid) return
 
     const { comment } = values
 
     const commentTopic = values.topic === 'other' ? values.otherTopic : values.topic
 
-    const data: TargetComment = {
+    const data: Omit<TargetComment, 'author'> = {
       comment: comment ?? undefined,
       topic: commentTopic,
-      author: user.id,
       authorPrivacy: 'allowed'
     }
 
@@ -115,6 +111,7 @@ const TargetCommentForm = ({
       (formik.values.topic === 'other' && formik.values.otherTopic !== '')
 
     setSubmitEnabled(comment && hasTopic && !actionInProgress)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formik])
 
   return (
