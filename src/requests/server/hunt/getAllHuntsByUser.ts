@@ -15,7 +15,6 @@ export const getAllHuntsByUser: GetAllHuntsByUserRequest = async (
   options
 ) => {
   const baseUrl = process.env.NEXT_PUBLIC_APPLICATION_URL
-
   if (!baseUrl) throw new Error('Application APP url not defined')
 
   try {
