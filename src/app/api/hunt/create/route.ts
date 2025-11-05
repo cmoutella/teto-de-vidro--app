@@ -38,8 +38,8 @@ export async function POST(req: NextRequest) {
         secure: process.env.NODE_ENV === 'production',
         sameSite: process.env.NODE_ENV === 'production' ? 'strict' : 'lax',
         path: '/',
-        maxAge: 60 * 60 * 24 * 3 // 3 dia,
-        // domain: process.env.NODE_ENV !== 'production' ? 'localhost' : 'tetodevidroo.com.br'
+        maxAge: 60 * 60 * 24 * 3,
+        domain: process.env.NODE_ENV !== 'production' ? 'localhost' : 'tetodevidro.app.br'
       })
     }
 
