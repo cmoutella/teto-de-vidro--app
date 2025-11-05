@@ -28,8 +28,8 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
         secure: process.env.NODE_ENV === 'production',
         sameSite: process.env.NODE_ENV === 'production' ? 'strict' : 'lax',
         path: '/',
-        maxAge: 60 * 60 * 24 * 3,
-        domain: process.env.NODE_ENV !== 'production' ? 'localhost' : 'tetodevidro.app.br'
+        maxAge: 60 * 60 * 24 * 3
+        // domain: process.env.NODE_ENV !== 'production' ? 'localhost' : 'tetodevidro.app.br'
       })
     }
 
