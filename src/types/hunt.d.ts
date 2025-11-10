@@ -1,15 +1,8 @@
 export type CONTRACT_TYPE = 'buy' | 'rent' | 'either'
 
-export type HuntParticipant = {
-  id: string
-  name: string
-  status: 'waiting' | 'accepted'
-}
-
 export interface InterfaceHunt {
   id: string
   creatorId: string
-  huntUsers: HuntParticipant[]
   title?: string
   type: CONTRACT_TYPE
   movingExpected?: string
@@ -17,8 +10,15 @@ export interface InterfaceHunt {
   livingPeople?: number
   livingPets?: number
   targets: string[]
+  participants: number
   minBudget: number
   maxBudget: number
+}
+
+export interface HuntParticipant {
+  name: string
+  familyName: string
+  id: string
 }
 
 export interface HuntPermissions {

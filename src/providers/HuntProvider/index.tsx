@@ -6,7 +6,8 @@ import { deleteTargetProperty } from '@/requests/client/targetProperty/delete'
 import { getAllTargetPropertiesfromHunt } from '@/requests/client/targetProperty/getAllTargetProperties'
 import { getUserPermissionsRequest } from '@/requests/client/user/getUserPermissionsRequest'
 import { getHuntById } from '@/requests/server/hunt/getById'
-import type { HuntPermissions, InterfaceHunt } from '@/types/hunt'
+import { getHuntParticipants } from '@/requests/server/hunt/getHuntParticipants'
+import type { HuntParticipant, HuntPermissions, InterfaceHunt } from '@/types/hunt'
 import type { TargetPropertyInterface } from '@/types/targetProperty'
 import { DEFAULT_HUNT_LIST_PER_PAGE } from '@/ui/pages/hunt/consts/perPage'
 
@@ -27,6 +28,8 @@ type PageConfig = {
 interface HuntContext {
   update: (_h?: InterfaceHunt) => void
   hunt?: InterfaceHunt
+  participants: HuntParticipant[]
+  participantsLoading: boolean
   page: PageConfig
   properties: TargetPropertyInterface[]
   propertiesLoading: boolean
@@ -51,6 +54,8 @@ const DEFAULT_VALUES: HuntContext = {
     firstPage: () => {},
     lastPage: () => {}
   },
+  participants: [],
+  participantsLoading: true,
   properties: [],
   propertiesLoading: true,
   fetchProperties: () => {},
@@ -86,6 +91,14 @@ export const HuntProvider = ({
   const [totalPages, setTotalPages] = useState<number>(DEFAULT_VALUES.page.total)
   const [perPage, setPerPage] = useState<number>(DEFAULT_VALUES.page.perPage)
   const [totalItems, setTotalItems] = useState<number>(0)
+
+  const [hunt, setHunt] = useState<InterfaceHunt>(initialHuntData)
+
+  const [participants, setParticipants] = useState<HuntParticipant[]>(DEFAULT_VALUES.participants)
+  const [participantsLoading, setParticipantsLoading] = useState<boolean>(
+    DEFAULT_VALUES.participantsLoading
+  )
+
   const [properties, setProperties] = useState<TargetPropertyInterface[]>(DEFAULT_VALUES.properties)
   const [propertiesLoading, setPropertiesLoading] = useState<boolean>(
     DEFAULT_VALUES.propertiesLoading
@@ -96,10 +109,10 @@ export const HuntProvider = ({
     return permissions.maxTargets - totalItems
   }, [permissions, totalItems])
 
-  const [hunt, setHunt] = useState<InterfaceHunt>(initialHuntData)
-
   useEffect(() => {
-    getPermissions()
+    if (participants.length <= 0) {
+      getParticipants()
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -121,6 +134,19 @@ export const HuntProvider = ({
       }
     } else {
       setHunt(updated)
+    }
+  }
+
+  async function getParticipants() {
+    setParticipantsLoading(true)
+    try {
+      const participants = await getHuntParticipants(hunt.id)
+
+      setParticipants(participants ?? [])
+    } catch {
+      setParticipants([])
+    } finally {
+      setParticipantsLoading(false)
     }
   }
 
@@ -186,6 +212,8 @@ export const HuntProvider = ({
     },
     properties,
     propertiesLoading,
+    participants,
+    participantsLoading,
     permissions,
     targetsLeft: targetAvailableLimit,
     fetchProperties: getProperties,

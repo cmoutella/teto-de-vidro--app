@@ -5,30 +5,16 @@ import { toast } from 'react-hot-toast'
 import Button from '@ui/base/Button'
 import TargetPropertyList from '@ui/TargetProperty/TargetPropertyList'
 
-import { HuntProvider, useHuntContext } from '@/providers/HuntProvider'
+import { useHuntContext } from '@/providers/HuntProvider'
 import { useUIContext } from '@/providers/UIProvider'
 import type { InterfaceHunt } from '@/types/hunt'
-import type { InterfacePublicUser } from '@/types/user'
 import EditHuntForm from '@/ui/forms/Hunt/EditHunt'
 import CreateTargetPropertyForm from '@/ui/forms/TargetProperty/CreateTargetProperty'
 
 import { HuntParticipants } from './components/HuntParticipants'
 
-interface HuntViewProps {
-  hunt: InterfaceHunt
-  user: InterfacePublicUser
-}
-
-function OneHuntView({ hunt }: HuntViewProps) {
-  return (
-    <HuntProvider initialHuntData={hunt}>
-      <HuntView />
-    </HuntProvider>
-  )
-}
-
-function HuntView() {
-  const { hunt, targetsLeft, update } = useHuntContext()
+export function HuntView() {
+  const { hunt, targetsLeft, update, participants, participantsLoading } = useHuntContext()
   const { modal } = useUIContext()
 
   function handleCreateTargetProperty() {
@@ -86,7 +72,11 @@ function HuntView() {
                     # {(hunt as InterfaceHunt).title}
                   </h3>
                 </div>
-                <HuntParticipants hunt={hunt ?? undefined} />
+                <HuntParticipants
+                  hunt={hunt!}
+                  participants={participants}
+                  isLoading={participantsLoading}
+                />
               </div>
               <div className="flex flex-row items-center justify-end gap-2">
                 <Button
@@ -114,5 +104,3 @@ function HuntView() {
     </div>
   )
 }
-
-export default OneHuntView

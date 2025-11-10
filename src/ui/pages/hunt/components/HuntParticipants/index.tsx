@@ -1,5 +1,5 @@
 'use client'
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo } from 'react'
 import { toast } from 'react-hot-toast'
 
 import cx from 'classnames'
@@ -13,29 +13,21 @@ import Button from '@/ui/components/base/Button'
 import InviteUserForm from '@/ui/forms/Hunt/InviteUsers'
 
 interface HuntParticipantsProps {
-  hunt?: InterfaceHunt
+  hunt: InterfaceHunt
+  participants: HuntParticipant[]
+  isLoading: boolean
 }
 
-export function HuntParticipants({ hunt }: HuntParticipantsProps) {
-  const [ready, setReady] = useState<boolean>(false)
-  const [huntUsers, setHuntUsers] = useState<HuntParticipant[]>([])
-
-  useEffect(() => {
-    if (hunt) {
-      setHuntUsers(hunt.huntUsers)
-      setReady(true)
-    }
-  }, [hunt])
-
+export function HuntParticipants({ hunt, participants, isLoading }: HuntParticipantsProps) {
   const { user, updatePermissions } = useSessionContext()
   const { update } = useHuntContext()
   const { modal } = useUIContext()
 
-  const participants = useMemo(() => {
-    return huntUsers!.filter((u) => user && u.id !== user.id) ?? []
-  }, [huntUsers, user])
+  const huntUsers = useMemo(() => {
+    return participants!.filter((u) => user && u.id !== user.id) ?? []
+  }, [participants, user])
 
-  if (!ready) {
+  if (isLoading) {
     return (
       <div className="w-full bg-brand-gray-600 opacity-50 h-6 rounded-sm animation-pulse"></div>
     )
@@ -76,10 +68,10 @@ export function HuntParticipants({ hunt }: HuntParticipantsProps) {
 
   return (
     <div className="flex justify-start items-end gap-3">
-      {participants.length >= 1 && (
+      {huntUsers.length >= 1 && (
         <div className="leading-none">
           Com{' '}
-          {participants.map((p, i) => {
+          {huntUsers.map((p, i) => {
             return (
               <span key={p.id}>
                 <span>{p.name}</span>
