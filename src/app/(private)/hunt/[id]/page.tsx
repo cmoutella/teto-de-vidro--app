@@ -3,8 +3,8 @@ import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
 
 import { appCookies } from '@/config/cookies'
-import { getHuntById } from '@/requests/client/hunt/getById'
 import { authenticateApp } from '@/requests/server/app/authenticateApp'
+import { getHuntById } from '@/requests/server/hunt/getById'
 import type { AppAuthData } from '@/types/apiResponses'
 import { isUserAuthenticated } from '@/utils/auth/userAuthenticationAtServer'
 
